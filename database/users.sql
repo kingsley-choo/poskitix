@@ -3,7 +3,7 @@ use user;
 CREATE TABLE user (
 	uid int NOT NULL AUTO_INCREMENT,
     username varchar(255) NOT NULL,
-	email varchar(255) not null,
+	email varchar(255) unique not null,
     primary key (uid)
 );
 
