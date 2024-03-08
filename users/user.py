@@ -7,7 +7,7 @@ import sys
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    environ.get("dbURL") or "mysql+mysqlconnector://root:root@localhost:3306/user"
+    environ.get("dbURL") or "mysql+mysqlconnector://root:@localhost:3306/user"
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_recycle": 299}
@@ -36,13 +36,13 @@ class User(db.Model):
             "email": self.email,
         }
 
-@app.route("/user/<string:email>")
-def find_by_email(email):
-    output_uid = db.session.scalars(db.select(User).filter_by(email=email).limit(1)).first()
+@app.route("/user/<int:id>")
+def find_by_id(id):
+    output_uid = db.session.scalars(db.select(User).filter_by(uid=id).limit(1)).first()
 
     if output_uid:
         return jsonify({"code": 200, "data": output_uid.json()})
     return jsonify({"code": 404, "message": "User not found."}), 404
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5001, debug=True)
