@@ -1,9 +1,9 @@
-
+create database user;
 use user;
 CREATE TABLE user (
 	uid int NOT NULL AUTO_INCREMENT,
     username varchar(255) NOT NULL,
-	email varchar(255) unique not null,
+	email varchar(250) unique not null,
     primary key (uid)
 );
 
