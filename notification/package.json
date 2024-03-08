@@ -1,0 +1,16 @@
+{
+  "name": "notification",
+  "version": "1.0.0",
+  "description": "IS213 Notification Service",
+  "main": "notification.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@dotenvx/dotenvx": "^0.24.0",
+    "nodemailer": "^6.9.11"
+  },
+  "type": "module"
+}
