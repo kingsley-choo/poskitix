@@ -36,13 +36,7 @@ class User(db.Model):
             "email": self.email,
         }
 
-@app.route("/user/<string:email>")
-def find_by_email(email):
-    output_uid = db.session.scalars(db.select(User).filter_by(email=email).limit(1)).first()
 
-    if output_uid:
-        return jsonify({"code": 200, "data": output_uid.json()})
-    return jsonify({"code": 404, "message": "User not found."}), 404
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
