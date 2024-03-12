@@ -2,16 +2,15 @@ create database queue;
 
 use queue;
 
-create table queue (
-	eid int not null,
-    uid int not null,
-    stat varchar(255),
-    createdAt timestamp default current_timestamp not null,
-    readyAt timestamp,
-    constraint primary key (eid,uid),
-    constraint foreign key (eid) references event.event (eid),
-	constraint foreign key (uid) references user.user (uid)
-
+CREATE TABLE queue (
+    eid INT NOT NULL,
+    uid INT NOT NULL,
+    stat VARCHAR(255),
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    readyAt TIMESTAMP NULL DEFAULT NULL,
+    CONSTRAINT PRIMARY KEY (eid, uid),
+    CONSTRAINT FOREIGN KEY (eid) REFERENCES event.event (eid),
+    CONSTRAINT FOREIGN KEY (uid) REFERENCES user.user (uid)
 );
 
 DELIMITER $$
