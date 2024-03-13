@@ -1,0 +1,50 @@
+version: '3.8'
+services:
+  ####################################
+  # MySQL Database  
+  ####################################
+  database:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    restart: always
+    ports:
+      - '3306:3306'
+    expose:
+      - 3306
+    volumes:
+      - db:/var/lib/mysql
+      - ./database/:/docker-entrypoint-initdb.d/
+
+  ####################################
+  # User microservice  
+  ####################################
+  user:
+    build:
+      context: ./users
+      dockerfile: Dockerfile
+    environment:
+      dbURL: mysql+mysqlconnector://root:example@database:3306/user
+      PYTHONUNBUFFERED: 1
+    ports:
+      - '5001:5001'
+    depends_on:
+      - database
+  ####################################
+  # RabbitMQ: The messaging broker   
+  ####################################
+  # rabbitmq:
+  #   image: rabbitmq:3-management
+  #   hostname: esd-rabbit
+  #   restart: always
+  #   ports:
+  #     - "5672:5672"
+  #     - "15672:15672"
+  #   volumes: 
+  #     - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config
+  #     - ./rabbitmq_definitions.json:/etc/rabbitmq/rabbitmq_definitions.json
+  #     - rabbitmq_data:/var/lib/rabbitmq
+ 
+volumes:
+  db:
+    driver: local
