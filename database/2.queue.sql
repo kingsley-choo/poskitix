@@ -13,7 +13,7 @@ CREATE TABLE queue (
     CONSTRAINT FOREIGN KEY (uid) REFERENCES user.user (uid)
 );
 
-DELIMITER $$
+DELIMITER //
 
 CREATE TRIGGER before_queue_update
 BEFORE UPDATE
@@ -22,7 +22,7 @@ BEGIN
     IF OLD.stat = "Waiting" and NEW.stat = "Ready" THEN
 		SET NEW.ReadyAt = current_timestamp();
     END IF;
-END$$
+END//
 
 DELIMITER ;
 
