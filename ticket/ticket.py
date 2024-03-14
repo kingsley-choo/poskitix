@@ -4,10 +4,11 @@ from os import environ
 from flask_cors import CORS
 import os
 import sys
+import uuid
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    environ.get("dbURL") or "mysql+mysqlconnector://root:root@localhost:3306/book"
+    environ.get("dbURL") or "mysql+mysqlconnector://root:example@localhost:3306/ticket"
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_recycle": 299}
@@ -39,10 +40,11 @@ CORS(app)
 class Ticket(db.Model):
     __tablename__ = "ticket"
     tid = db.Column(db.String(255))
-    eid = db.Column(db.int, primary_key=True)
-    uid = db.Column(db.int, primary_key=True)
+    eid = db.Column(db.ForeignKey(
+        'ticket_event.eid', ondelete='CASCADE', onupdate='CASCADE'), primary_key=True)
+    uid = db.Column(db.Integer, primary_key=True)
 
-    def __init__(self, eid, uid, tid):
+    def __init__(self, eid, uid,tid):
         self.eid = eid
         self.uid = uid
         self.tid = tid
@@ -56,17 +58,17 @@ class Ticket(db.Model):
 
 class Ticket_Event(db.Model):
     __tablename__ = "ticket_event"
-    eid = db.Column(db.int, primary_key=True)
-    ticket_left = db.Column(db.int)
+    eid = db.Column(db.Integer, primary_key=True)
+    tickets_left = db.Column(db.Integer)
 
     def __init__(self, eid, ticket_left):
         self.eid = eid
-        self.ticket_left = ticket_left
+        self.tickets_left = tickets_left
         
     def json(self):
         return {
             "eid": self.eid,
-            "ticket_left": self.ticket_left,
+            "tickets_left": self.tickets_left,
         }
 
 #create new ticket
@@ -76,16 +78,15 @@ def create_ticket():
 
     eid = data.get("eid")
     uid = data.get("uid")
-    tid = data.get("tid")
 
-    if eid is None or uid is None or tid is None:
+    if eid is None or uid is None:
         return jsonify(
             {
                 "code": 400,
                 "message": "Missing required parameters."
             }
             ), 400
-    new_ticket = Ticket(eid=eid, uid=uid, tid=tid)
+    new_ticket = Ticket(eid=eid, uid=uid, tid= str(uuid.uuid1()))
 
     try:
         db.session.add(new_ticket)
@@ -104,18 +105,18 @@ def create_ticket():
 #get number of tickets left from db with eid
 @app.route("/ticket_event/<int:eid>")
 def get_ticket_left(eid):
-    output_ticket = db.session.scalars(db.select(Ticket_Event).filter_by(eid=eid).limit(1)).first()
-    if output_ticket!=0:
+    output= db.session.scalars(db.select(Ticket_Event).filter_by(eid=eid).limit(1)).first()
+    if output.tickets_left >0:
         return jsonify(
             {
                 "code": 200,
                 "data": output_ticket.json()
             }
             )
-    elif output_ticket==0:
+    else:
         return jsonify(
             {
-                "code": 400,
+                "code": 404,
                 "message": "Oh no! Event is SOLD OUT."
             }
             ), 400
