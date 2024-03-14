@@ -30,6 +30,70 @@ services:
       - '5001:5001'
     depends_on:
       - database
+
+  ####################################
+  # User microservice  
+  ####################################
+  user:
+    build:
+      context: ./users
+      dockerfile: Dockerfile
+    environment:
+      dbURL: mysql+mysqlconnector://root:example@database:3306/user
+      PYTHONUNBUFFERED: 1
+    ports:
+      - '5001:5001'
+    depends_on:
+      - database
+
+  ####################################
+  # Event microservice  
+  ####################################
+  event:
+    build:
+      context: ./event
+      dockerfile: Dockerfile
+    environment:
+      dbURL: mysql+mysqlconnector://root:example@database:3306/event
+      PYTHONUNBUFFERED: 1
+    ports:
+      - '5002:5002'
+    depends_on:
+      - database
+
+  ####################################
+  # Queue microservice  
+  ####################################
+  queue:
+    build:
+      context: ./queue
+      dockerfile: Dockerfile
+    environment:
+      dbURL: mysql+mysqlconnector://root:example@database:3306/queue
+      PYTHONUNBUFFERED: 1
+    ports:
+      - '5003:5003'
+    depends_on:
+      - database
+
+
+  ####################################
+  # Ticket microservice  
+  ####################################
+  ticket:
+    build:
+      context: ./ticket
+      dockerfile: Dockerfile
+    environment:
+      dbURL: mysql+mysqlconnector://root:example@database:3306/ticket
+      PYTHONUNBUFFERED: 1
+    ports:
+      - '5004:5004'
+    depends_on:
+      - database
+
+
+  
   ####################################
   # RabbitMQ: The messaging broker   
   ####################################

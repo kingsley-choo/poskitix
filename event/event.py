@@ -76,4 +76,4 @@ def find_future_events():
         return jsonify({"code": 404, "message": "Event not found."}), 404
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5300, debug=True)
+    app.run(host="0.0.0.0", port=5002, debug=True)
