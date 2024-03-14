@@ -6,11 +6,11 @@ import os
 import sys
 
 #import date
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    environ.get("dbURL") or "mysql+mysqlconnector://root:@localhost:3306/event"
+    environ.get("dbURL") or "mysql+mysqlconnector://root:example@localhost:3306/event"
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_recycle": 299}
@@ -62,14 +62,13 @@ def find_by_eid(eid):
 
 @app.route("/event")
 def find_future_events():
-    output_events = datetime.now()
-    print(output_events)
-    # output_events = db.session.scalars(db.select(Event).filter_by(date>date))
+    time_now_utc = datetime.now(timezone.utc) 
+    output_events = Event.query.filter(Event.date> time_now_utc).all()
 
-    if output_events:
-        return 
-        # return jsonify({"code": 200, "data": output_events.json()})
-    return jsonify({"code": 404, "message": "Event not found."}), 404
+    if len(output_events):
+        return jsonify({"code": 200, "data": list(map(lambda x : x.json(), output_events))})
+    else:
+        return jsonify({"code": 404, "message": "Event not found."}), 404
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5300, debug=True)
