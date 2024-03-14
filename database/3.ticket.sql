@@ -16,6 +16,8 @@ CREATE TABLE ticket (
 	 TID varchar(36) DEFAULT (UUID())
 );
 
+insert into ticket_event (tickets_left) values (10), (14);
+
 DELIMITER $$
 
 create trigger `add_ticket_trigger` 
@@ -23,8 +25,6 @@ create trigger `add_ticket_trigger`
     for each row 
     begin
         update `ticket_event` set `tickets_left` = `tickets_left` - 1 where `eid` = new.eid;
-    end$$
-    
-DELIMITER ;
-    
-insert into ticket_event (tickets_left) values (10), (14);
+    end;
+    $$
+        
