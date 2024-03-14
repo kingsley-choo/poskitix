@@ -32,21 +32,6 @@ services:
       - database
 
   ####################################
-  # User microservice  
-  ####################################
-  user:
-    build:
-      context: ./users
-      dockerfile: Dockerfile
-    environment:
-      dbURL: mysql+mysqlconnector://root:example@database:3306/user
-      PYTHONUNBUFFERED: 1
-    ports:
-      - '5001:5001'
-    depends_on:
-      - database
-
-  ####################################
   # Event microservice  
   ####################################
   event:
