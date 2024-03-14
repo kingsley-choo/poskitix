@@ -21,8 +21,8 @@ CORS(app)
 class Queue(db.Model):
     __tablename__ = "queue"
 
-    eid = db.Column(db.int, primary_key=True)
-    uid = db.Column(db.int, primary_key=True)
+    eid = db.Column(db.Integer, primary_key=True)
+    uid = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.String(255))
     CreatedAt = db.Column(db.TIMESTAMP, default=db.func.current_timestamp(), nullable=False)
     readyAt = db.Column(db.TIMESTAMP, nullable=True)
