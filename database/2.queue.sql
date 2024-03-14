@@ -5,7 +5,7 @@ use queue;
 CREATE TABLE queue (
     eid INT NOT NULL,
     uid INT NOT NULL,
-    stat VARCHAR(255),
+    status VARCHAR(255) default "Waiting",
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     readyAt TIMESTAMP NULL DEFAULT NULL,
     CONSTRAINT PRIMARY KEY (eid, uid),
@@ -19,7 +19,7 @@ CREATE TRIGGER before_queue_update
 BEFORE UPDATE
 ON queue FOR EACH ROW
 BEGIN
-    IF OLD.stat = "Waiting" and NEW.stat = "Ready" THEN
+    IF OLD.status = "Waiting" and NEW.status = "Ready" THEN
 		SET NEW.ReadyAt = current_timestamp();
     END IF;
 END//
