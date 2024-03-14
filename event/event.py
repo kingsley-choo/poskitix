@@ -52,6 +52,8 @@ class Event(db.Model):
             "price": self.price
         }
 
+
+# find events by EID
 @app.route("/event/<int:eid>")
 def find_by_eid(eid):
     output_event = db.session.scalars(db.select(Event).filter_by(eid=eid).limit(1)).first()
@@ -60,6 +62,9 @@ def find_by_eid(eid):
         return jsonify({"code": 200, "data": output_event.json()})
     return jsonify({"code": 404, "message": "Event not found."}), 404
 
+print(datetime.utcnow())
+
+# find future events
 @app.route("/event")
 def find_future_events():
     time_now_utc = datetime.now(timezone.utc) 
