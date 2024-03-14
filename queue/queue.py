@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
@@ -6,14 +6,19 @@ from flask_cors import CORS
 import os
 import sys
 
+MAX_PEOPLE_READY = 2
+MAX_MINUTES_IN_QUEUE = 5
+
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    environ.get("dbURL") or "mysql+mysqlconnector://root:root@localhost:3306/queue"
+    environ.get("dbURL") or "mysql+mysqlconnector://root:example@localhost:3306/queue"
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_recycle": 299}
 
 db = SQLAlchemy(app)
+
+
 
 CORS(app)
 
@@ -21,26 +26,24 @@ CORS(app)
 class Queue(db.Model):
     __tablename__ = "queue"
 
-    eid = db.Column(db.int, primary_key=True)
-    uid = db.Column(db.int, primary_key=True)
+    eid = db.Column(db.Integer, primary_key=True)
+    uid = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.String(255))
-    CreatedAt = db.Column(db.TIMESTAMP, default=db.func.current_timestamp(), nullable=False)
+    createdAt = db.Column(db.TIMESTAMP, default=db.func.current_timestamp(), nullable=False)
     readyAt = db.Column(db.TIMESTAMP, nullable=True)
 
-    def __init__(self, eid, uid, status, CreatedAt, ReadyAt= None):
+    def __init__(self, eid, uid, status="Waiting"):
         self.eid = eid
         self.uid = uid
         self.status = status
-        self.Created = CreatedAt
-        self.ReadyAt = ReadyAt
 
     def json(self):
         return {
             "eid": self.eid,
             "uid": self.uid,
             "status": self.status,
-            "CreatedAt": self.CreatedAt,
-            "ReadyAt": self.ReadyAt,
+            "createdAt": self.createdAt,
+            "readyAt": self.readyAt,
         }
 
 
@@ -51,7 +54,6 @@ def create_queue():
 
     eid = data.get("eid")
     uid = data.get("uid")
-    status = data.get("status", "Waiting")
 
     if eid is None or uid is None:
         return jsonify(
@@ -60,7 +62,7 @@ def create_queue():
                 "message": "Missing required parameters."
             }
             ), 400
-    new_queue = Queue(eid=eid, uid=uid, status=status)
+    new_queue = Queue(eid=eid, uid=uid)
 
     try:
         db.session.add(new_queue)
@@ -75,28 +77,33 @@ def create_queue():
              }
              ), 500
 
-@app.route("/update_queue_status_ready", methods=["PUT"])
-def update_queue_status_ready():
-    queue_entries = Queue.query.limit(10).all()
+@app.route("/update_queue_status_ready/<int:eid>/<int:no_of_tickets>", methods=["PUT"])
+def update_queue_status_ready(eid, no_of_tickets):
+        no_of_ready_in_queue =   Queue.query.filter_by(status='Ready', eid=eid).count()
+        queue_entries = Queue.query.order_by(db.asc(Queue.createdAt)).filter_by(status='Waiting', eid=eid).limit(min(no_of_tickets,MAX_PEOPLE_READY)-no_of_ready_in_queue).all()
 
-    if not queue_entries:
-        return jsonify({"code": 404, "message": "No queue entries found."}), 404
+        if len(queue_entries) ==0 :
+            return jsonify({"code": 404, "message": "Number of people ready has reached maximum"}), 404
 
-    try:
-        for queue_entry in queue_entries:
-            queue_entry.status = "ready"
-            queue_entry.ReadyAt = datetime.now()
+        try:
+            for queue_entry in queue_entries:
+                queue_entry.status = "Ready"
 
-        db.session.commit()
-        return jsonify({"code": 200, "message": "Update to 'Ready' completed successfully for the first 10 rows."}), 200
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"code": 500, "message": "An error occurred during bulk update.", "error": str(e)}), 500
+            db.session.commit()
+            return jsonify({"code": 200, "message": f"Update to 'Ready' completed successfully for the first {min(no_of_tickets,MAX_PEOPLE_READY)-no_of_ready_in_queue} rows."}), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"code": 500, "message": "An error occurred during bulk update.", "error": str(e)}), 500
 
-@app.route("/check_and_update_missed_status", methods=["PUT"])
-def check_and_update_missed_status():
-    fifteen_minutes_ago = datetime.now() - timedelta(minutes=15)
-    queue_entries = Queue.query.filter(Queue.status == 'Ready', Queue.readyAt <= fifteen_minutes_ago).all()
+
+
+@app.route("/check_and_update_missed_status/<int:eid>", methods=["PUT"])
+def check_and_update_missed_status(eid):
+    fifteen_minutes_ago = datetime.now(timezone.utc) - timedelta(minutes=MAX_MINUTES_IN_QUEUE)
+    queue_entries = Queue.query.filter(Queue.status == 'Ready', Queue.readyAt <= fifteen_minutes_ago, Queue.eid==eid).all()
+
+    if len(queue_entries) == 0 :
+        return jsonify({"code": 200, "message": f"No user status was updated in queue for event {eid}", "updated_entries": []}), 200
 
     updated_entries = []
 
@@ -110,21 +117,41 @@ def check_and_update_missed_status():
     except Exception as e:
         db.session.rollback()
         return jsonify({"code": 500, "message": "An error occurred during update. " + str(e)}), 500
+    
+@app.route("/close_queue/<int:eid>", methods=["PUT"])
+def close_queue(eid):
+    queue_entries = Queue.query.filter(Queue.status == 'Waiting').all()
 
-@app.route("/update_queue_status_bought", methods=["PUT"])
-def update_queue_status_bought():
+    updated_entries = []
+
+    for queue_entry in queue_entries:
+        queue_entry.status = 'Fail'
+        updated_entries.append({"eid": queue_entry.eid, "uid": queue_entry.uid})
+
     try:
-        ready_queue_entries = Queue.query.filter_by(status='Ready').all()
+        db.session.commit()
+        return jsonify({"code": 200, "message": "Update to 'Missed' completed successfully.", "updated_entries": updated_entries}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"code": 500, "message": "An error occurred during update. " + str(e)}), 500
 
-        updated_entries = []
 
-        for queue_entry in ready_queue_entries:
-            queue_entry.status = 'Bought'
-            updated_entries.append({"eid": queue_entry.eid, "uid": queue_entry.uid})
+@app.route("/update_queue_status_bought/<int:eid>/<int:uid>", methods=["PUT"])
+def update_queue_status_bought(eid,uid):
+    try:
+        number_of_user_ready = Queue.query.filter_by(status='Ready', eid=eid,uid=uid).count()
+        #only either 0 or 1 because eid uid is primary key
+        if number_of_user_ready ==0:
+            return jsonify({"code": 404, "message": f"User {uid} in event {eid} is not in queue/not ready"}), 404
 
+        queue_entry = Queue.query.filter_by(status='Ready', eid=eid,uid=uid).one()
+
+        queue_entry.status = 'Bought'
         db.session.commit()
 
-        return jsonify({"code": 200, "message": "Queue statuses updated to 'Bought' successfully.", "updated_entries": updated_entries}), 200
+        queue_entry = Queue.query.filter_by(status='Ready', eid=eid,uid=uid).one()
+
+        return jsonify({"code": 200, "message": f"User {uid} updated to 'Bought' successfully."}), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({"code": 500, "message": f"An error occurred: {str(e)}"}), 500
