@@ -1,0 +1,10 @@
+@user = http://localhost:5001
+
+GET {{user}}/user/1
+
+@event = http://localhost:5002
+### get event based on eid
+GET {{event}}/event/1
+
+### get events not yet happen
+GET {{event}}/event
