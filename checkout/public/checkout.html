@@ -4,7 +4,7 @@
     <title>Buy cool new product</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://js.stripe.com/v3/"></script>
-    <script>
+    <!-- <script>
       // Initialize Stripe.js
       var stripe = Stripe('sk_test_Ou1w6LVt3zmVipDVJsvMeQsc'); // Replace 'YOUR_PUBLIC_STRIPE_KEY' with your actual public Stripe key
 
@@ -33,7 +33,7 @@
           console.error('Error:', error);
         });
       });
-    </script>
+    </script> -->
   </head>
   <body>
     <section>
@@ -44,10 +44,10 @@
           <h5>$20.00</h5>
         </div>
       </div>
-      <!-- <form action="/create-checkout-session" method="POST">
+      <form action="/create-checkout-session" method="POST">
         <button type="submit" id="checkout-button">Checkout</button>
-      </form> -->
-      <button id="checkout-button">Checkout</button>
+      </form>
+      <!-- <button id="checkout-button">Checkout</button> -->
     </section>
   </body>
 </html>
