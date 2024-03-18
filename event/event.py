@@ -62,7 +62,6 @@ def find_by_eid(eid):
         return jsonify({"code": 200, "data": output_event.json()})
     return jsonify({"code": 404, "message": "Event not found."}), 404
 
-print(datetime.utcnow())
 
 # find future events
 @app.route("/event")
