@@ -57,7 +57,7 @@ services:
       dbURL: mysql+mysqlconnector://root:example@database:3306/queue
       PYTHONUNBUFFERED: 1
     ports:
-      - '5003:5003'
+      - '5004:5004'
     depends_on:
       - database
 
@@ -73,27 +73,49 @@ services:
       dbURL: mysql+mysqlconnector://root:example@database:3306/ticket
       PYTHONUNBUFFERED: 1
     ports:
-      - '5004:5004'
+      - '5003:5003'
     depends_on:
       - database
 
+  ####################################
+  # Notification microservice  
+  ####################################
+  notification:
+    # restart: on-failure
+    build:
+      context: ./notification
+      dockerfile: Dockerfile
+    environment:
+      RABBIT_URL : 'amqp://rabbitmq'
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    ports: 
+      - "1234:1234"
 
-  
   ####################################
   # RabbitMQ: The messaging broker   
   ####################################
-  # rabbitmq:
-  #   image: rabbitmq:3-management
-  #   hostname: esd-rabbit
-  #   restart: always
-  #   ports:
-  #     - "5672:5672"
-  #     - "15672:15672"
-  #   volumes: 
-  #     - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config
-  #     - ./rabbitmq_definitions.json:/etc/rabbitmq/rabbitmq_definitions.json
-  #     - rabbitmq_data:/var/lib/rabbitmq
+  rabbitmq:
+    build: 
+      context:  ./
+      dockerfile: rabbit.Dockerfile
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes: 
+      - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config
+      - ./rabbitmq_definitions.json:/etc/rabbitmq/rabbitmq_definitions.json
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
  
 volumes:
   db:
     driver: local
+  rabbitmq_data:
