@@ -1,3 +1,5 @@
+import QRCode from 'qrcode'
+
 export default  {
     waiting_ready : function(user_info,event_info) {
         return {
@@ -60,20 +62,6 @@ export default  {
     ready_done : async function(user_info,event_info,ticket_info) {
         let url = await QRCode.toDataURL(ticket_info.tid);
 
-        console.log(`<h2>Congratulations you got ticket for ${event_info.eventname}</h2>
-                        
-                    <p>
-                        You have successfully purchased ticket for
-                        ${event_info.eventname} on ${event_info.date} at ${event_info.location}.
-                        Please arrive at least 15 minutes before the event and present the following barcode.
-                    </p>
-
-                    <p>
-                        <img src=${url}/>
-                    </p>
-                    
-                    <p>Hope you enjoy the concert!</p>`)
-
         return {
             from: process.env.email,
             to: user_info.email,
@@ -87,10 +75,18 @@ export default  {
                     </p>
 
                     <p>
-                        <img src=${url}/>
+                        <img src="cid:${ticket_info.tid}"/>
                     </p>
                     
                     <p>Hope you enjoy the concert!</p>`, // html body
+            attachments : [
+                {
+                    filename : `${ticket_info.tid}.jpg`,
+                    content : url.split("base64,")[1],
+                    encoding: 'base64',
+                    cid : ticket_info.tid
+                }
+            ]
           }
     }
 

@@ -1,5 +1,4 @@
 import amqp from 'amqplib/callback_api.js';
-
 import {transporter} from './send_email.js';
 import emailTemplates from './templates.js';
 
@@ -103,7 +102,7 @@ amqp.connect(process.env.RABBIT_URL, function(error0, connection) {
 
         let msg_content = JSON.parse(msg.content.toString());
 
-        let filled_email = await emailTemplates[msg.fields.routingKey.replace(".", "_")](msg_content["user"], msg_content["event"],msg_content["ticket"])
+        let filled_email =  await emailTemplates[msg.fields.routingKey.replace(".", "_")](msg_content["user"], msg_content["event"],msg_content["ticket"])
 
         await transporter.sendMail(filled_email)
         console.log("==Message sent==")
