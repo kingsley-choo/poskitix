@@ -11,7 +11,8 @@
   "dependencies": {
     "@dotenvx/dotenvx": "^0.24.0",
     "amqplib": "^0.10.3",
-    "nodemailer": "^6.9.11"
+    "nodemailer": "^6.9.11",
+    "qrcode": "^1.5.3"
   },
   "type": "module"
 }
