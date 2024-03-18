@@ -5,6 +5,51 @@ GET {{user}}/user/1
 @event = http://localhost:5002
 ### get event based on eid
 GET {{event}}/event/1
-
-### get events not yet happen
+### get events that havent happened 
 GET {{event}}/event
+
+@ticket = http://localhost:5003
+
+### create ticket
+POST {{ticket}}/ticket
+Content-Type: application/json
+ 
+{
+    "eid": 1,
+    "uid": 2
+}
+
+### get number of ticket for an event id
+GET {{ticket}}/ticket/event/1
+
+@queue = http://localhost:5004
+### join a queue
+POST {{queue}}/queue
+Content-Type: application/json
+ 
+{
+    "eid": 1,
+    "uid": 6
+}
+
+### 'admit' people into queue i.e. waiting => ready
+### no admitted = min(max people admitted, tickets left)
+PUT {{queue}}/queue/event/1/waiting-ready
+Content-Type: application/json
+ 
+{
+    "tickets_remaining": 2
+}
+
+### remove people who have been too long admitted i.e. ready
+### convert ready => missed
+PUT {{queue}}/queue/event/1/ready-missed
+
+### ticket sold out - close queue
+PUT {{queue}}/queue/event/1/waiting-fail
+
+### purchase ticket i.e ready => done
+PUT {{queue}}/queue/event/1/user/1/ready-done
+
+### get user queue status
+GET {{queue}}/queue/event/1/user/2
