@@ -1,6 +1,6 @@
 @user = http://localhost:5001
 
-GET {{user}}/user/1
+GET {{user}}/user/6
 
 @event = http://localhost:5002
 ### get event based on eid
@@ -20,7 +20,7 @@ Content-Type: application/json
 }
 
 ### get number of ticket for an event id
-GET {{ticket}}/ticket/event/1
+GET {{ticket}}/ticket/event/2
 
 @queue = http://localhost:5004
 ### join a queue
@@ -29,7 +29,7 @@ Content-Type: application/json
  
 {
     "eid": 1,
-    "uid": 6
+    "uid": 3
 }
 
 ### 'admit' people into queue i.e. waiting => ready

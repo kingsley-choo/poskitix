@@ -36,7 +36,7 @@ class User(db.Model):
             "email": self.email,
         }
 
-@app.route("/user/<int:uid>")
+@app.route("/user/<int:id>")
 def find_by_id(id):
     output_uid = db.session.scalars(db.select(User).filter_by(uid=id).limit(1)).first()
 
