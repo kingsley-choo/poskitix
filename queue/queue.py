@@ -6,8 +6,10 @@ from flask_cors import CORS
 import os
 import sys
 
+#to take out
 MAX_PEOPLE_READY = 2
 MAX_MINUTES_IN_QUEUE = 5
+##max in queue is 15 minutes
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = (
@@ -67,7 +69,7 @@ def create_queue():
     try:
         db.session.add(new_queue)
         db.session.commit()
-        return jsonify({"code": 201, "message": "Queue created successfully."}), 201
+        return jsonify({"code": 201, "message": f"User {uid} entered queue created successfully."}), 201
     except Exception as e:
         db.session.rollback()
         return jsonify(
@@ -77,8 +79,10 @@ def create_queue():
              }
              ), 500
 
-@app.route("/update_queue_status_ready/<int:eid>/<int:no_of_tickets>", methods=["PUT"])
-def update_queue_status_ready(eid, no_of_tickets):
+@app.route("/queue/event/<int:eid>/waiting-ready", methods=["PUT"])
+def update_queue_status_ready(eid):
+        data = request.get_json()
+        no_of_tickets = data.get("tickets_remaining")
         no_of_ready_in_queue =   Queue.query.filter_by(status='Ready', eid=eid).count()
         queue_entries = Queue.query.order_by(db.asc(Queue.createdAt)).filter_by(status='Waiting', eid=eid).limit(min(no_of_tickets,MAX_PEOPLE_READY)-no_of_ready_in_queue).all()
 
@@ -97,7 +101,7 @@ def update_queue_status_ready(eid, no_of_tickets):
 
 
 
-@app.route("/check_and_update_missed_status/<int:eid>", methods=["PUT"])
+@app.route("/queue/event/<int:eid>/ready-missed", methods=["PUT"])
 def check_and_update_missed_status(eid):
     fifteen_minutes_ago = datetime.now(timezone.utc) - timedelta(minutes=MAX_MINUTES_IN_QUEUE)
     queue_entries = Queue.query.filter(Queue.status == 'Ready', Queue.readyAt <= fifteen_minutes_ago, Queue.eid==eid).all()
@@ -108,7 +112,7 @@ def check_and_update_missed_status(eid):
     updated_entries = []
 
     for queue_entry in queue_entries:
-        queue_entry.status = 'Missed'
+        queue_entry.status = 'missed'
         updated_entries.append({"eid": queue_entry.eid, "uid": queue_entry.uid})
 
     try:
@@ -118,14 +122,14 @@ def check_and_update_missed_status(eid):
         db.session.rollback()
         return jsonify({"code": 500, "message": "An error occurred during update. " + str(e)}), 500
     
-@app.route("/close_queue/<int:eid>", methods=["PUT"])
+@app.route("/queue/event/<int:eid>/waiting-fail", methods=["PUT"])
 def close_queue(eid):
     queue_entries = Queue.query.filter(Queue.status == 'Waiting').all()
 
     updated_entries = []
 
     for queue_entry in queue_entries:
-        queue_entry.status = 'Fail'
+        queue_entry.status = 'fail'
         updated_entries.append({"eid": queue_entry.eid, "uid": queue_entry.uid})
 
     try:
@@ -136,7 +140,7 @@ def close_queue(eid):
         return jsonify({"code": 500, "message": "An error occurred during update. " + str(e)}), 500
 
 
-@app.route("/update_queue_status_bought/<int:eid>/<int:uid>", methods=["PUT"])
+@app.route("/queue/event/<int:eid>/user/<int:uid>/ready-done", methods=["PUT"])
 def update_queue_status_bought(eid,uid):
     try:
         number_of_user_ready = Queue.query.filter_by(status='Ready', eid=eid,uid=uid).count()
@@ -156,13 +160,13 @@ def update_queue_status_bought(eid,uid):
         db.session.rollback()
         return jsonify({"code": 500, "message": f"An error occurred: {str(e)}"}), 500
 
-@app.route("/find_specific_queue_status/<int:eid>/<int:uid>")
+@app.route("/queue/event/<int:eid>/user/<int:uid>")
 def find_specific_queue_status(eid, uid):
     output_status = db.session.scalars(db.select(Queue).filter_by(eid=eid, uid=uid).limit(1)).first()
 
     if output_status:
         return jsonify({"code": 200, "data": output_status.json()})
-    return jsonify({"code": 404, "message": "Queue not found."}), 404
+    return jsonify({"code": 404, "message": "User not found in queue."}), 404
 
 
 

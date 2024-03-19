@@ -1,29 +1,119 @@
-import dotenv from '@dotenvx/dotenvx';
-import nodemailer from 'nodemailer';
+import amqp from 'amqplib/callback_api.js';
+import {transporter} from './send_email.js';
+import emailTemplates from './templates.js';
 
-dotenv.config();
 
-const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.email,
-      pass: process.env.email_password
-    },
-  });
-
-  // async..await is not allowed in global scope, must use a wrapper
-async function main() {
-    // send mail with defined transport object
-    const info = await transporter.sendMail({
-      from: process.env.email,
-      to: "germainegoh.2022@scis.smu.edu.sg, gxlee.2022@scis.smu.edu.sg", // list of receivers
-      subject: "Hello ✔", // Subject line
-      text: "Hello world? ESD", // plain text body
-      html: "<b>Hello world? ESD</b>", // html body
-    });
-  
-    console.log("Message sent: %s", info.messageId);
-    // Message sent: <d786aa62-4e0a-070a-47ed-0b0666549519@ethereal.email>
+amqp.connect(process.env.RABBIT_URL, function(error0, connection) {
+  if (error0) {
+    throw error0;
   }
+  console.log('Connection to RabbitMQ Successful');
+  connection.createChannel(function(error1, channel) {
+    if (error1) {
+      throw error1;
+    }
+    console.log('Channel created...');
+    var exchange = 'email';
+
+    channel.assertExchange(exchange, 'topic', {
+      durable: true
+    });
+    console.log('Exchange asserted...');
+
+    channel.assertQueue('', {
+      exclusive: false // exclusive means used by only 1 connect and will be closed when connection is closed
+      }, function(error2, q) {
+        if (error2) {
+          throw error2;
+        }
+        console.log(`Queue ${q.queue} created`);
+
+
+      channel.bindQueue(q.queue, exchange, "*");
+      console.log(`Queue ${q.queue} binded to *...`);
+
+
+      channel.consume(q.queue,async  function(msg) {
+
+        console.log("==Received message==")
+
+        console.log('msg.content.toString :>> ', msg.content.toString());
+        console.log('msg.fields.routingKey :>> ', msg.fields.routingKey);
+
+        let msg_content = JSON.parse(msg.content.toString());
+        let filled_email = await emailTemplates[msg.fields.routingKey](msg_content["user"],  msg_content["event"])
+
+        await transporter.sendMail(filled_email)
+        console.log("==Message sent==")
+
+      }, {
+        noAck: true
+      });
+    });
+
+    channel.assertQueue('', {
+        exclusive: false // exclusive means used by only 1 connect and will be closed when connection is closed
+        }, function(error2, q) {
+          if (error2) {
+            throw error2;
+          }
+          console.log(`Queue ${q.queue} created`);
   
-  main().catch(console.error);
+        channel.bindQueue(q.queue, exchange, "*.*");
+        console.log(`Queue ${q.queue} binded to *.*...`);
+
+        channel.consume(q.queue,async  function(msg) {
+  
+        if(msg.fields.routingKey != "ready.done"){
+            console.log("==Received message==")
+    
+            console.log('msg.content.toString :>> ', msg.content.toString());
+            console.log('msg.fields.routingKey :>> ', msg.fields.routingKey);
+
+            let msg_content = JSON.parse(msg.content.toString());
+    
+            let filled_email = await emailTemplates[msg.fields.routingKey.replace(".", "_")](msg_content["user"], msg_content["event"])
+    
+            await transporter.sendMail(filled_email)
+            console.log("==Message sent==")
+        }
+  
+        }, {
+          noAck: true
+        });
+      });
+
+
+      channel.assertQueue('', {
+        exclusive: false // exclusive means used by only 1 connect and will be closed when connection is closed
+        }, function(error2, q) {
+          if (error2) {
+            throw error2;
+          }
+          console.log(`Queue ${q.queue} created`);
+        channel.bindQueue(q.queue, exchange, "ready.done");
+        console.log(`Queue ${q.queue} bind to ready.done....`);
+        channel.consume(q.queue,async  function(msg) {
+  
+        console.log("==Received message buy ticket==")
+
+        console.log('msg.content.toString :>> ', msg.content.toString());
+        console.log('msg.fields.routingKey :>> ', msg.fields.routingKey);
+
+        let msg_content = JSON.parse(msg.content.toString());
+
+        let filled_email =  await emailTemplates[msg.fields.routingKey.replace(".", "_")](msg_content["user"], msg_content["event"],msg_content["ticket"])
+
+        await transporter.sendMail(filled_email)
+        console.log("==Message sent==")
+
+  
+        }, {
+          noAck: true
+        });
+      });
+  });
+});
+
+
+

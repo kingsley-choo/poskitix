@@ -78,6 +78,7 @@ def create_ticket():
 
     eid = data.get("eid")
     uid = data.get("uid")
+    tid = str(uuid.uuid1())
 
     if eid is None or uid is None:
         return jsonify(
@@ -86,12 +87,21 @@ def create_ticket():
                 "message": "Missing required parameters."
             }
             ), 400
-    new_ticket = Ticket(eid=eid, uid=uid, tid= str(uuid.uuid1()))
+    new_ticket = Ticket(eid=eid, uid=uid, tid=tid)
 
     try:
         db.session.add(new_ticket)
         db.session.commit()
-        return jsonify({"code": 201, "message": "Ticket created successfully."}), 201
+        print("marco")
+        return jsonify(
+            {
+            "code": 201, 
+            "message": {
+                "tid" : tid,
+                "uid" : uid,
+                "eid": eid
+            }
+            }), 201
     except Exception as e:
         db.session.rollback()
         return jsonify(
@@ -103,14 +113,25 @@ def create_ticket():
              
 
 #get number of tickets left from db with eid
-@app.route("/ticket_event/<int:eid>")
+@app.route("/ticket/event/<int:eid>")
 def get_ticket_left(eid):
     output= db.session.scalars(db.select(Ticket_Event).filter_by(eid=eid).limit(1)).first()
+<<<<<<< HEAD
     
     if not output:
         return jsonify({"code": 404, "message": "Event not found."}), 404
     
     if output.tickets_left >0:
+=======
+    if output is None:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Event not found."
+            }
+            ), 404
+    elif output.tickets_left >0:
+>>>>>>> e5cedc4c91c919d11ab34a8e90dce04e7ce6ff17
         return jsonify(
             {
                 "code": 200,

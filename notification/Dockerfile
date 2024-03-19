@@ -1,6 +1,7 @@
-FROM python:3-slim
+FROM node:latest
 WORKDIR /usr/src/app
-COPY requirements.txt ./
-RUN python -m pip install --no-cache-dir -r requirements.txt
-COPY ./notification.py .
-CMD [ "python", "./notification.py" ]
+COPY *.json ./
+RUN npm install
+COPY ./*.js .
+COPY .env ./
+CMD [ "node", "notification.js" ]

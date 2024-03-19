@@ -1,0 +1,14 @@
+{
+    "user" : {
+        "username" : "joshua",
+        "email" : "joshua.sumarlin333@gmail.com"
+    },
+    "event" : {
+        "eventname" : "Errors tour",
+        "date" : "15 May 2024",
+        "location" : "Singapore"
+    },
+    "ticket" : {
+        "tid" : "8c874087-9f1a-4c12-a4dc-4a4e53282b8e"
+    }
+}
