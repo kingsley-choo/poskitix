@@ -89,12 +89,19 @@ def update_queue_status_ready(eid):
         if len(queue_entries) ==0 :
             return jsonify({"code": 404, "message": "Number of people ready has reached maximum"}), 404
 
+        result = []
         try:
             for queue_entry in queue_entries:
                 queue_entry.status = "Ready"
-
+                result.append({
+                    "uid" : queue_entry.uid,
+                    "eid" : queue_entry.eid
+                })
+                
             db.session.commit()
-            return jsonify({"code": 200, "message": f"Update to 'Ready' completed successfully for the first {min(no_of_tickets,MAX_PEOPLE_READY)-no_of_ready_in_queue} rows."}), 200
+            return jsonify({"code": 200, 
+                            "message": f"Update to 'Ready' completed successfully for the first {min(no_of_tickets,MAX_PEOPLE_READY)-no_of_ready_in_queue} rows."
+                            , "update_entries": result}), 200
         except Exception as e:
             db.session.rollback()
             return jsonify({"code": 500, "message": "An error occurred during bulk update.", "error": str(e)}), 500
