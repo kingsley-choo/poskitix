@@ -74,4 +74,3 @@ PUT {{queue}}/queue/event/1/user/1/ready-done
 
 ### get user queue status
 GET {{queue}}/queue/event/1/user/2
->>>>>>> e5cedc4c91c919d11ab34a8e90dce04e7ce6ff17
