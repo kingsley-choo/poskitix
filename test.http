@@ -53,3 +53,6 @@ PUT {{queue}}/queue/event/1/user/1/ready-done
 
 ### get user queue status
 GET {{queue}}/queue/event/1/user/2
+
+### complex micro 1
+POST http://localhost:5100/queue/event/2/user/3/join
