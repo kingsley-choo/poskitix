@@ -24,7 +24,9 @@ def process_ticket(eid,uid):
         eid = event["eid"]
         r_ticket = requests.get(f"http://localhost:5003/ticket/event/{eid}")
         if r_ticket.status_code //200 != 1:
+            
             continue
+
 
         if r_ticket == 0:
             r = requests.get(f"http://localhost:5004/queue/event/{eid}/waiting-fail")
