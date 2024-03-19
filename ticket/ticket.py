@@ -106,11 +106,15 @@ def create_ticket():
 @app.route("/ticket_event/<int:eid>")
 def get_ticket_left(eid):
     output= db.session.scalars(db.select(Ticket_Event).filter_by(eid=eid).limit(1)).first()
+    
+    if not output:
+        return jsonify({"code": 404, "message": "Event not found."}), 404
+    
     if output.tickets_left >0:
         return jsonify(
             {
                 "code": 200,
-                "data": output_ticket.json()
+                "data": output.json()
             }
             )
     else:
@@ -120,7 +124,6 @@ def get_ticket_left(eid):
                 "message": "Oh no! Event is SOLD OUT."
             }
             ), 400
-    return jsonify({"code": 404, "message": "Event not found."}), 404
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5003, debug=True)
+    app.run(host="0.0.0.0", port=5004, debug=True)

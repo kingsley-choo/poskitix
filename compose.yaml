@@ -77,6 +77,19 @@ services:
     depends_on:
       - database
 
+  ####################################
+  # Payment microservice  
+  ####################################
+  payment:
+    build:
+      context: ./payment
+      dockerfile: Dockerfile
+    environment:
+      frontEndUrl: "localhost:8080/checkout.html"
+    ports:
+      - '5005:5005'
+    # depends_on:
+    #   - database
 
   
   ####################################

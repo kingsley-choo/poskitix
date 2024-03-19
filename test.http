@@ -8,3 +8,23 @@ GET {{event}}/event/1
 
 ### get events not yet happen
 GET {{event}}/event
+
+
+### henry is joshua's fav
+
+GET {{user}}/user/4
+
+
+@ticket = http://localhost:5004
+### create ticket
+
+POST {{ticket}}/ticket
+Content-Type: application/json
+
+{
+    
+    "eid":1,
+    "uid":1
+}
+
+
