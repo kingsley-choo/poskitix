@@ -6,11 +6,11 @@ export default  {
             from: process.env.email,
             to: user_info.email,
             subject: `You are ready to purchase ticket for ${event_info.eventname}`, // Subject line
-            html: `<h2>Are you excited, ${user_info.username} because we are!</h2>
+            html: `<h2>Are you excited, ${user_info.username}? Because we are more than just excited!</h2>
                         
                     <p>It is now your turn to purchase ticket for ${event_info.eventname} on ${event_info.date}</p>
                     
-                    <p>Click <a href="${process.env.FRONTEND_URL}">here</a> to purchase. Hurry! you only have 15 minutes</p>`, // html body
+                    <p>Click <a href="${process.env.FRONTEND_URL}">here</a> to purchase. Hurry! You only have 15 minutes</p>`, // html body
           }
     },
     ready_missed : function(user_info,event_info) {
@@ -18,7 +18,7 @@ export default  {
             from: process.env.email,
             to: user_info.email,
             subject: `You lost your spot in the queue for ${event_info.eventname}`, // Subject line
-            html: `<h2>Oh no...you missed the chance</h2>
+            html: `<h2>Oh no...you lost the great war...</h2>
                         
                     <p>We regret to inform you that you are no longer able to purchase ticket for
                      ${event_info.eventname} on ${event_info.date} at ${event_info.location} as you failed to purchase within 15 minutes.
