@@ -61,7 +61,7 @@ class Ticket_Event(db.Model):
     eid = db.Column(db.Integer, primary_key=True)
     tickets_left = db.Column(db.Integer)
 
-    def __init__(self, eid, ticket_left):
+    def __init__(self, eid, tickets_left):
         self.eid = eid
         self.tickets_left = tickets_left
         
@@ -123,20 +123,12 @@ def get_ticket_left(eid):
                 "message": "Event not found."
             }
             ), 404
-    elif output.tickets_left >0:
+    else:
         return jsonify(
             {
                 "code": 200,
                 "data": output.json()
             }
             )
-    else:
-        return jsonify(
-            {
-                "code": 404,
-                "message": "Oh no! Event is SOLD OUT."
-            }
-            ), 400
-
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5003, debug=True)
