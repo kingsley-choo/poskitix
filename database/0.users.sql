@@ -8,7 +8,7 @@ CREATE TABLE user (
 );
 
 insert into user (username, email) values ("chris","joshlife333+chris@gmail.com");
-insert into user (username, email) values ("marco","joshlife333+marco@gmail.com");
+insert into user (username, email) values ("swetha","joshlife333+swetha@gmail.com");
 insert into user (username, email) values ("nathan","joshlife333+nathan@gmail.com");
 insert into user (username, email) values ("kingsley","joshlife333+kingsley@gmail.com");
 insert into user (username, email) values ("germaine","joshlife333+germaine@gmail.com");
