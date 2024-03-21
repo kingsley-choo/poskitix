@@ -20,7 +20,7 @@ amqp.connect(process.env.RABBIT_URL, function(error0, connection) {
     });
     console.log('Exchange asserted...');
 
-    channel.assertQueue('', {
+    channel.assertQueue('enter_one_status', {
       exclusive: false // exclusive means used by only 1 connect and will be closed when connection is closed
       }, function(error2, q) {
         if (error2) {
@@ -51,7 +51,7 @@ amqp.connect(process.env.RABBIT_URL, function(error0, connection) {
       });
     });
 
-    channel.assertQueue('', {
+    channel.assertQueue('transition_into_another_status', {
         exclusive: false // exclusive means used by only 1 connect and will be closed when connection is closed
         }, function(error2, q) {
           if (error2) {
@@ -84,7 +84,7 @@ amqp.connect(process.env.RABBIT_URL, function(error0, connection) {
       });
 
 
-      channel.assertQueue('', {
+      channel.assertQueue('purchased_ticket', {
         exclusive: false // exclusive means used by only 1 connect and will be closed when connection is closed
         }, function(error2, q) {
           if (error2) {
