@@ -182,6 +182,13 @@ services:
       - "8004:8004" # Dev Portal /files traffic over HTTPS, assuming the Dev Portal is enabled.
       - "8447:8447" # Dev Portal /files traffic over HTTPS, assuming the Dev Portal is enabled.
 
+  httpd:
+    build: 
+      context:  ./
+      dockerfile: httpd.Dockerfile
+    restart: always
+    ports:
+      - "80:80"
 
  
 volumes:
