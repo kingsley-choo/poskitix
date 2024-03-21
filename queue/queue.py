@@ -5,10 +5,12 @@ from os import environ
 from flask_cors import CORS
 import os
 import sys
+import math
+import pytz
 
 #to take out
 MAX_PEOPLE_READY = 2
-MAX_MINUTES_IN_QUEUE = 5
+MAX_MINUTES_READY = 5
 ##max in queue is 15 minutes
 
 app = Flask(__name__)
@@ -31,8 +33,8 @@ class Queue(db.Model):
     eid = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.String(255))
-    createdAt = db.Column(db.TIMESTAMP, default=db.func.current_timestamp(), nullable=False)
-    readyAt = db.Column(db.TIMESTAMP, nullable=True)
+    createdAt = db.Column(db.TIMESTAMP(timezone=True), default=db.func.current_timestamp(), nullable=False)
+    readyAt = db.Column(db.TIMESTAMP(timezone=True), nullable=True)
 
     def __init__(self, eid, uid, status="Waiting"):
         self.eid = eid
@@ -110,7 +112,7 @@ def update_queue_status_ready(eid):
 
 @app.route("/queue/event/<int:eid>/ready-missed", methods=["PUT"])
 def check_and_update_missed_status(eid):
-    fifteen_minutes_ago = datetime.now(timezone.utc) - timedelta(minutes=MAX_MINUTES_IN_QUEUE)
+    fifteen_minutes_ago = datetime.now(timezone.utc) - timedelta(minutes=MAX_MINUTES_READY)
     queue_entries = Queue.query.filter(Queue.status == 'Ready', Queue.readyAt <= fifteen_minutes_ago, Queue.eid==eid).all()
 
     if len(queue_entries) == 0 :
@@ -119,7 +121,7 @@ def check_and_update_missed_status(eid):
     updated_entries = []
 
     for queue_entry in queue_entries:
-        queue_entry.status = 'missed'
+        queue_entry.status = 'Missed'
         updated_entries.append({"eid": queue_entry.eid, "uid": queue_entry.uid})
 
     try:
@@ -136,7 +138,7 @@ def close_queue(eid):
     updated_entries = []
 
     for queue_entry in queue_entries:
-        queue_entry.status = 'fail'
+        queue_entry.status = 'Fail'
         updated_entries.append({"eid": queue_entry.eid, "uid": queue_entry.uid})
 
     try:
@@ -157,7 +159,7 @@ def update_queue_status_bought(eid,uid):
 
         queue_entry = Queue.query.filter_by(status='Ready', eid=eid,uid=uid).one()
 
-        queue_entry.status = 'Bought'
+        queue_entry.status = 'Done'
         db.session.commit()
 
         queue_entry = Queue.query.filter_by(status='Ready', eid=eid,uid=uid).one()
@@ -170,12 +172,42 @@ def update_queue_status_bought(eid,uid):
 @app.route("/queue/event/<int:eid>/user/<int:uid>")
 def find_specific_queue_status(eid, uid):
     output_status = db.session.scalars(db.select(Queue).filter_by(eid=eid, uid=uid).limit(1)).first()
+    #what if the user not in queue
+
+    if output_status.status == "Waiting":
+        #position = number of people ahead of me who are not ready
+        number_people_ahead =1 +  Queue.query.filter(Queue.eid == eid,Queue.status == "Waiting",  Queue.createdAt < output_status.json()["createdAt"]).count()
+        position_in_line = 1 + number_people_ahead
+
+        #estimate waiting time
+
+        #step 1 for the people who are ready 
+        #consider worst case where the only time people are admitted into "Ready"
+        #is when people ready all are cleared i.e. Done/Failed
+        ready_user_with_latest_ready_time = Queue.query.filter(Queue.eid == eid, Queue.status == "Ready").order_by(db.desc(Queue.readyAt)).first()
+        if ready_user_with_latest_ready_time is not None:
+            latest_ready_time = ready_user_with_latest_ready_time.readyAt.replace(tzinfo=pytz.utc)
+        else:
+            latest_ready_time = datetime.now(timezone.utc)
+
+        #then out of people ahead of me who are waiting
+        # assume we all enter in groups of 5 (MAX_PEOPLE_READY)
+        # and everyone fails / buys last minute
+                                                                                    #why floor? because when its my group's turn I will be ready
+        maximum_time_to_process_people_ahead = timedelta(minutes=(MAX_MINUTES_READY * (number_people_ahead // MAX_PEOPLE_READY)))
+        predicted_time_user_ready = latest_ready_time + maximum_time_to_process_people_ahead
+        print(math.ceil(number_people_ahead / MAX_PEOPLE_READY))
+        waiting_time = predicted_time_user_ready - datetime.now(timezone.utc)
+
+        output_json = output_status.json()
+        output_json["position"] = position_in_line
+        output_json["waiting_time_minutes"]=round(waiting_time.total_seconds() / 60)
 
     if output_status:
-        return jsonify({"code": 200, "data": output_status.json()})
+        return jsonify({"code": 200, "data": output_json })
     return jsonify({"code": 404, "message": "User not found in queue."}), 404
 
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5004, debug=True)
+    app.run(host="0.0.0.0", port=5404, debug=True)
