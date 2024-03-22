@@ -32,10 +32,10 @@ public class UserController {
         return service.getUsersByIds(uids).stream().collect(Collectors.toMap(User::getUid, user -> user));
     }
 
-    @GetMapping("/email")
-    public Map<Integer, User> getUsersByMultipleEmails(@RequestParam("email") List<String> emails) {
-        return service.getUsersByEmail(emails).stream().collect(Collectors.toMap(User::getUid, user -> user));
-    }
+    // @GetMapping("/email")
+    // public Map<Integer, User> getUsersByMultipleEmails(@RequestParam List<String> emails) {
+    //     return service.getUsersByEmail(emails).stream().collect(Collectors.toMap(User::getUid, user -> user));
+    // }
 
     @GetMapping("/all")
     public Map<Integer, User> getAllUsers() {
