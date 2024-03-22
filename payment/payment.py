@@ -31,7 +31,7 @@ db = SQLAlchemy(app)
 
 CORS(app)
 
-YOUR_DOMAIN = 'http://localhost:5000'
+YOUR_DOMAIN = 'http://localhost:4242'
 
 class User(db.Model):
     __tablename__ = "user"
@@ -104,4 +104,4 @@ def order_success():
   return render_template_string('<html><body><h1>Thanks for your order, {{customer.name}}!</h1></body></html>', customer=customer)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=4242, debug=True)
