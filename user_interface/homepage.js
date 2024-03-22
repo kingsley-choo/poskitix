@@ -14,6 +14,14 @@ const root = Vue.createApp({
             dog_snack: "Beef Jerky"
 
         }
+    },
+
+    created() {
+        axios.get('https://localhost/is216/REST/blog/addPost.php', {
+            params: { entry: this.entry }
+        })
+            .then(response => { console.log(response.data) })
+            .catch(error => { console.log(error.message) })
     }
 
 })
@@ -22,7 +30,7 @@ const root = Vue.createApp({
 root.component("pet-component", {
 
     // Properties, data properties
-    props: ["type", "name", "snack"], 
+    props: ["type", "name", "snack"],
 
     template: `
     <h2>
