@@ -17,21 +17,18 @@ services:
       - ./database/:/docker-entrypoint-initdb.d/
 
   ####################################
-  # user-application microservice  
+  # User microservice (Java)
   ####################################
-  user-application:
+  user:
     build:
       context: ./user-application/cs102
       dockerfile: Dockerfile
     environment:
-      # - MYSQL_HOST=localhost
-      # - MYSQL_DATABASE=user
-      # - URL=jdbc:mysql://database:3306/user
       - MYSQL_HOST=database
       - MYSQL_USERNAME=root
       - MYSQL_PASSWORD=example
     ports:
-      - "7696:7696"
+      - "5001:5001"
     depends_on:
       - database
   
@@ -39,17 +36,17 @@ services:
   ####################################
   # User microservice  
   ####################################
-  user:
-    build:
-      context: ./users
-      dockerfile: Dockerfile
-    environment:
-      dbURL: mysql+mysqlconnector://root:example@database:3306/user
-      PYTHONUNBUFFERED: 1
-    ports:
-      - '5001:5001'
-    depends_on:
-      - database
+  # user:
+  #   build:
+  #     context: ./users
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     dbURL: mysql+mysqlconnector://root:example@database:3306/user
+  #     PYTHONUNBUFFERED: 1
+  #   ports:
+  #     - '5001:5001'
+  #   depends_on:
+  #     - database
 
   ####################################
   # Event microservice  
