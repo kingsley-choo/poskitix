@@ -44,5 +44,11 @@ def find_by_email(email):
         return jsonify({"code": 200, "data": output_uid.json()})
     return jsonify({"code": 404, "message": "User not found."}), 404
 
+@app.route("/queue/event/<int:eid>/user/<int:uid>")
+def purchase_ticket(eid, uid):
+    r_status = request.get(f"http://localhost:5004/{eid}/user/{uid}")
+    
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
