@@ -12,28 +12,9 @@ channel = connection.channel()
 app = Flask(__name__)
 CORS(app)
 
-def email(r, event, s):
-    for person in r.json()["updated_entries"]:
-                uid = person["uid"]
-                r_user = requests.get(f"http://localhost:5001/user/{uid}")
-                #step 10 & 11 getting emails of all the users with status changed
-                if r_user.status_code //200 != 1:
-                    return r_user.text, 404
-                    #step 12
-                exchange="email"
-                body = {
-                    "user" : r_user.json()["data"],
-                    "event" : event
-                }
-                channel.exchange_declare(exchange=exchange,
-                                    exchange_type='topic', durable=True)
-                channel.basic_publish(exchange=exchange,
-                                routing_key= s,
-                                body=json.dumps(body))
-
 #activity log and error log missing
-@app.route("/queue/event/<int:eid>/user/<int:uid>/process")
-def process_ticket(eid):
+@app.route("/queue/process", methods=["POST", "PUT"])
+def process_ticket():
     #step 2 and 3 - get all future events
     r_event = requests.get(f"http://localhost:5002/event")
     if r_event.status_code // 200 != 1:
@@ -105,6 +86,27 @@ def process_ticket(eid):
     return {
             "status" : 200,}
 
+
+def email(r, event, s):
+    for person in r.json()["updated_entries"]:
+                uid = person["uid"]
+                r_user = requests.get(f"http://localhost:5001/user/{uid}")
+                #step 10 & 11 getting emails of all the users with status changed
+                if r_user.status_code //200 != 1:
+                    return r_user.text, 404
+                    #step 12
+                exchange="email"
+                body = {
+                    "user" : r_user.json()["data"],
+                    "event" : event
+                }
+                channel.exchange_declare(exchange=exchange,
+                                    exchange_type='topic', durable=True)
+                channel.basic_publish(exchange=exchange,
+                                routing_key= s,
+                                body=json.dumps(body))
+
+print(app.url_map)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5200, debug=True)
