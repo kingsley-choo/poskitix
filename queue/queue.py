@@ -130,24 +130,51 @@ def check_and_update_missed_status(eid):
     except Exception as e:
         db.session.rollback()
         return jsonify({"code": 500, "message": "An error occurred during update. " + str(e)}), 500
-    
-@app.route("/queue/event/<int:eid>/waiting-fail", methods=["PUT"])
-def close_queue(eid):
-    queue_entries = Queue.query.filter(Queue.status == 'Waiting').all()
+
+@app.route("/queue/event/<int:eid>/waiting-ready", methods=["PUT"])
+def update_queue_status_ready(eid):
+        data = request.get_json()
+        no_of_tickets = data.get("tickets_remaining")
+        no_of_ready_in_queue =   Queue.query.filter_by(status='Ready', eid=eid).count()
+        queue_entries = Queue.query.order_by(db.asc(Queue.createdAt)).filter_by(status='Waiting', eid=eid).limit(min(no_of_tickets,MAX_PEOPLE_READY)-no_of_ready_in_queue).all()
+
+        if len(queue_entries) ==0 :
+            return jsonify({"code": 404, "message": "Number of people ready has reached maximum"}), 404
+
+        updated_entries = []
+        try:
+            for queue_entry in queue_entries:
+                queue_entry.status = "Ready"
+                updated_entries.append({
+                    "uid" : queue_entry.uid,
+                    "eid" : queue_entry.eid
+                })
+                
+            db.session.commit()
+            return jsonify({"code": 200, 
+                            "message": f"Update to 'Ready' completed successfully for the first {min(no_of_tickets,MAX_PEOPLE_READY)-no_of_ready_in_queue} rows."
+                            , "updated_entries": updated_entries}), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"code": 500, "message": "An error occurred during bulk update.", "error": str(e)}), 500
+
+#new function for poskitix suggestion
+@app.route("/queue/event/<int:eid>/ready-paying", methods=["PUT"])
+def paying_queue(eid):
+    queue_entries = Queue.query.filter(Queue.status == 'Ready', eid=eid).all()
 
     updated_entries = []
 
     for queue_entry in queue_entries:
-        queue_entry.status = 'Fail'
+        queue_entry.status = 'Paying'
         updated_entries.append({"eid": queue_entry.eid, "uid": queue_entry.uid})
 
     try:
         db.session.commit()
-        return jsonify({"code": 200, "message": "Update to 'Missed' completed successfully.", "updated_entries": updated_entries}), 200
+        return jsonify({"code": 200, "message": "Update to 'Paying' completed successfully.", "updated_entries": updated_entries}), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({"code": 500, "message": "An error occurred during update. " + str(e)}), 500
-
 
 @app.route("/queue/event/<int:eid>/user/<int:uid>/ready-done", methods=["PUT"])
 def update_queue_status_bought(eid,uid):
@@ -168,6 +195,51 @@ def update_queue_status_bought(eid,uid):
     except Exception as e:
         db.session.rollback()
         return jsonify({"code": 500, "message": f"An error occurred: {str(e)}"}), 500
+
+#new function for poskitix suggestion
+@app.route("/queue/event/<int:eid>/user/<int:uid>/paying-done", methods=["PUT"])
+def update_queue_status_paid(eid,uid):
+    try:
+        number_of_user_paid = Queue.query.filter_by(status='Paying', eid=eid,uid=uid).count()
+        #only either 0 or 1 because eid uid is primary key
+        if number_of_user_paid ==0:
+            return jsonify({"code": 404, "message": f"User {uid} in event {eid} has not paid."}), 404
+
+        queue_entry = Queue.query.filter_by(status='Paying', eid=eid,uid=uid).one()
+
+        queue_entry.status = 'Done'
+        db.session.commit()
+
+        queue_entry = Queue.query.filter_by(status='Paying', eid=eid,uid=uid).one()
+
+        return jsonify({"code": 200, "message": f"User {uid} updated to 'Bought' successfully."}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"code": 500, "message": f"An error occurred: {str(e)}"}), 500
+
+#poskitix solution paying to missed if exceed 15minutes since readyat time but this is specific to one at a time
+@app.route("/queue/event/<int:eid>/user/<int:uid>/paying-missed", methods=["PUT"])
+def update_paying_status_to_missed(eid, uid):
+    try:
+        # Fetch the queue entry for the given eid and uid with 'Paying' status
+        queue_entry = Queue.query.filter_by(eid=eid, uid=uid, status='Paying').first()
+        
+        if queue_entry is None:
+            return jsonify({"code": 404, "message": f"No user with uid {uid} in event {eid} found in 'Paying' status."}), 404
+        
+        # Check if the time difference exceeds 15 minutes between current time and ReadyAt time
+        fifteen_minutes_ago = datetime.now(timezone.utc) - timedelta(minutes=15)
+        if queue_entry.readyAt <= fifteen_minutes_ago:
+            # Update the status to 'Missed'
+            queue_entry.status = 'Missed'
+            db.session.commit()
+            return jsonify({"code": 200, "message": f"User {uid} in event {eid} status updated from 'Paying' to 'Missed'."}), 200
+        else:
+            return jsonify({"code": 400, "message": f"Time limit not exceeded for user {uid} in event {eid} to update status from 'Paying' to 'Missed'."}), 400
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"code": 500, "message": f"An error occurred: {str(e)}"}), 500
+
 
 @app.route("/queue/event/<int:eid>/user/<int:uid>")
 def find_specific_queue_status(eid, uid):
