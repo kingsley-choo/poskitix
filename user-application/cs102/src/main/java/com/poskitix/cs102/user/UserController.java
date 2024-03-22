@@ -1,14 +1,16 @@
 package com.poskitix.cs102.user;
 
-// import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/user")
 public class UserController {
+
     private final UserService service;
 
     public UserController(UserService service) {
@@ -20,12 +22,22 @@ public class UserController {
         return service.getUserById(uid);
     }
 
+    @GetMapping("/email/{email}")
+    public User getUserByEmail(@PathVariable String email) {
+        return service.getUserByEmail(email);
+    }
+
     @GetMapping
     public Map<Integer, User> getUsersByMultipleIds(@RequestParam("uid") List<Integer> uids) {
         return service.getUsersByIds(uids).stream().collect(Collectors.toMap(User::getUid, user -> user));
     }
 
-    @GetMapping
+    @GetMapping("/email")
+    public Map<Integer, User> getUsersByMultipleEmails(@RequestParam("email") List<String> emails) {
+        return service.getUsersByEmail(emails).stream().collect(Collectors.toMap(User::getUid, user -> user));
+    }
+
+    @GetMapping("/all")
     public Map<Integer, User> getAllUsers() {
         return service.getAllUsers().stream().collect(Collectors.toMap(User::getUid, user -> user));
     }

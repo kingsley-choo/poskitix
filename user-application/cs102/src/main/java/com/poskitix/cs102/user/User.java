@@ -17,7 +17,4 @@ public class User {
 
     private String email;
 
-    // public Integer getUid() {
-    //     return uid;
-    // }
 }
