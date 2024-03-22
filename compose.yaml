@@ -17,6 +17,26 @@ services:
       - ./database/:/docker-entrypoint-initdb.d/
 
   ####################################
+  # user-application microservice  
+  ####################################
+  user-application:
+    build:
+      context: ./user-application/cs102
+      dockerfile: Dockerfile
+    environment:
+      # - MYSQL_HOST=localhost
+      # - MYSQL_DATABASE=user
+      # - URL=jdbc:mysql://database:3306/user
+      - MYSQL_HOST=database
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=example
+    ports:
+      - "7696:7696"
+    depends_on:
+      - database
+  
+  
+  ####################################
   # User microservice  
   ####################################
   user:
@@ -182,13 +202,14 @@ services:
       - "8004:8004" # Dev Portal /files traffic over HTTPS, assuming the Dev Portal is enabled.
       - "8447:8447" # Dev Portal /files traffic over HTTPS, assuming the Dev Portal is enabled.
 
-  httpd:
-    build: 
-      context:  ./
-      dockerfile: httpd.Dockerfile
-    restart: always
-    ports:
-      - "80:80"
+
+  # httpd:
+  #   build: 
+  #     context:  ./
+  #     dockerfile: httpd.Dockerfile
+  #   restart: always
+  #   ports:
+  #     - "80:80"
 
  
 volumes:
