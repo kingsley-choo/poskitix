@@ -31,10 +31,9 @@ def process_ticket():
         if tickets_left == 0:
             #step 7b & 8 changing status
             r_waitingtofail = requests.get(f"http://localhost:5004/queue/event/{eid}/waiting-fail")
-            if r_waitingtofail.status_code // 100 != 2:
-                return r_waitingtofail.text, r_waitingtofail.status_code
+            if r_waitingtofail.status_code // 100 == 2:
             #step 9 - returned ID of impacted users in "updated_entries"
-            email(r_waitingtofail, event, "waiting.fail")
+                email(r_waitingtofail, event, "waiting.fail")
             # for person in r_waitingtofail.json()["updated_entries"]:
             #     uid = person["uid"]
             #     #step 10 & 11 getting emails of all the users with status changed
@@ -56,16 +55,14 @@ def process_ticket():
         #CASE A - there are still tickets in this event
         else:
             #step 7a & 8 changing status
-            r_readytomissed = requests.get(f"http://localhost:5004/queue/event/{eid}/ready-missed")
-            if r_readytomissed.status_code // 100 != 2:
-                return r_readytomissed.text, r_readytomissed.status_code
-            email(r_readytomissed, event, "ready.missed")
+            r_readytomissed = requests.put(f"http://localhost:5004/queue/event/{eid}/ready-missed")
+            if r_readytomissed.status_code // 100 == 2:
+                email(r_readytomissed, event, "ready.missed")
 
-            r_waitingtoready = requests.get(f"http://localhost:5004/queue/event/{eid}/waiting-ready/")
-            if r_waitingtoready.status_code // 100 != 2:
-                return r_waitingtoready.text, r_waitingtoready.status_code
+            r_waitingtoready = requests.put(f"http://localhost:5004/queue/event/{eid}/waiting-ready/")
+            if r_waitingtoready.status_code // 100 == 2:
             #step 9 - returned ID of impacted users in "updated_entries"
-            email(r_waitingtoready, event, "waiting.ready")
+                email(r_waitingtoready, event, "waiting.ready")
             # for person in r_waitingtoready.json()["updated_entries"]:
             #     uid = person["uid"]
             #     r_user = requests.get(f"http://localhost:5001/user/{uid}")
@@ -83,8 +80,7 @@ def process_ticket():
             #     channel.basic_publish(exchange=exchange,
             #                     routing_key='waiting.ready',
             #                     body=json.dumps(body))
-    return {
-            "status" : 200,}
+    return {"status" : 200}
 
 
 def email(r, event, s):
