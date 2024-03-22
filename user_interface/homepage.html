@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poskitix</title>
+    <script class="headflowbite" src="./node_modules/flowbite/dist/datepicker.js"></script>
+    <!-- Load Google client library -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://apis.google.com/js/platform.js?onload=initGoogleSignIn" async defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+
+</head>
+
+<body>
+    <div>
+
+        <nav class="bg-white border-gray-200 dark:bg-gray-900">
+            <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+                <a href="homepage.html" class="flex items-center space-x-3 rtl:space-x-reverse">
+                    <img src="../pics/logo.png" class="h-8" alt="Poskitix Logo" />
+                    <!-- <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Poskitix</span> -->
+                </a>
+
+                <button data-collapse-toggle="navbar-default" type="button"
+                    class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                    aria-controls="navbar-default" aria-expanded="false">
+                    <span class="sr-only">Open main menu</span>
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 17 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M1 1h15M1 7h15M1 13h15" />
+                    </svg>
+                </button>
+
+                <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+                    <ul
+                        class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                        <li>
+                            <a href="#"
+                                class="block py-2 px-3 text-white bg-red-700 rounded md:bg-transparent md:text-red-700 md:p-0 dark:text-white md:dark:text-red-500"
+                                aria-current="page">Home</a>
+                        </li>
+                        <li>
+                            <a href="#"
+                                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0 dark:text-white md:dark:hover:text-red-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Events</a>
+                        </li>
+                        <li>
+                            <a href="#"
+                                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0 dark:text-white md:dark:hover:text-red-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Tickets</a>
+                        </li>
+                        <li>
+                            <a href="#"
+                                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0 dark:text-white md:dark:hover:text-red-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Profile</a>
+                        </li>
+                        <li>
+                            <a href="#"
+                                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0 dark:text-white md:dark:hover:text-red-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </nav>
+
+        <div id="PageContent">
+
+            <div class="flex flex-col flex-1">
+                <div>
+                    <div id="top-header" class="block pt-8 shadow-inner w-full">
+                        <div id="page-header" class="typingtext">
+                            <div class="typewriter hidden lg:block justify-content-center ">
+                                <h1
+                                    class="mb-4 p-5 text-3xl font-extrabold leading-none tracking-tight text-black md:text-5xl lg:text-6xl text-center">
+                                    Buying Concert Tickets have Never been Easier!
+                                </h1>
+                            </div>
+                        </div>
+
+                        <div class="lg:hidden">
+                            <h1
+                                class="mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl text-white text-center">
+                                Buying Concert Tickets have Never been Easier!
+                            </h1>
+                        </div>
+
+                        <p id="page-subheader"
+                            class="mb-6 text-3xl font-bold lg:text-4xl sm:px-16 xl:px-48 text-gray-400 text-center">
+                            At
+                            <mark class="px-1 font-bold text-white bg-black rounded"><span class="text-white font-bold">Poski</span><span class="font-bold text-red-500">tix</span></mark>, We're Dedicated to
+                            Enhancing YOUR Ticketing Purchases
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="animate-up flex flex-shrink-0 h-80 md:h-96">
+                    <div id="user-input-area" class="w-full h-auto">
+                        <div id="homepage-carousel" class="z-0 w-full content-center" data-carousel="slide">
+                            <div class="relative z-0 h-80 overflow-hidden w-full rounded-t-2xl md:h-96">
+
+                                <div class="hidden duration-1000 ease-in-out" data-carousel-item>
+                                    <img src="pics/erastour.jpeg"
+                                        class="w-full h-64 lg:h-full object-cover relative block w-full shadow-xl"
+                                        alt="Taylor Swift Eras Tour">
+                                </div>
+
+                                <div class="hidden duration-1000 ease-in-out" data-carousel-item>
+                                    <img src="pics/brunomars.png"
+                                        class="w-full h-64 lg:h-full object-cover relative block w-full shadow-xl"
+                                        alt="Bruno Mars Tour">
+                                </div>
+
+                                <div class="hidden duration-1000 ease-in-out" data-carousel-item>
+                                    <img src="pics/coldplay.png"
+                                        class="h-64 lg:h-full object-cover relative block w-full shadow-xl"
+                                        alt="Coldplay Music of Spheres Tour">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="animate-up flex flex-shrink-0 flex-1">
+                    <div id="featured-listings" style="background-color: rgb(0, 0, 0);"
+                        class="px-6 pt-2 pb-12 w-full h-full">
+
+                        <div id="header-featured-listings" class="px-6 my-5">
+                            <h1
+                                class="text-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-emerald-600 md:text-5xl lg:text-6xl dark:text-white">
+                                Concerts People <mark
+                                    class="px-4 font-bold text-white bg-red-600 rounded dark:bg-red-500">LOVE</mark>
+                            </h1>
+
+
+
+                            <p class="font-bold text-lg text-gray-500 lg:text-xl dark:text-gray-400 text-center">
+                                Concerting
+                                Shouldn't be Complicated!</p>
+                        </div>
+
+                        <div id="PageContent"
+                            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 place-items-center content-center">
+
+                            <!-- <itemCardVue v-for="doc of allDocs" :cardID=doc.ID :cardName=doc.Data.Name
+                                :cardImg=doc.Data.images[0] :cardRating=doc.Data.rating
+                                :cardRatingImg=doc.Data.rating_img :card-price=doc.Data.Price_level>
+                            </itemCardVue> -->
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
+
+<style>
+    #user-input-area {
+        position: relative;
+        padding-bottom: 500px;
+        width: 100%;
+    }
+
+    #user-input-box {
+        height: 145px;
+        margin: auto;
+        background-color: rgb(207, 202, 194, 0.9);
+    }
+
+    .animate-up {
+        animation: FlyUpAnimation ease 0.5s;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+    }
+
+    #pageContent {
+        animation: fadeInAnimation ease 0.5s;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes fadeInAnimation {
+        0% {
+            transform: translateY(100%);
+        }
+
+        100% {
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes FlyUpAnimation {
+        0% {
+            transform: translateY(100%);
+        }
+
+        100% {
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes typing {
+        from {
+            width: 0;
+            margin: 10px;
+        }
+
+        to {
+            width: 100%
+        }
+    }
+
+    .typewriter h1 {
+
+        overflow: hidden;
+
+        /* Keeps the content on a single line */
+        white-space: nowrap;
+
+        /* Gives that scrolling effect  
+     as the typing happens */
+        /* margin: 0 auto;  */
+
+        /* Typing Effect Animation */
+        animation: typing 2.5s steps(50, end)
+    }
+
+    .typingtext {
+
+        /* Keeping the Text in the  
+     center of the Screen */
+        display: flex;
+        justify-content: center;
+        padding: 5px;
+    }
+</style>
+
+<!-- ApexChart CDN -->
+<script class='' src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<!-- Itinerary flowbite -->
+<script id='flowbite' src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.0.0/flowbite.min.js"></script>
+<!-- <script src="./node_modules/flowbite/dist/flowbite.min.js"></script>
+<script src="./node_modules/flowbite/dist/datepicker.js"></script> -->
+
+<!-- Importing icons from ionic.io -->
+<script class='importCDN' type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script class='importCDN' nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
