@@ -81,34 +81,25 @@ def create_queue():
              }
              ), 500
 
-@app.route("/queue/event/<int:eid>/waiting-ready", methods=["PUT"])
-def update_queue_status_ready(eid):
-        data = request.get_json()
-        no_of_tickets = data.get("tickets_remaining")
-        no_of_ready_in_queue =   Queue.query.filter_by(status='Ready', eid=eid).count()
-        queue_entries = Queue.query.order_by(db.asc(Queue.createdAt)).filter_by(status='Waiting', eid=eid).limit(min(no_of_tickets,MAX_PEOPLE_READY)-no_of_ready_in_queue).all()
+@app.route("/queue/event/<int:eid>/waiting-fail", methods=["PUT"])
+def check_and_update_fail_status(eid):
+    queue_entries = Queue.query.filter(Queue.status == 'Waiting', Queue.eid==eid).all()
 
-        if len(queue_entries) ==0 :
-            return jsonify({"code": 404, "message": "Number of people ready has reached maximum"}), 404
+    if len(queue_entries) == 0 :
+        return jsonify({"code": 200, "message": f"No user status was updated in queue for event {eid}", "updated_entries": []}), 200
 
-        updated_entries = []
-        try:
-            for queue_entry in queue_entries:
-                queue_entry.status = "Ready"
-                updated_entries.append({
-                    "uid" : queue_entry.uid,
-                    "eid" : queue_entry.eid
-                })
-                
-            db.session.commit()
-            return jsonify({"code": 200, 
-                            "message": f"Update to 'Ready' completed successfully for the first {min(no_of_tickets,MAX_PEOPLE_READY)-no_of_ready_in_queue} rows."
-                            , "updated_entries": updated_entries}), 200
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({"code": 500, "message": "An error occurred during bulk update.", "error": str(e)}), 500
+    updated_entries = []
 
+    for queue_entry in queue_entries:
+        queue_entry.status = 'Fail'
+        updated_entries.append({"eid": queue_entry.eid, "uid": queue_entry.uid})
 
+    try:
+        db.session.commit()
+        return jsonify({"code": 200, "message": "Update to 'Fail' completed successfully.", "updated_entries": updated_entries}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"code": 500, "message": "An error occurred during update. " + str(e)}), 500
 
 @app.route("/queue/event/<int:eid>/ready-missed", methods=["PUT"])
 def check_and_update_missed_status(eid):
@@ -130,6 +121,7 @@ def check_and_update_missed_status(eid):
     except Exception as e:
         db.session.rollback()
         return jsonify({"code": 500, "message": "An error occurred during update. " + str(e)}), 500
+
 
 @app.route("/queue/event/<int:eid>/waiting-ready", methods=["PUT"])
 def update_queue_status_ready(eid):
