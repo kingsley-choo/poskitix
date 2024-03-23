@@ -200,10 +200,10 @@ services:
       - "8447:8447" # Dev Portal /files traffic over HTTPS, assuming the Dev Portal is enabled.
 
   httpd:
-    build: 
-      context:  ./
-      dockerfile: httpd.Dockerfile
+    image: httpd 
     restart: always
+    volumes: 
+      - ./user_interface:/usr/local/apache2/htdocs/
     ports:
       - "80:80"
 
