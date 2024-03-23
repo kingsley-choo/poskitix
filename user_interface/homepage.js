@@ -5,48 +5,54 @@ const root = Vue.createApp({
     data() {
         return {
 
-            // Pretend animal info came from API
-
-            cat_name: "Kitty",
-            cat_snack: "Salmon",
-
-            dog_name: "Flash",
-            dog_snack: "Beef Jerky"
+            events: ""
 
         }
     },
+    methods: {
+        get_all_events() {
 
-    created() {
-        axios.get('https://localhost/is216/REST/blog/addPost.php', {
-            params: { entry: this.entry }
-        })
-            .then(response => { console.log(response.data) })
-            .catch(error => { console.log(error.message) })
+            // call API endpoint
+
+            let api_endpoint_url = "http://localhost:8000/api/v1/event/1"
+
+            axios.get(api_endpoint_url)
+                .then(response => {
+                    console.log(response.data) // Array
+
+                    this.events = response.data // Array
+                })
+
+                .catch(error => {
+                    console.log(error.message)
+                })
+
+            console.log("=== [END] get_all_posts() ===")
+        }
+    },
+    
+    // This will run when the webpage loads for the first time 
+    created() { 
+        console.log("===[START] created() ===") 
+ 
+            // call API endpoint 
+            let api_endpoint_url = "http://localhost:8000/api/v1/event/1"
+
+            // Don't do risky stuff here first
+            axios.get(api_endpoint_url)
+                .then(response => {
+                    console.log(response.data) // Array
+
+                    this.events = response.data // Array
+                })
+
+                .catch(error => {
+                    console.log(error.message)
+                })
+
+            console.log("=== [END] get_all_posts() ===")
+ 
     }
 
 })
-
-// Add components
-root.component("pet-component", {
-
-    // Properties, data properties
-    props: ["type", "name", "snack"],
-
-    template: `
-    <h2>
-        {{ type }}
-    </h2>
-
-    <p>
-        Name: {{ name }}
-    </p>
-
-    <p>
-        Snack: {{ snack }}
-    </p>
-    `
-
-
-})
-
 root.mount("#root")
