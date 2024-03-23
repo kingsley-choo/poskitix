@@ -12,6 +12,23 @@ channel = connection.channel()
 app = Flask(__name__)
 CORS(app)
 
+@app.route("/?", methods=["GET"])
+#joshie's function, not sure what to put for the route tho
+def get_events_to_display(uid):
+    r_events = request.get(f"http://localhost:5002/event")["data"]
+
+    for event in r_events:
+        input_eid = event["eid"]
+        r_tickets_left = request.get(f"http://localhost:5003/ticket/event/{input_eid}")["data"]["tickets"]
+
+        if r_tickets_left == 0:
+            event["status"] = "Sold Out"
+
+        else:
+            #paiseh not sure whats the output so i put "status" correct if im wrong
+            r_status = request.get(f"http://localhost:5004/queue/event/{input_eid}/user/{uid}")["data"]["status"]
+
+
 #activity log and error log missing
 @app.route("/queue/event/<int:eid>/user/<int:uid>/join", methods=["POST"])
 def join_queue(eid,uid):
