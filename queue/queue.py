@@ -50,8 +50,6 @@ class Queue(db.Model):
             "readyAt": self.readyAt,
         }
 
-
-
 @app.route("/queue", methods = ["POST"])
 def create_queue():
     data = request.get_json()
@@ -237,6 +235,9 @@ def update_paying_status_to_missed(eid, uid):
 def find_specific_queue_status(eid, uid):
     output_status = db.session.scalars(db.select(Queue).filter_by(eid=eid, uid=uid).limit(1)).first()
     #what if the user not in queue
+
+    if output_status == None:
+        return jsonify({"code": 404, "message": "No queue found."}), 404
 
     if output_status.status == "Waiting":
         #position = number of people ahead of me who are not ready
