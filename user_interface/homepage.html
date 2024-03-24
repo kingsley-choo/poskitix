@@ -204,7 +204,7 @@
             axios.get('http://localhost:8000/api/v1/user/email/' + emailinput)
                 .then(function (response) {
                     var nameresult = JSON.stringify(response.data.username);
-                    document.getElementById('result').innerText = "Welcome " + nameresult[1:nameresult.length -1];
+                    document.getElementById('result').innerText = "Welcome " + nameresult
 
                 })
                 .catch(function (error) {
