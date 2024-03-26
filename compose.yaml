@@ -21,7 +21,7 @@ services:
   ####################################
   user:
     build:
-      context: ./user-application/cs102
+      context: ./simple_microservice/user-java
       dockerfile: Dockerfile
     environment:
       - MYSQL_HOST=database
@@ -32,28 +32,12 @@ services:
     depends_on:
       - database
 
-  
-  ####################################
-  # User microservice  
-  ####################################
-  # user:
-  #   build:
-  #     context: ./users
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     dbURL: mysql+mysqlconnector://root:example@database:3306/user
-  #     PYTHONUNBUFFERED: 1
-  #   ports:
-  #     - '5001:5001'
-  #   depends_on:
-  #     - database
-
   ####################################
   # Event microservice  
   ####################################
   event:
     build:
-      context: ./event
+      context: ./simple_microservice/event
       dockerfile: Dockerfile
     environment:
       dbURL: mysql+mysqlconnector://root:example@database:3306/event
@@ -68,7 +52,7 @@ services:
   ####################################
   queue:
     build:
-      context: ./queue
+      context: ./simple_microservice/queue
       dockerfile: Dockerfile
     environment:
       dbURL: mysql+mysqlconnector://root:example@database:3306/queue
@@ -84,7 +68,7 @@ services:
   ####################################
   ticket:
     build:
-      context: ./ticket
+      context: ./simple_microservice/ticket
       dockerfile: Dockerfile
     environment:
       dbURL: mysql+mysqlconnector://root:example@database:3306/ticket
@@ -100,7 +84,7 @@ services:
   notification:
     # restart: on-failure
     build:
-      context: ./notification
+      context: ./simple_microservice/notification
       dockerfile: Dockerfile
     environment:
       RABBIT_URL : 'amqp://rabbitmq'
