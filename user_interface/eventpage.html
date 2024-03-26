@@ -93,41 +93,13 @@
                             class="mb-6 text-3xl font-bold lg:text-4xl sm:px-16 xl:px-48 text-gray-400 text-center">
                             Choose an Event
                         </p>
+
+                        <button onclick="fetchData()">test</button>
                     </div>
                 </div>
 
 
-                
-
-
-
-                <div class="animate-up flex-shrink-0">
-
-                    <div id="email-input-header-box" class="bg-gray-900 flex items-center"
-                        class="px-6 pt-2 pb-12 w-full h-full">
-
-                        <div id="header-email-input" class="px-6 my-5 flex items-center">
-                            
-                            <h1
-                                class="text-white text-center mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl">
-                                Concerts People <mark class="px-4 font-bold text-white bg-red-600 rounded">LOVE</mark>
-                            </h1>
-
-                            <p class="font-bold text-lg text-gray-500 lg:text-xl text-center">
-                                Concerting
-                                Shouldn't be Complicated!
-                            </p>
-
-
-                        </div>
-
-
-                    </div>
-                  
-
-                    
-
-                </div>
+            
 
 
             </div>
@@ -142,11 +114,39 @@
     <script>
         var uid = JSON.parse(localStorage.getItem('uid'));
         var nameresult = localStorage.getItem('nameresult');
-        console.log(uid)
-        console.log(nameresult)
+        // console.log(uid)
+        // console.log(nameresult)
 
         document.getElementById('result').innerText = "Welcome " + nameresult + "!"
+
+        // obtain events and relevant statuses
+        function fetchData() {
         
+
+            axios.get('http://localhost:8000/api/v1/event')
+                .then(function (response) {
+                    // var eventresult = JSON.parse(response.data.data)
+                    var eventresult = JSON.stringify(response.data.data);
+                    console.log(eventresult)
+                    console.log(eventresult["eventname"])
+
+                    for (const event of eventresult) {
+                        var eventname = event.eventname;
+                        console.log(eventname);
+                    }
+
+                    localStorage.setItem('eventname', eventname);
+                    localStorage.setItem('uid', uid);
+                    console.log(localStorage)
+
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        } 
+        
+
+
     </script>
 
 

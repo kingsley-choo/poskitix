@@ -54,6 +54,9 @@ PUT {{queue}}/queue/event/1/user/1/ready-done
 ### get user queue status
 GET {{queue}}/queue/event/1/user/2
 
+### get all event and status based on user (to be checked)
+GET {{event}}/user/1
+
 ### complex micro 1
 POST http://localhost:5100/queue/event/2/user/3/join
 
