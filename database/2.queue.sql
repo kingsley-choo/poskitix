@@ -6,6 +6,7 @@ CREATE TABLE queue (
     eid INT NOT NULL,
     uid INT NOT NULL,
     status VARCHAR(255) default "Waiting",
+    checkout_session_id VARCHAR(70),
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     readyAt TIMESTAMP NULL DEFAULT NULL,
     CONSTRAINT PRIMARY KEY (eid, uid),
