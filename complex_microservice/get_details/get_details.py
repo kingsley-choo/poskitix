@@ -17,7 +17,7 @@ def get_events_to_display(email):
     uid = response_user.json()["uid"]
 
     #2. get a response        #1. make a request....
-    response_events = requests.get(f"http://event:5002/event")
+    response_events = requests.get(f"http://event/event")
 
     #did it fail? lets check
     if response_events.status_code not in range(200,300):

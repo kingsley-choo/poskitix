@@ -40,7 +40,7 @@ def check_payment(id):
     if r_user.status_code // 100 != 2:
         return {"code":200, "data": "Success but notification not sent"}, 200
     
-    r_event = requests.get(f"http://event:5002/event/{eid}")
+    r_event = requests.get(f"http://event/event/{eid}")
     if r_event.status_code // 100 != 2:
         return {"code":200, "data": "Success but notification not sent"}, 200   
     print(r_createticket.text)

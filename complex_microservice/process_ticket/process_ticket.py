@@ -18,7 +18,7 @@ CORS(app)
 @app.route("/queue/process", methods=["POST", "PUT"])
 def process_ticket():
     #step 2 and 3 - get all future events
-    r_event = requests.get(f"http://event:5002/event")
+    r_event = requests.get(f"http://event/event")
     if r_event.status_code // 200 != 1:
         return r_event.text, 404
     #step 4 and 5 checking which event still have ticket

@@ -33,19 +33,16 @@ services:
       - database
 
   ####################################
-  # Event microservice  
+  # Event microservice  (PHP)
   ####################################
   event:
-    build:
-      context: ./simple_microservice/event
-      dockerfile: Dockerfile
-    environment:
-      dbURL: mysql+mysqlconnector://root:example@database:3306/event
-      PYTHONUNBUFFERED: 1
-    ports:
-      - '5002:5002'
     depends_on:
       - database
+    volumes:
+      - "./simple_microservice/event-php:/var/www/html"
+    ports:
+      - 5002:80
+    build: ./simple_microservice/event-php
 
   ####################################
   # Queue microservice  

@@ -18,7 +18,7 @@ def join_queue(eid,uid):
 
 
     #step 4 and 5 - does the event exist? 
-    r_event = requests.get(f"http://event:5002/event/{eid}")
+    r_event = requests.get(f"http://event/event/{eid}")
     if r_event.status_code // 200 != 1:
         return r_event.text, 404
     
