@@ -8,7 +8,8 @@ import json
 
 print(environ.get("RABBIT_URL"))
 
-connection = pika.BlockingConnection(pika.ConnectionParameters(environ.get("RABBIT_URL")))
+connection = pika.BlockingConnection(pika.ConnectionParameters(environ.get("RABBIT_URL"),heartbeat=600,
+                                       blocked_connection_timeout=300))
 channel = connection.channel()
 
 app = Flask(__name__)
