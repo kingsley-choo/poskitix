@@ -71,7 +71,7 @@ export default  {
                     <p>
                         You have successfully purchased ticket for
                         ${event_info.eventname} on ${event_info.date} at ${event_info.location}.
-                        Please arrive at least 15 minutes before the event and present the following barcode.
+                        Please arrive at least 15 minutes before the event and present the following QR code:
                     </p>
 
                     <p>
