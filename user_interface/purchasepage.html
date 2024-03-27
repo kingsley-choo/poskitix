@@ -69,40 +69,38 @@
         </nav>
 
         <div id="PageContent">
-
-            <div class="flex flex-col flex-1">
-                <div>
-                    <div id="top-header" class="block pt-8 shadow-inner w-full">
-                        <div id="page-header" class="typingtext text-black">
-                            <div class="typewriter hidden lg:block justify-content-center ">
-                                <h1 id="result"
-                                    class="mb-4 p-5 text-3xl font-extrabold leading-none tracking-tight text-black md:text-5xl lg:text-6xl text-center">
-                                    <!-- Welcome user -->
-                                </h1>
-                            </div>
+            
+            <!-- Jumbotron -->
+            <div
+                class="relative h-[800px] overflow-hidden bg-[url('/pics/congrats.png')] bg-cover bg-no-repeat p-12 text-center text-white">
+                <div
+                    class="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden bg-black/60 bg-fixed">
+                    <div class="flex h-full items-center justify-center">
+                        <div class="text-white">
+                            <h4 class="mb-6 text-3xl font-semibold">
+                                Congratulations! You are on your way to purchase tickets for 
+                            </h4>
+                            <!-- Event chosen -->
+                            <h2 class="mb-4 text-5xl font-semibold"><div id="result">TayTayTest</div></h2>
+                            <h4 class="mb-6 text-2xl font-semibold">
+                                <br><br>
+                                Please click the button below to make payment
+                            </h4> 
+                            
+                            <button type="button"
+                                class="inline-block rounded border-4 border-neutral-50 px-6 pb-[6px] pt-2 text-lg font-medium uppercase leading-normal text-neutral-50 transition duration-150 ease-in-out hover:border-red-600 hover:text-neutral-200 focus:border-neutral-300 focus:text-neutral-200 focus:outline-none focus:ring-0 active:border-neutral-300 active:text-neutral-200"
+                                data-twe-ripple-init data-twe-ripple-color="light">
+                                    Pay Now
+                            </button>
                         </div>
-
-                        <div class="lg:hidden">
-                            <h1 id="result"
-                                class="mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl text-black text-center">
-                                <!-- Welcome user -->
-                            </h1>
-                        </div>
-
-                        <p id="page-subheader"
-                            class="mb-6 text-3xl font-bold lg:text-4xl sm:px-16 xl:px-48 text-gray-400 text-center">
-                            Choose an Event
-                        </p>
-
-                        
                     </div>
                 </div>
-
-
-            
-
-
             </div>
+            <!-- Jumbotron -->
+
+
+
+
             <footer
                 class="fixed bottom-0 left-0 z-20 w-full h-auto p-1 bg-gray-900 shadow md:flex md:items-center md:justify-between md:p-2">
                 <span class="text-sm text-white sm:text-center">© 2024 <a href="https://flowbite.com/"
@@ -115,42 +113,13 @@
     </div>
 
 
-    <!-- testing germaine -->
     <script>
-        var uid = JSON.parse(localStorage.getItem('uid'));
-        var nameresult = localStorage.getItem('nameresult');
-        // console.log(uid)
-        // console.log(nameresult)
 
-        document.getElementById('result').innerText = "Welcome " + nameresult + "!"
+        // var uid = JSON.parse(localStorage.getItem('uid'));
+        var eventchosen = localStorage.getItem('eventchosen');
 
-        // obtain events and relevant statuses
-        function fetchData() {
+        document.getElementById('result').innerText = eventresult 
         
-
-            axios.get('http://localhost:8000/api/v1/event')
-                .then(function (response) {
-                    // var eventresult = JSON.parse(response.data.data)
-                    var eventresult = JSON.stringify(response.data.data);
-                    console.log(eventresult)
-                    console.log(eventresult["eventname"])
-
-                    for (const event of eventresult) {
-                        var eventname = event.eventname;
-                        console.log(eventname);
-                    }
-
-                    localStorage.setItem('eventname', eventname);
-                    localStorage.setItem('uid', uid);
-                    console.log(localStorage)
-
-                })
-                .catch(function (error) {
-                    console.error(error);
-                });
-        } 
-        
-
 
     </script>
 
@@ -161,86 +130,6 @@
 
 </html>
 
-<style>
-    #user-input-area {
-        position: relative;
-        padding-bottom: 500px;
-        width: 100%;
-    }
-
-    #user-input-box {
-        height: 145px;
-        margin: auto;
-        background-color: rgb(207, 202, 194, 0.9);
-    }
-
-    .animate-up {
-        animation: FlyUpAnimation ease 0.5s;
-        animation-iteration-count: 1;
-        animation-fill-mode: forwards;
-    }
-
-    #pageContent {
-        animation: fadeInAnimation ease 0.5s;
-        animation-iteration-count: 1;
-        animation-fill-mode: forwards;
-    }
-
-    @keyframes fadeInAnimation {
-        0% {
-            transform: translateY(100%);
-        }
-
-        100% {
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes FlyUpAnimation {
-        0% {
-            transform: translateY(100%);
-        }
-
-        100% {
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes typing {
-        from {
-            width: 0;
-            margin: 10px;
-        }
-
-        to {
-            width: 100%
-        }
-    }
-
-    .typewriter h1 {
-
-        overflow: hidden;
-
-        /* Keeps the content on a single line */
-        white-space: nowrap;
-
-        /* Gives that scrolling effect  
-     as the typing happens */
-        /* margin: 0 auto;  */
-
-        /* Typing Effect Animation */
-        animation: typing 2.5s steps(50, end)
-    }
-
-    .typingtext {
-
-        /* Keeping the Text in the  
-     center of the Screen */
-        display: flex;
-        justify-content: center;
-        padding: 5px;
-    }
-</style>
 
 <!-- ApexChart CDN -->
 <script class='' src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
