@@ -64,6 +64,20 @@ services:
     depends_on:
       - database
 
+  ####################################
+  # Payment microservice  
+  ####################################
+  payment:
+    build:
+      context: ./simple_microservice/payment
+      dockerfile: Dockerfile
+    environment:
+      YOUR_DOMAIN : http://localhost
+    ports:
+      - '5005:5005'
+    depends_on:
+      - database
+
 
   ####################################
   # Ticket microservice  
@@ -93,8 +107,87 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-    ports: 
-      - "1234:1234"
+
+  ####################################
+  # Check payment microservice  
+  ####################################
+  check_payment:
+    # restart: on-failure
+    build:
+      context: ./complex_microservice/check_payment
+      dockerfile: Dockerfile
+    environment:
+      RABBIT_URL : 'rabbitmq'
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - '5400:5400'
+
+  ####################################
+  # Get details microservice  
+  ####################################
+  get_details:
+    # restart: on-failure
+    build:
+      context: ./complex_microservice/get_details
+      dockerfile: Dockerfile
+    environment:
+      RABBIT_URL : 'rabbitmq'
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - '5010:5010'
+
+  ####################################
+  # Join queue microservice  
+  ####################################
+  join_queue:
+    # restart: on-failure
+    build:
+      context: ./complex_microservice/join_queue
+      dockerfile: Dockerfile
+    environment:
+      RABBIT_URL : 'rabbitmq'
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - '5100:5100'
+
+  ####################################
+  # Process ticket (cron) microservice  
+  ####################################
+  process_ticket:
+    # restart: on-failure
+    build:
+      context: ./complex_microservice/process_ticket
+      dockerfile: Dockerfile
+    environment:
+      RABBIT_URL : 'rabbitmq'
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - '5200:5200'
+
+  ####################################
+  # Purchase ticket microservice  
+  ####################################
+  purchase_ticket:
+    # restart: on-failure
+    build:
+      context: ./complex_microservice/purchase_ticket
+      dockerfile: Dockerfile
+    environment:
+      RABBIT_URL : 'rabbitmq'
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - '5300:5300'
+
 
   ####################################
   # RabbitMQ: The messaging broker   

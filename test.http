@@ -52,7 +52,10 @@ PUT {{queue}}/queue/event/3/waiting-fail
 PUT {{queue}}/queue/event/1/user/1/ready-done
 
 ### give user a checkout session id i.e. null => 1234
-PUT {{queue}}/queue/event/1/user/1/session_id/1234
+PUT {{queue}}/queue/event/1/user/4/session_id/1234
+
+### get queue based on checkout id
+GET {{queue}}/queue/checkout-session-id/1234
 
 ### get user queue status
 GET {{queue}}/queue/event/1/user/2
@@ -60,8 +63,32 @@ GET {{queue}}/queue/event/1/user/2
 ### get all event and status based on user (to be checked)
 GET {{event}}/user/1
 
-### complex micro 1
+@payment = http://localhost:5005
+@sesion_id = cs_test_a18h9mnnvgEthgQEKQZRXT99HudkxdlmSHh1yAVClfBlc5kxzqrP7kbzNF
+### create session
+POST {{payment}}/create-checkout-session/event/2
+
+### get session
+GET {{payment}}/order/{{sesion_id}}/payment_status
+
+### get session
+GET {{payment}}/order/{{sesion_id}}/url
+
+### 
+DELETE {{payment}}/order/{{sesion_id}}/expire
+
+
+### complex micro 1 part 1
+GET http://localhost:5010/get-details/user/joshlife333+chris@gmail.com
+
+### complex micro 1 part 2
 POST http://localhost:5100/queue/event/2/user/3/join
 
 ### complex micro 2
 POST http://localhost:5200/queue/process
+
+### complex micro 3 part 1
+POST http://localhost:5300/purchase_ticket/event/1/user/7
+
+### complex micro 3 part 2
+POST http://localhost:5400/check_payment/cs_test_a1rUz4H9Auu9KCyKM1ayh0dBAlYuepvTEQ3OUHRyzTZsXtghVrTkXyJXgb
