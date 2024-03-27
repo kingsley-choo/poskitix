@@ -28,8 +28,8 @@ POST {{queue}}/queue
 Content-Type: application/json
  
 {
-    "eid": 3,
-    "uid": 2
+    "eid": 1,
+    "uid": 4
 }
 
 ### 'admit' people into queue i.e. waiting => ready

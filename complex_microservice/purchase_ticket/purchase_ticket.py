@@ -20,55 +20,20 @@ db = SQLAlchemy(app)
 
 CORS(app)
 
-
-class User(db.Model):
-    __tablename__ = "user"
-
-    uid = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(255), nullable=False)
-    email = db.Column(db.String(255), nullable=False)
-
-    def __init__(self, uid, username, email):
-        self.uid = uid
-        self.username = username
-        self.email = email
-
-    def json(self):
+@app.route("/purchase_ticket/event/<int:eid>/user/<int:uid>")
+def purchase_ticket(eid,uid):
+    #is the user ready to buy ticket? -> Check user status if it is ready
+    r = requests.get(f"http://localhost:5004/queue/{eid}/user/{uid}")
+    status = r.json()['data']['status']
+    if status == 'Ready':
+        #invoke payment here
+        #pass is supposed to return URL for checkout
+        print('payment')
+    else:
         return {
             "uid": self.uid,
             "username": self.username,
             "email": self.email,
-        }
-    
-class Event(db.Model):
-    __tablename__ = "event"
-
-    eid = db.Column(db.Integer, primary_key=True)
-    event_name = db.Column(db.String(255), nullable=False)
-    date = db.Column(db.DateTime, nullable=False)
-    location = db.Column(db.String(255), nullable=False)
-    description = db.Column(db.String(255), nullable=False)
-    capacity = db.Column(db.Integer, nullable=False)
-    price = db.Column(db.Float, nullable=False)
-
-    def __init__(self, eid, event_name, date, location, description, capacity, price):
-        self.eid = eid
-        self.event_name = event_name
-        self.date = date
-        self.location = location
-        self.description = description
-        self.capacity = capacity
-        self.price = price
-
-    def json(self):
-        return {
-            "eid": self.eid,
-            "event_name": self.event_name,
-            "date": self.date,
-            "location": self.location,
-            "description": self.description,
-            "capacity": self.capacity,
-            "price": self.price
         }
 
 @app.route("/user/<string:email>")
@@ -94,4 +59,4 @@ def process_payment():
     return {"status" : 200}
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5300, debug=True)
