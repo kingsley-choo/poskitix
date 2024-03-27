@@ -131,12 +131,9 @@
 
 
 
-                <div class="animate-up flex-shrink-0">
+                <!-- <div class="animate-up flex-shrink-0 bg-gray-900">
 
-                    <div id="email-input-header-box" class="bg-gray-900 flex items-center"
-                        class="px-6 pt-2 pb-12 w-full h-full">
-
-                        <div id="header-email-input" class="px-6 my-5 flex items-center">
+                    <div class="p-6 my-5 flex items-center">
                             
                             <h1
                                 class="text-white text-center mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl">
@@ -149,12 +146,12 @@
                             </p>
 
 
-                        </div>
-
-
                     </div>
 
-                    <div>
+
+                </div> -->
+
+                    <div class="p-4 pb-12">
                         <label for="input-group-1"
                             class="block mb-2 text-sm font-medium text-white-900">Enter Your Email</label>
 
@@ -174,9 +171,9 @@
                         </div>
 
                         <div id="app">
-                            <button id="submit-email-button" onclick="fetchData()"
+                            <button id="submit-email-button" onclick="fetchUser()"
                                 class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-                                <a href="eventpage.html">Enter</a>
+                                <a href="eventpage.html">Log In</a>
                             </button>
                         </div>
                     </div>
@@ -185,18 +182,24 @@
 
             </div>
 
+            <footer
+                class="fixed bottom-0 left-0 z-20 w-full h-auto p-1 bg-gray-900 shadow md:flex md:items-center md:justify-between md:p-2">
+                <span class="text-sm text-white sm:text-center">© 2024 <a href="https://flowbite.com/"
+                class="hover:underline">Poskitix</a>. All Rights Reserved.
+                </span>
+            </footer>
 
         </div>
+
+
 
     </div>
 
 
-    <!-- testing germaine -->
-
 
 
     <script>
-        function fetchData() {
+        function fetchUser() {
             var emailinput = document.getElementById('emailinput').value;
 
             axios.get('http://localhost:8000/api/v1/user/email/' + emailinput)
