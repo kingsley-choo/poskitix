@@ -28,7 +28,7 @@ POST {{queue}}/queue
 Content-Type: application/json
  
 {
-    "eid": 3,
+    "eid": 1,
     "uid": 2
 }
 
@@ -50,6 +50,9 @@ PUT {{queue}}/queue/event/3/waiting-fail
 
 ### purchase ticket i.e ready => done
 PUT {{queue}}/queue/event/1/user/1/ready-done
+
+### give user a checkout session id i.e. null => 1234
+PUT {{queue}}/queue/event/1/user/1/session_id/1234
 
 ### get user queue status
 GET {{queue}}/queue/event/1/user/2

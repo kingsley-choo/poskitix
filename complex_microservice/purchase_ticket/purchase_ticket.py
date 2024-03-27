@@ -23,17 +23,25 @@ CORS(app)
 @app.route("/purchase_ticket/event/<int:eid>/user/<int:uid>")
 def purchase_ticket(eid,uid):
     #is the user ready to buy ticket? -> Check user status if it is ready
-    r = requests.get(f"http://localhost:5004/queue/{eid}/user/{uid}")
+    r = requests.get(f"http://localhost:5004/queue/event/{eid}/user/{uid}")
     status = r.json()['data']['status']
     if status == 'Ready':
-        #invoke payment here
-        #pass is supposed to return URL for checkout
+        #invoke payment here e.g. r_payment_info = requests.get(payment)
+        #this is supposed to return URL for checkout and sid
         print('payment')
+        #r_payment_info.json()[follow schema for uid/eid/sid]
+        sid = 12345 #example sid for now
+        r_update_session_id = requests.put(f"http://localhost:5004/queue/event/{eid}/user/{uid}/session_id/{sid}")
+        if r_update_session_id.status_code == 200:
+            return {"code":200, "data": "Success"}, 200
     else:
         return {
             "code" : 400,
             "message" : "Failed to create payment url."
         }, 400
+
+
+
 
 
 
