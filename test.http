@@ -29,7 +29,7 @@ Content-Type: application/json
  
 {
     "eid": 1,
-    "uid": 2
+    "uid": 4
 }
 
 ### 'admit' people into queue i.e. waiting => ready

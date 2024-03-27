@@ -36,11 +36,32 @@ def purchase_ticket(eid,uid):
             return {"code":200, "data": "Success"}, 200
     else:
         return {
-            "code" : 400,
-            "message" : "Failed to create payment url."
-        }, 400
+            "uid": self.uid,
+            "username": self.username,
+            "email": self.email,
+        }
+
+@app.route("/user/<string:email>")
+def find_by_email(email):
+    output_uid = db.session.scalars(db.select(User).filter_by(email=email).limit(1)).first()
+
+    if output_uid:
+        return jsonify({"code": 200, "data": output_uid.json()})
+    return jsonify({"code": 404, "message": "User not found."}), 404
+
+@app.route("/queue/payment/<int:eid>/user/<int:uid>")
+def purchase_ticket(eid, uid):
+    r_status = request.get(f"http://localhost:5004/{eid}/user/{uid}")
 
 
+#activity log and error log missing
+@app.route("/order/success", methods=["GET"])
+def process_payment():
+    #step 2 and 3 - get all future payments
+    r_payment = requests.get(f"http://localhost:4242/success.html")
+    if r_payment.status_code // 200 != 1:
+        return r_payment.text, 404
+    return {"status" : 200}
 
 
 
