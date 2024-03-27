@@ -57,6 +57,8 @@ services:
     environment:
       dbURL: mysql+mysqlconnector://root:example@database:3306/queue
       PYTHONUNBUFFERED: 1
+      MAX_PEOPLE_READY: 4
+      MAX_MINUTES_READY : 5
     ports:
       - '5004:5004'
     depends_on:
