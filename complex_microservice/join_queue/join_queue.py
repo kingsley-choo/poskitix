@@ -17,7 +17,7 @@ CORS(app)
 def get_events_to_display(uid):
 
     #2. get a response        #1. make a request....
-    response_events = request.get(f"http://localhost:5002/event")
+    response_events = requests.get(f"http://localhost:5002/event")
 
     #did it fail? lets check
     if response_events.status_code not in range(200,300):
@@ -25,6 +25,7 @@ def get_events_to_display(uid):
 
     #if it reaches here then the success must have passed
     events_json_body = response_events.json()
+
     #lets get the events inside
     events = events_json_body["data"]
 
@@ -39,7 +40,7 @@ def get_events_to_display(uid):
         input_eid = event["eid"]
 
         #FIRST, how many tickets are left?
-        response_tickets_left = request.get(f"http://localhost:5003/ticket/event/{input_eid}")
+        response_tickets_left = requests.get(f"http://localhost:5003/ticket/event/{input_eid}")
 
         if response_events.status_code not in range(200,300): # if there is an error with tickets of one event - leave it be 
             event["status"] = "error"
@@ -54,7 +55,7 @@ def get_events_to_display(uid):
         else:
             event["sold_out"]=False
             #lets check their status in queue
-            response_queue_status = request.get(f"http://localhost:5004/queue/event/{input_eid}/user/{uid}")
+            response_queue_status = requests.get(f"http://localhost:5004/queue/event/{input_eid}/user/{uid}")
             if response_queue_status.status_code not in range(200,300):
                 #an error! lets just set the queue_status as None
                 event["queue_status"] = None

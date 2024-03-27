@@ -6,6 +6,7 @@ import os
 import sys
 import stripe
 import time
+import datetime
 
 # This is a public sample test API key.
 # Public key
@@ -14,69 +15,66 @@ import time
 # Don’t submit any personally identifiable information in requests made with this key.
 # Sign in to see your own test API key embedded in code samples.
 # Secret key
+# Henry's API key
 stripe.api_key = 'sk_test_51OuAKs2M2WNHYrTASwFcISy1TyhM9f8Vt4X1IaLzZQRQvzTkbGCUXiJk0Fi2O0bEuUwJlAo8851TXMtd8ygPhJhA00kmXWvzBC'
+
+# Joshua's API key
+# stripe.api_key = 'sk_test_51OyrMORsQ5WaThPekIN8poryHhxBLzXKQ9EhYDvc58oNPSRTKrgpZy3haLx99TBdFw4ktMD27A7MClQI0SfSeZlz00L4z8Mwqf'
 
 
 app = Flask(__name__,
             static_url_path='',
             static_folder='public')
 
-app.config["SQLALCHEMY_DATABASE_URI"] = (
-    environ.get("dbURL") or "mysql+mysqlconnector://root:root@localhost:3306/book"
-)
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_recycle": 299}
-
-db = SQLAlchemy(app)
-
-CORS(app)
-
 YOUR_DOMAIN = 'http://localhost:4242'
 
-class User(db.Model):
-    __tablename__ = "user"
 
-    uid = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(255), nullable=False)
-    email = db.Column(db.String(255), nullable=False)
 
-    def __init__(self, uid, username, email):
-        self.uid = uid
-        self.username = username
-        self.email = email
 
-    def json(self):
-        return {
-            "uid": self.uid,
-            "username": self.username,
-            "email": self.email,
-        }
+#make 2 products one for each event - create separate script
 
-@app.route("/user/<string:email>")
-def find_by_email(email):
-    output_uid = db.session.scalars(db.select(User).filter_by(email=email).limit(1)).first()
+# stripe.Price.create( 
+# currency="sgd",
+# # unit_amount in cents 
+# unit_amount= 1500, 
+# lookup_key= "1", 
+# product_data={"name" : "Eras Tour"} 
+# )
 
-    if output_uid:
-        return jsonify({"code": 200, "data": output_uid.json()})
-    return jsonify({"code": 404, "message": "User not found."}), 404
+# stripe.Price.create( 
+# currency="sgd", 
+# # unit_amount in cents
+# unit_amount= 3000 , 
+# lookup_key= "2", 
+# product_data={"name" : "Nathan Tour"} 
+# )
+
+#Hardcode event
+def lookup_event(event):
+    list_price_result = stripe.Price.list(lookup_keys=[event])
+    if not list_price_result:
+        return jsonify({"code": 404, "message": "Event not found."}), 404
+    print(list_price_result)
+    the_price_i_need = list_price_result["data"][0] 
+    the_id_i_need = the_price_i_need["id"]
+    return the_id_i_need
 
 # Create Checkout Session
-@app.route('/create-checkout-session', methods=['POST'])
-def create_checkout_session():
+@app.route('/create-checkout-session/<eid>', methods=['POST'])
+def create_checkout_session(eid):
     try:
         checkout_session = stripe.checkout.Session.create(
             line_items=[
                 {
                     # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                    'price': 'price_1OwTOw2M2WNHYrTAGgU9CBwp',
+                    # 'price': 'price_1OwTOw2M2WNHYrTAGgU9CBwp',
+                    'price': lookup_event(eid),
                     'quantity': 1,
                 },
             ],
             mode='payment',
             success_url = YOUR_DOMAIN + '/success.html' + '?session_id={CHECKOUT_SESSION_ID}',
             cancel_url = YOUR_DOMAIN + '/cancel.html',
-            # How to retreive customer's id here?
-            # customer = User.uid,
 
             # Timestamp must be at least 30 minutes
             expires_at = int(time.time() + (60 * 30)), # Configured to expire after 30 minutes
@@ -84,24 +82,48 @@ def create_checkout_session():
     except Exception as e:
         return str(e)
 
-    return redirect(checkout_session.url, code=303)
+    session_id = checkout_session.id
+    # return redirect(checkout_session.url, code=303)
+
+    return {"code": 201, "data": checkout_session}
 
 
-@app.route('/order/success', methods=['GET'])
-def order_success():
-  session = stripe.checkout.Session.retrieve(request.args.get('session_id'))
-  customer = stripe.Customer.retrieve(session.customer)
-  expire = stripe.checkout.Session.expire(
-  "cs_test_a1Ae6ClgOkjygKwrf9B3L6ITtUuZW4Xx9FivL6DZYoYFdfAefQxsYpJJd3",
-)
 
-# To retrieve checkout session's line items? Should this be placed earlier?
-# Is this even necessary?  
-#   line_items = stripe.checkout.Session.list_line_items(
-#   "cs_test_a1enSAC01IA3Ps2vL32mNoWKMCNmmfUGTeEeHXI5tLCvyFNGsdG2UNA7mr",
+@app.route('/order/success/<session_id>', methods=['GET'])
+def order_success(session_id):
+    # session = stripe.checkout.Session.retrieve(request.args.get('session_id'))
+    # session_id = create_checkout_session(event)["session_id"]
+    # customer = stripe.Customer.retrieve(session_id.customer)
+    session = stripe.checkout.Session.retrieve(
+        session_id
+    )   
+    #   stripe.checkout.Session.expire(
+    #   "cs_test_a1Ae6ClgOkjygKwrf9B3L6ITtUuZW4Xx9FivL6DZYoYFdfAefQxsYpJJd3",
+#     stripe.checkout.Session.expire(
+#     session_id,
 # )
+    if session["payment_status"] == "paid":
+        # return render_template_string('<html><body><h1>Thanks for your order, {{customer.name}}!</h1></body></html>', customer=customer)
+        return jsonify({"code": 200, "message": "Payment Successful"}), 200
+    else:
+        return jsonify({"code": 400, "message": "Payment Failed"}), 400
+    
+@app.route('/expire/<session_id>', methods=['GET'])
+def expire_session(session_id):
+    # session = stripe.checkout.Session.retrieve(request.args.get('session_id'))
+    # session_id = create_checkout_session(event)["session_id"]
+    # customer = stripe.Customer.retrieve(session_id.customer)
+    stripe.checkout.Session.expire(
+        session_id
+    )   
+    #   stripe.checkout.Session.expire(
+    #   "cs_test_a1Ae6ClgOkjygKwrf9B3L6ITtUuZW4Xx9FivL6DZYoYFdfAefQxsYpJJd3",
+#     stripe.checkout.Session.expire(
+#     session_id,
+# )
+    return jsonify({"code": 200, "message": "Session Expired"}), 200
 
-  return render_template_string('<html><body><h1>Thanks for your order, {{customer.name}}!</h1></body></html>', customer=customer)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=4242, debug=True)
