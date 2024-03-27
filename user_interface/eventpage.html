@@ -105,7 +105,24 @@
                                 <div class="col-span-3 text-center py-4">${eventDate}</div>
                                 <div class="col-span-3 text-center py-4">${eventLocation}</div>
                                 <div class="col-span-4 text-center">
-                                    <button type="button" class="text-white bg-black hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">Queue</button>
+                                    <button type="button"
+                                        class="text-white bg-black hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">Queue</button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-12 gap-4 border">
+                                <div class="col-span-2 text-center py-4">${eventName}</div>
+                                <div class="col-span-3 text-center py-4">${eventDate}</div>
+                                <div class="col-span-3 text-center py-4">${eventLocation}</div>
+                                <div class="col-span-4 text-center py-4">
+                                    <p>Sorry you have Missed your chance to buy :( </p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-12 gap-4 border">
+                                <div class="col-span-2 text-center py-4">${eventName}</div>
+                                <div class="col-span-3 text-center py-4">${eventDate}</div>
+                                <div class="col-span-3 text-center py-4">${eventLocation}</div>
+                                <div class="col-span-4 text-center">
+                                    <button type="button" class="text-white border-solid bg-emerald-500 hover:text-white focus:outline-none focus:ring-4 focus:ring-emerald-500 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">Purchase Ticket!</button>
                                 </div>
                             </div>
                         </div>
@@ -118,7 +135,7 @@
                             <button onclick="fetchEventandStatus()">test2</button>
                         </div>
 
-                        
+
                     </div>
                 </div>
 
@@ -130,7 +147,7 @@
             <footer
                 class="fixed bottom-0 left-0 z-20 w-full h-auto p-1 bg-gray-900 shadow md:flex md:items-center md:justify-between md:p-2">
                 <span class="text-sm text-white sm:text-center">© 2024 <a href="https://flowbite.com/"
-                class="hover:underline">Poskitix</a>. All Rights Reserved.
+                        class="hover:underline">Poskitix</a>. All Rights Reserved.
                 </span>
             </footer>
 
@@ -214,27 +231,65 @@
                             event_queue_status = event.queue_status
                             status_name = event_queue_status.status
 
+                            // add event, updating that they have missed their chance to buy
                             if (status_name == "Missed") {
-
+                                document.getElementById("event_status_display") +=
+                                    `
+                                <div class="grid grid-cols-12 gap-4 border">
+                                    <div class="col-span-2 text-center py-4">${eventName}</div>
+                                    <div class="col-span-3 text-center py-4">${eventDate}</div>
+                                    <div class="col-span-3 text-center py-4">${eventLocation}</div>
+                                    <div class="col-span-4 text-center py-4">
+                                        <p>Sorry you have Missed your chance to buy :( </p>
+                                    </div>
+                                </div>
+                                    `
                             }
 
+                            // add event, updating that the queue has reached their turn and can proceed to buy
                             else if (status_name == "Ready") {
+                                document.getElementById("event_status_display") +=
+
+                                    `
+                                <div class="grid grid-cols-12 gap-4 border">
+                                    <div class="col-span-2 text-center py-4">${eventName}</div>
+                                    <div class="col-span-3 text-center py-4">${eventDate}</div>
+                                    <div class="col-span-3 text-center py-4">${eventLocation}</div>
+                                    <div class="col-span-4 text-center">
+                                        <button type="button" class="text-white border-solid hover:bg-emerald-500 hover:text-white focus:outline-none focus:ring-4 focus:ring-emerald-500 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">Purchase Ticket!</button>
+                                    </div>
+                                </div>
+                                    `
 
                             }
 
+                            // add event, updating user that the user has already bought a ticket for the event
                             else if (status_name == "Done") {
-
+                                document.getElementById("event_status_display") +=
+                                
+                                `
+                            <div class="grid grid-cols-12 gap-4 border">
+                                <div class="col-span-2 text-center py-4">${eventName}</div>
+                                <div class="col-span-3 text-center py-4">${eventDate}</div>
+                                <div class="col-span-3 text-center py-4">${eventLocation}</div>
+                                <div class="col-span-4 text-center">
+                                    <button type="button" class="text-white border-solid hover:bg-emerald-500 hover:text-white focus:outline-none focus:ring-4 focus:ring-emerald-500 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">Purchase Ticket!</button>
+                                </div>
+                            </div>
+                                `
                             }
 
+                            // add event, updating user that their initial queue has failed as all tickets are now sold out
                             else if (status_name == "Fail") {
 
                             }
 
+                            // add event, updating user that they are current in the queue, not yet called to purchase
                             else if (status_name == "Waiting") {
-                                
+
                             }
 
-                        } 
+                        }
 
 
 
