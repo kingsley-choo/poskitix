@@ -261,11 +261,11 @@ def find_specific_queue_status(eid, uid):
         maximum_time_to_process_people_ahead = timedelta(minutes=(MAX_MINUTES_READY * (number_people_ahead // MAX_PEOPLE_READY)))
         predicted_time_user_ready = latest_ready_at_time +timedelta(minutes=MAX_MINUTES_READY)+ maximum_time_to_process_people_ahead
         print(math.ceil(number_people_ahead / MAX_PEOPLE_READY))
-        waiting_time = max(0,int(predicted_time_user_ready - datetime.now(timezone.utc)))
+        waiting_time = predicted_time_user_ready - datetime.now(timezone.utc)
 
 
         output_json["position"] = position_in_line
-        output_json["waiting_time_minutes"]=round(waiting_time.total_seconds() / 60)
+        output_json["waiting_time_minutes"]=max(round(waiting_time.total_seconds() / 60),0)
 
     if output_status:
         return jsonify({"code": 200, "data": output_json })
