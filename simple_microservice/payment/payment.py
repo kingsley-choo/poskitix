@@ -2,8 +2,6 @@ from flask import Flask, request, jsonify, redirect, render_template_string
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
 from flask_cors import CORS
-import os
-import sys
 import stripe
 import time
 import datetime
@@ -22,14 +20,7 @@ stripe.api_key = 'sk_test_51OuAKs2M2WNHYrTASwFcISy1TyhM9f8Vt4X1IaLzZQRQvzTkbGCUX
 # stripe.api_key = 'sk_test_51OyrMORsQ5WaThPekIN8poryHhxBLzXKQ9EhYDvc58oNPSRTKrgpZy3haLx99TBdFw4ktMD27A7MClQI0SfSeZlz00L4z8Mwqf'
 
 
-app = Flask(__name__,
-            static_url_path='',
-            static_folder='public')
-
-YOUR_DOMAIN = 'http://localhost:4242'
-
-
-
+app = Flask(__name__)
 
 #make 2 products one for each event - create separate script
 
@@ -49,7 +40,8 @@ YOUR_DOMAIN = 'http://localhost:4242'
 # product_data={"name" : "Nathan Tour"} 
 # )
 
-#Hardcode event
+YOUR_DOMAIN = environ.get("YOUR_DOMAIN")
+
 def lookup_event(event):
     list_price_result = stripe.Price.list(lookup_keys=[event])
     if not list_price_result:
@@ -60,7 +52,7 @@ def lookup_event(event):
     return the_id_i_need
 
 # Create Checkout Session
-@app.route('/create-checkout-session/<eid>', methods=['POST'])
+@app.route('/create-checkout-session/event/<int:eid>', methods=['POST'])
 def create_checkout_session(eid):
     try:
         checkout_session = stripe.checkout.Session.create(
@@ -85,45 +77,40 @@ def create_checkout_session(eid):
     session_id = checkout_session.id
     # return redirect(checkout_session.url, code=303)
 
-    return {"code": 201, "data": checkout_session}
+    return {"code": 201, "data": checkout_session},201
 
 
 
-@app.route('/order/success/<session_id>', methods=['GET'])
+@app.route('/order/<session_id>/payment_status', methods=['GET'])
 def order_success(session_id):
-    # session = stripe.checkout.Session.retrieve(request.args.get('session_id'))
-    # session_id = create_checkout_session(event)["session_id"]
-    # customer = stripe.Customer.retrieve(session_id.customer)
+
     session = stripe.checkout.Session.retrieve(
         session_id
     )   
-    #   stripe.checkout.Session.expire(
-    #   "cs_test_a1Ae6ClgOkjygKwrf9B3L6ITtUuZW4Xx9FivL6DZYoYFdfAefQxsYpJJd3",
-#     stripe.checkout.Session.expire(
-#     session_id,
-# )
+
     if session["payment_status"] == "paid":
-        # return render_template_string('<html><body><h1>Thanks for your order, {{customer.name}}!</h1></body></html>', customer=customer)
         return jsonify({"code": 200, "message": "Payment Successful"}), 200
     else:
         return jsonify({"code": 400, "message": "Payment Failed"}), 400
     
-@app.route('/expire/<session_id>', methods=['GET'])
+@app.route('/order/<session_id>/expire', methods=['DELETE'])
 def expire_session(session_id):
-    # session = stripe.checkout.Session.retrieve(request.args.get('session_id'))
-    # session_id = create_checkout_session(event)["session_id"]
-    # customer = stripe.Customer.retrieve(session_id.customer)
+
     stripe.checkout.Session.expire(
         session_id
     )   
-    #   stripe.checkout.Session.expire(
-    #   "cs_test_a1Ae6ClgOkjygKwrf9B3L6ITtUuZW4Xx9FivL6DZYoYFdfAefQxsYpJJd3",
-#     stripe.checkout.Session.expire(
-#     session_id,
-# )
     return jsonify({"code": 200, "message": "Session Expired"}), 200
 
 
+@app.route('/order/<session_id>/url', methods=['GET'])
+def get_order_url(session_id):
+    session = stripe.checkout.Session.retrieve(
+        session_id
+    )   
+    if session.url is None:
+        return {"code": 400, "data": "session no longer valid"}, 400
+
+    return {"code" : 200, "data" : session.url}
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=4242, debug=True)
+    app.run(host="0.0.0.0", port=5005, debug=True)

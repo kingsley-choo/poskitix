@@ -1,68 +1,47 @@
 from flask import Flask, request, jsonify, redirect, render_template_string
-from flask_sqlalchemy import SQLAlchemy
-from os import environ
 from flask_cors import CORS
-import os
-import sys
-import stripe
 import requests
-import pika
-import json
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = (
-    environ.get("dbURL") or "mysql+mysqlconnector://root:root@localhost:3306/book"
-)
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_recycle": 299}
-
-db = SQLAlchemy(app)
-
 CORS(app)
 
-@app.route("/purchase_ticket/event/<int:eid>/user/<int:uid>")
+@app.route("/purchase_ticket/event/<int:eid>/user/<int:uid>", methods=["POST"])
 def purchase_ticket(eid,uid):
     #is the user ready to buy ticket? -> Check user status if it is ready
-    r = requests.get(f"http://localhost:5004/queue/event/{eid}/user/{uid}")
-    status = r.json()['data']['status']
+    r = requests.get(f"http://queue:5004/queue/event/{eid}/user/{uid}")
+    queue_status = r.json()["data"]
+    print(queue_status)
+    if r.status_code not in range(200,300):
+        return r.text,r.status_code
+
+    status = queue_status['status']
+    print(status)
     if status == 'Ready':
-        #invoke payment here e.g. r_payment_info = requests.get(payment)
-        #this is supposed to return URL for checkout and sid
-        print('payment')
-        #r_payment_info.json()[follow schema for uid/eid/sid]
-        sid = 12345 #example sid for now
-        r_update_session_id = requests.put(f"http://localhost:5004/queue/event/{eid}/user/{uid}/session_id/{sid}")
-        if r_update_session_id.status_code == 200:
-            return {"code":200, "data": "Success"}, 200
+            
+        if queue_status["checkout_session_id"] is None:
+            #invoke payment here e.g. r_payment_info = requests.get(payment)
+            #this is supposed to return URL for checkout and sid
+            r_payment_info = requests.post(f"http://payment:5005/create-checkout-session/event/{eid}")
+            if r_payment_info.status_code not in range(200,300):
+                return {"data" : "failed to create payment link", "code" : 500}, 500
+            #r_payment_info.json()[follow schema for uid/eid/sid]
+            session = r_payment_info.json()["data"]
+            sid = session['id']
+            r_update_session_id = requests.put(f"http://queue:5004/queue/event/{eid}/user/{uid}/session_id/{sid}")
+            if r_update_session_id.status_code == 200:
+                return {"code":200, "data": "Success", "url" : session["url"]}, 200
+            else : 
+                return {"code": 200, "data" : "Success but not recorded please contact us after paying","url": session.url}, 200
+        else:
+            r_payment_info = requests.get(f"http://order:5005/order/{queue_status["checkout_session_id"]}/url")
+            if r_payment_info.status_code not in range(200,300):
+                return {"code":500, "data":"issue with stripe"},500
+            
+            url = r_payment_info.json()["data"]
+
+            return {"code":200, "data": "Success", "url" : url}, 200
     else:
-        return {
-            "uid": self.uid,
-            "username": self.username,
-            "email": self.email,
-        }
-
-@app.route("/user/<string:email>")
-def find_by_email(email):
-    output_uid = db.session.scalars(db.select(User).filter_by(email=email).limit(1)).first()
-
-    if output_uid:
-        return jsonify({"code": 200, "data": output_uid.json()})
-    return jsonify({"code": 404, "message": "User not found."}), 404
-
-@app.route("/queue/payment/<int:eid>/user/<int:uid>")
-def purchase_ticket(eid, uid):
-    r_status = request.get(f"http://localhost:5004/{eid}/user/{uid}")
-
-
-#activity log and error log missing
-@app.route("/order/success", methods=["GET"])
-def process_payment():
-    #step 2 and 3 - get all future payments
-    r_payment = requests.get(f"http://localhost:4242/success.html")
-    if r_payment.status_code // 200 != 1:
-        return r_payment.text, 404
-    return {"status" : 200}
-
+        return {"code" : 400, "data" : "Ineligible to buy ticket"}
 
 
 

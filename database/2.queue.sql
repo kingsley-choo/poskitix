@@ -11,7 +11,8 @@ CREATE TABLE queue (
     readyAt TIMESTAMP NULL DEFAULT NULL,
     CONSTRAINT PRIMARY KEY (eid, uid),
     CONSTRAINT FOREIGN KEY (eid) REFERENCES event.event (eid),
-    CONSTRAINT FOREIGN KEY (uid) REFERENCES user.user (uid)
+    CONSTRAINT FOREIGN KEY (uid) REFERENCES user.user (uid),
+    unique(checkout_session_id)
 );
 
 DELIMITER //

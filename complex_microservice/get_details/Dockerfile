@@ -2,5 +2,5 @@ FROM python:3-slim
 WORKDIR /usr/src/app
 COPY requirements.txt ./
 RUN python -m pip install --no-cache-dir -r requirements.txt
-COPY ./join_queue.py .
-CMD [ "python", "./join_queue.py" ]
+COPY ./*.py .
+CMD [ "python", "./get_details.py" ]

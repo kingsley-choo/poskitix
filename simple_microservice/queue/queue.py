@@ -174,7 +174,7 @@ def update_session_id(eid,uid,sid):
     try:
         record = Queue.query.filter_by(status='Ready', eid=eid,uid=uid).one()
         if record.checkout_session_id is not None:
-            return {"code" : 400, "message" : "session id recorded"}
+            return {"code" : 400, "message" : "session id recorded already"},400
         record.checkout_session_id = sid
         db.session.commit()
         return jsonify({"code": 200, "message": f"User {uid} updated session ID successfully."}), 200
@@ -182,28 +182,15 @@ def update_session_id(eid,uid,sid):
         db.session.rollback()
         return jsonify({"code": 500, "message": f"An error occurred: {str(e)}"}), 500
 
-#poskitix solution paying to missed if exceed 15minutes since readyat time but this is specific to one at a time
-# @app.route("/queue/event/<int:eid>/user/<int:uid>/paying-missed", methods=["PUT"])
-# def update_paying_status_to_missed(eid, uid):
-#     try:
-#         # Fetch the queue entry for the given eid and uid with 'Paying' status
-#         queue_entry = Queue.query.filter_by(eid=eid, uid=uid, status='Paying').first()
-        
-#         if queue_entry is None:
-#             return jsonify({"code": 404, "message": f"No user with uid {uid} in event {eid} found in 'Paying' status."}), 404
-        
-#         # Check if the time difference exceeds 15 minutes between current time and ReadyAt time
-#         fifteen_minutes_ago = datetime.now(timezone.utc) - timedelta(minutes=15)
-#         if queue_entry.readyAt <= fifteen_minutes_ago:
-#             # Update the status to 'Missed'
-#             queue_entry.status = 'Missed'
-#             db.session.commit()
-#             return jsonify({"code": 200, "message": f"User {uid} in event {eid} status updated from 'Paying' to 'Missed'."}), 200
-#         else:
-#             return jsonify({"code": 400, "message": f"Time limit not exceeded for user {uid} in event {eid} to update status from 'Paying' to 'Missed'."}), 400
-#     except Exception as e:
-#         db.session.rollback()
-#         return jsonify({"code": 500, "message": f"An error occurred: {str(e)}"}), 500
+
+@app.route("/queue/checkout-session-id/<string:sid>")
+def get_session_id(sid):
+    try:
+        record = Queue.query.filter_by(checkout_session_id=sid, status="Ready").one()
+        return jsonify({"code": 200, "data": record.json()}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"code": 500, "message": f"An error occurred: {str(e)}"}), 500
 
 
 @app.route("/queue/event/<int:eid>/user/<int:uid>")
@@ -250,70 +237,6 @@ def find_specific_queue_status(eid, uid):
 
 
 
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5004)
-
-
-
-#poskitix solution paying to missed if exceed 15minutes since readyat time but this is specific to one at a time
-# @app.route("/queue/event/<int:eid>/user/<int:uid>/paying-missed", methods=["PUT"])
-# def update_paying_status_to_missed(eid, uid):
-#     try:
-#         # Fetch the queue entry for the given eid and uid with 'Paying' status
-#         queue_entry = Queue.query.filter_by(eid=eid, uid=uid, status='Paying').first()
-        
-#         if queue_entry is None:
-#             return jsonify({"code": 404, "message": f"No user with uid {uid} in event {eid} found in 'Paying' status."}), 404
-        
-#         # Check if the time difference exceeds 15 minutes between current time and ReadyAt time
-#         fifteen_minutes_ago = datetime.now(timezone.utc) - timedelta(minutes=15)
-#         if queue_entry.readyAt <= fifteen_minutes_ago:
-#             # Update the status to 'Missed'
-#             queue_entry.status = 'Missed'
-#             db.session.commit()
-#             return jsonify({"code": 200, "message": f"User {uid} in event {eid} status updated from 'Paying' to 'Missed'."}), 200
-#         else:
-#             return jsonify({"code": 400, "message": f"Time limit not exceeded for user {uid} in event {eid} to update status from 'Paying' to 'Missed'."}), 400
-#     except Exception as e:
-#         db.session.rollback()
-#         return jsonify({"code": 500, "message": f"An error occurred: {str(e)}"}), 500
-
-
-#new function for poskitix suggestion
-# @app.route("/queue/event/<int:eid>/user/<int:uid>/paying-done", methods=["PUT"])
-# def update_queue_status_paid(eid,uid):
-#     try:
-#         number_of_user_paid = Queue.query.filter_by(status='Paying', eid=eid,uid=uid).count()
-#         #only either 0 or 1 because eid uid is primary key
-#         if number_of_user_paid ==0:
-#             return jsonify({"code": 404, "message": f"User {uid} in event {eid} has not paid."}), 404
-
-#         queue_entry = Queue.query.filter_by(status='Paying', eid=eid,uid=uid).one()
-
-#         queue_entry.status = 'Done'
-#         db.session.commit()
-
-#         queue_entry = Queue.query.filter_by(status='Paying', eid=eid,uid=uid).one()
-
-#         return jsonify({"code": 200, "message": f"User {uid} updated to 'Bought' successfully."}), 200
-#     except Exception as e:
-#         db.session.rollback()
-#         return jsonify({"code": 500, "message": f"An error occurred: {str(e)}"}), 500
-
-#new function for poskitix suggestion
-# @app.route("/queue/event/<int:eid>/ready-paying", methods=["PUT"])
-# def paying_queue(eid):
-#     queue_entries = Queue.query.filter(Queue.status == 'Ready', eid=eid).all()
-
-#     updated_entries = []
-
-#     for queue_entry in queue_entries:
-#         queue_entry.status = 'Paying'
-#         updated_entries.append({"eid": queue_entry.eid, "uid": queue_entry.uid})
-
-#     try:
-#         db.session.commit()
-#         return jsonify({"code": 200, "message": "Update to 'Paying' completed successfully.", "updated_entries": updated_entries}), 200
-#     except Exception as e:
-#         db.session.rollback()
-#         return jsonify({"code": 500, "message": "An error occurred during update. " + str(e)}), 500
