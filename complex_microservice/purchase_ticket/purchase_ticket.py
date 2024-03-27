@@ -39,6 +39,37 @@ class User(db.Model):
             "username": self.username,
             "email": self.email,
         }
+    
+class Event(db.Model):
+    __tablename__ = "event"
+
+    eid = db.Column(db.Integer, primary_key=True)
+    event_name = db.Column(db.String(255), nullable=False)
+    date = db.Column(db.DateTime, nullable=False)
+    location = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.String(255), nullable=False)
+    capacity = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Float, nullable=False)
+
+    def __init__(self, eid, event_name, date, location, description, capacity, price):
+        self.eid = eid
+        self.event_name = event_name
+        self.date = date
+        self.location = location
+        self.description = description
+        self.capacity = capacity
+        self.price = price
+
+    def json(self):
+        return {
+            "eid": self.eid,
+            "event_name": self.event_name,
+            "date": self.date,
+            "location": self.location,
+            "description": self.description,
+            "capacity": self.capacity,
+            "price": self.price
+        }
 
 @app.route("/user/<string:email>")
 def find_by_email(email):
