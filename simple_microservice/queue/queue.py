@@ -172,19 +172,12 @@ def update_queue_status_bought(eid,uid):
 @app.route("/queue/event/<int:eid>/user/<int:uid>/session_id/<string:sid>", methods=['PUT'])
 def update_session_id(eid,uid,sid):
     try:
-        number_of_user_paid = Queue.query.filter_by(status='Paying', eid=eid,uid=uid).count()
-        #only either 0 or 1 because eid uid is primary key
-        if number_of_user_paid ==0:
-            return jsonify({"code": 404, "message": f"User {uid} in event {eid} has not paid."}), 404
-
-        queue_entry = Queue.query.filter_by(status='Paying', eid=eid,uid=uid).one()
-
-        queue_entry.status = 'Done'
+        record = Queue.query.filter_by(status='Ready', eid=eid,uid=uid).one()
+        if record.checkout_session_id is not None:
+            return {"code" : 400, "message" : "session id recorded"}
+        record.checkout_session_id = sid
         db.session.commit()
-
-        queue_entry = Queue.query.filter_by(status='Paying', eid=eid,uid=uid).one()
-
-        return jsonify({"code": 200, "message": f"User {uid} updated to 'Bought' successfully."}), 200
+        return jsonify({"code": 200, "message": f"User {uid} updated session ID successfully."}), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({"code": 500, "message": f"An error occurred: {str(e)}"}), 500
