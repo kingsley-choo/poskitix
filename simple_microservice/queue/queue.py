@@ -9,8 +9,8 @@ import math
 import pytz
 
 #to take out
-MAX_PEOPLE_READY = 2
-MAX_MINUTES_READY = 5
+MAX_PEOPLE_READY = int(os.environ.get("MAX_PEOPLE_READY"))
+MAX_MINUTES_READY = int(os.environ.get("MAX_MINUTES_READY"))
 ##max in queue is 15 minutes
 
 app = Flask(__name__)
@@ -149,22 +149,22 @@ def update_queue_status_ready(eid):
             return jsonify({"code": 500, "message": "An error occurred during bulk update.", "error": str(e)}), 500
 
 #new function for poskitix suggestion
-@app.route("/queue/event/<int:eid>/ready-paying", methods=["PUT"])
-def paying_queue(eid):
-    queue_entries = Queue.query.filter(Queue.status == 'Ready', eid=eid).all()
+# @app.route("/queue/event/<int:eid>/ready-paying", methods=["PUT"])
+# def paying_queue(eid):
+#     queue_entries = Queue.query.filter(Queue.status == 'Ready', eid=eid).all()
 
-    updated_entries = []
+#     updated_entries = []
 
-    for queue_entry in queue_entries:
-        queue_entry.status = 'Paying'
-        updated_entries.append({"eid": queue_entry.eid, "uid": queue_entry.uid})
+#     for queue_entry in queue_entries:
+#         queue_entry.status = 'Paying'
+#         updated_entries.append({"eid": queue_entry.eid, "uid": queue_entry.uid})
 
-    try:
-        db.session.commit()
-        return jsonify({"code": 200, "message": "Update to 'Paying' completed successfully.", "updated_entries": updated_entries}), 200
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"code": 500, "message": "An error occurred during update. " + str(e)}), 500
+#     try:
+#         db.session.commit()
+#         return jsonify({"code": 200, "message": "Update to 'Paying' completed successfully.", "updated_entries": updated_entries}), 200
+#     except Exception as e:
+#         db.session.rollback()
+#         return jsonify({"code": 500, "message": "An error occurred during update. " + str(e)}), 500
 
 @app.route("/queue/event/<int:eid>/user/<int:uid>/ready-done", methods=["PUT"])
 def update_queue_status_bought(eid,uid):
@@ -178,8 +178,6 @@ def update_queue_status_bought(eid,uid):
 
         queue_entry.status = 'Done'
         db.session.commit()
-
-        queue_entry = Queue.query.filter_by(status='Ready', eid=eid,uid=uid).one()
 
         return jsonify({"code": 200, "message": f"User {uid} updated to 'Bought' successfully."}), 200
     except Exception as e:
@@ -208,27 +206,27 @@ def update_queue_status_paid(eid,uid):
         return jsonify({"code": 500, "message": f"An error occurred: {str(e)}"}), 500
 
 #poskitix solution paying to missed if exceed 15minutes since readyat time but this is specific to one at a time
-@app.route("/queue/event/<int:eid>/user/<int:uid>/paying-missed", methods=["PUT"])
-def update_paying_status_to_missed(eid, uid):
-    try:
-        # Fetch the queue entry for the given eid and uid with 'Paying' status
-        queue_entry = Queue.query.filter_by(eid=eid, uid=uid, status='Paying').first()
+# @app.route("/queue/event/<int:eid>/user/<int:uid>/paying-missed", methods=["PUT"])
+# def update_paying_status_to_missed(eid, uid):
+#     try:
+#         # Fetch the queue entry for the given eid and uid with 'Paying' status
+#         queue_entry = Queue.query.filter_by(eid=eid, uid=uid, status='Paying').first()
         
-        if queue_entry is None:
-            return jsonify({"code": 404, "message": f"No user with uid {uid} in event {eid} found in 'Paying' status."}), 404
+#         if queue_entry is None:
+#             return jsonify({"code": 404, "message": f"No user with uid {uid} in event {eid} found in 'Paying' status."}), 404
         
-        # Check if the time difference exceeds 15 minutes between current time and ReadyAt time
-        fifteen_minutes_ago = datetime.now(timezone.utc) - timedelta(minutes=15)
-        if queue_entry.readyAt <= fifteen_minutes_ago:
-            # Update the status to 'Missed'
-            queue_entry.status = 'Missed'
-            db.session.commit()
-            return jsonify({"code": 200, "message": f"User {uid} in event {eid} status updated from 'Paying' to 'Missed'."}), 200
-        else:
-            return jsonify({"code": 400, "message": f"Time limit not exceeded for user {uid} in event {eid} to update status from 'Paying' to 'Missed'."}), 400
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"code": 500, "message": f"An error occurred: {str(e)}"}), 500
+#         # Check if the time difference exceeds 15 minutes between current time and ReadyAt time
+#         fifteen_minutes_ago = datetime.now(timezone.utc) - timedelta(minutes=15)
+#         if queue_entry.readyAt <= fifteen_minutes_ago:
+#             # Update the status to 'Missed'
+#             queue_entry.status = 'Missed'
+#             db.session.commit()
+#             return jsonify({"code": 200, "message": f"User {uid} in event {eid} status updated from 'Paying' to 'Missed'."}), 200
+#         else:
+#             return jsonify({"code": 400, "message": f"Time limit not exceeded for user {uid} in event {eid} to update status from 'Paying' to 'Missed'."}), 400
+#     except Exception as e:
+#         db.session.rollback()
+#         return jsonify({"code": 500, "message": f"An error occurred: {str(e)}"}), 500
 
 
 @app.route("/queue/event/<int:eid>/user/<int:uid>")
@@ -238,6 +236,7 @@ def find_specific_queue_status(eid, uid):
 
     if output_status == None:
         return jsonify({"code": 404, "message": "No queue found."}), 404
+    output_json = output_status.json()
 
     if output_status.status == "Waiting":
         #position = number of people ahead of me who are not ready
@@ -251,20 +250,20 @@ def find_specific_queue_status(eid, uid):
         #is when people ready all are cleared i.e. Done/Failed
         ready_user_with_latest_ready_time = Queue.query.filter(Queue.eid == eid, Queue.status == "Ready").order_by(db.desc(Queue.readyAt)).first()
         if ready_user_with_latest_ready_time is not None:
-            latest_ready_time = ready_user_with_latest_ready_time.readyAt.replace(tzinfo=pytz.utc)
+            latest_ready_at_time = ready_user_with_latest_ready_time.readyAt.replace(tzinfo=pytz.utc)
         else:
-            latest_ready_time = datetime.now(timezone.utc)
+            latest_ready_at_time = datetime.now(timezone.utc)
 
         #then out of people ahead of me who are waiting
         # assume we all enter in groups of 5 (MAX_PEOPLE_READY)
         # and everyone fails / buys last minute
                                                                                     #why floor? because when its my group's turn I will be ready
         maximum_time_to_process_people_ahead = timedelta(minutes=(MAX_MINUTES_READY * (number_people_ahead // MAX_PEOPLE_READY)))
-        predicted_time_user_ready = latest_ready_time + maximum_time_to_process_people_ahead
+        predicted_time_user_ready = latest_ready_at_time +timedelta(minutes=MAX_MINUTES_READY)+ maximum_time_to_process_people_ahead
         print(math.ceil(number_people_ahead / MAX_PEOPLE_READY))
-        waiting_time = predicted_time_user_ready - datetime.now(timezone.utc)
+        waiting_time = max(0,int(predicted_time_user_ready - datetime.now(timezone.utc)))
 
-        output_json = output_status.json()
+
         output_json["position"] = position_in_line
         output_json["waiting_time_minutes"]=round(waiting_time.total_seconds() / 60)
 
