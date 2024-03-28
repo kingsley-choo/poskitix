@@ -155,10 +155,10 @@
 
 
                         <div>
-                            <button onclick="fetchEventData()">test1</button>
+                            <button onclick="fetchEventandStatus()">test1</button>
                         </div>
                         <div>
-                            <button onclick="fetchEventandStatus()">test2</button>
+                            <button onclick="">test2</button>
                         </div>
 
 
@@ -186,6 +186,9 @@
     <script>
         var uid = JSON.parse(localStorage.getItem('uid'));
         var nameresult = localStorage.getItem('nameresult');
+        var emailresult = localStorage.getItem("emailinput")
+
+        console.log(emailresult)
         // console.log(uid)
         // console.log(nameresult)
 
@@ -213,8 +216,11 @@
         // obtain event name and status
         function fetchEventandStatus() {
 
-            axios.get('http://localhost:8000/api/v1/join_queue/event/user/' + uid)
+            console.log("run fetchEventandStatus()" )
+
+            axios.get('http://localhost:8000/api/v1/get_details/get-details/user/' + emailresult)
                 .then(function (response) {
+                    console.log("its working")
                     var event_statusresult = response.data.data;
 
                     for (event of event_statusresult) {
