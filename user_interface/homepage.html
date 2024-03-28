@@ -200,7 +200,7 @@
         function fetchUser() {
             var emailinput = document.getElementById('emailinput').value;
 
-            axios.get('http://localhost:8000/api/v1/user/email/' + emailinput)
+            axios.get('http://localhost:5001/user/email/' + emailinput)
                 .then(function (response) {
                     var nameresult = JSON.stringify(response.data.username);
                     var nameresult = nameresult.charAt(1).toUpperCase() + nameresult.slice(2, nameresult.length-1)
