@@ -62,7 +62,7 @@ def get_events_to_display(email):
             else:
                 event["queue_status"] = response_queue_status.json()["data"]
     
-    return { "code" : 200, "data" : events}
+    return { "code" : 200, "data" : events, "uid" : uid}
 
 
 if __name__ == "__main__":
