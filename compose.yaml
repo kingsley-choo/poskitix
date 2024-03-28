@@ -15,6 +15,11 @@ services:
     volumes:
       - db:/var/lib/mysql
       - ./database/:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
   ####################################
   # User microservice (Java)
@@ -30,19 +35,22 @@ services:
     ports:
       - "5001:5001"
     depends_on:
-      - database
+      database:
+          condition: service_healthy
+
 
   ####################################
   # Event microservice  (PHP)
   ####################################
   event:
-    depends_on:
-      - database
-    volumes:
-      - "./simple_microservice/event-php:/var/www/html"
+    # volumes:
+    #   - "./simple_microservice/event-php:/var/www/html"
     ports:
       - 5002:80
     build: ./simple_microservice/event-php
+    depends_on:
+      database:
+        condition: service_healthy
 
   ####################################
   # Queue microservice  
@@ -59,7 +67,8 @@ services:
     ports:
       - '5004:5004'
     depends_on:
-      - database
+      database:
+          condition: service_healthy
 
   ####################################
   # Payment microservice  
@@ -73,8 +82,8 @@ services:
     ports:
       - '5005:5005'
     depends_on:
-      - database
-
+      database:
+          condition: service_healthy
 
   ####################################
   # Ticket microservice  
@@ -89,7 +98,8 @@ services:
     ports:
       - '5003:5003'
     depends_on:
-      - database
+      database:
+          condition: service_healthy
 
   ####################################
   # Notification microservice  
@@ -203,8 +213,8 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:15672"]
-      interval: 30s
-      timeout: 10s
+      interval: 10s
+      timeout: 5s
       retries: 5
   #######################################
   # Postgres: The database used by Kong
@@ -282,8 +292,12 @@ services:
       - ./user_interface:/usr/local/apache2/htdocs/
     ports:
       - "80:80"
+    depends_on:
+      database:
+          condition: service_healthy
+      rabbitmq:
+          condition: service_healthy 
 
- 
 volumes:
   db:
     driver: local
