@@ -78,8 +78,8 @@ GET {{payment}}/order/{{sesion_id}}/url
 DELETE {{payment}}/order/{{sesion_id}}/expire
 
 
-### complex micro 1 part 1
-GET http://localhost:5010/get-details/user/joshlife333+chris@gmail.com
+### complex micro 1 part 1 (get events to display)
+GET http://localhost:5010/get-details/user/joshlife333+kingsley@gmail.com
 
 ### complex micro 1 part 2
 POST http://localhost:5100/queue/event/2/user/3/join
