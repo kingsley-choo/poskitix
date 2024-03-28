@@ -1,6 +1,6 @@
 @user = http://localhost:5001
 
-GET {{user}}/user/1
+GET {{user}}/user/email/kingsleychoo2001+joshua@gmail.com
 
 @event = http://localhost:5002
 ### get event based on eid
@@ -78,17 +78,17 @@ GET {{payment}}/order/{{sesion_id}}/url
 DELETE {{payment}}/order/{{sesion_id}}/expire
 
 
-### complex micro 1 part 1
-GET http://localhost:5010/get-details/user/joshlife333+chris@gmail.com
+### complex micro 1 part 1 (get events to display)
+GET http://localhost:5010/get-details/user/kingsleychoo2001+joshua@gmail.com
 
 ### complex micro 1 part 2
 POST http://localhost:5100/queue/event/2/user/3/join
 
-### complex micro 2
+### complex micro 2 (process queue)
 POST http://localhost:5200/queue/process
 
-### complex micro 3 part 1
-POST http://localhost:5300/purchase_ticket/event/1/user/7
+### complex micro 3 part 1 (purchase ticket)
+POST http://localhost:5300/purchase_ticket/event/1/user/1
 
-### complex micro 3 part 2
-POST http://localhost:5400/check_payment/cs_test_a1rUz4H9Auu9KCyKM1ayh0dBAlYuepvTEQ3OUHRyzTZsXtghVrTkXyJXgb
+### complex micro 3 part 2 (issue ticket after payment complete)
+POST http://localhost:5400/check_payment/cs_test_a1e49jNnrCL2IvITraxw3LgiNaRbXdOVgqXSyEtw0DtjWPPlmauTdEmEB9
