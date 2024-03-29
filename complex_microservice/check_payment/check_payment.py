@@ -58,7 +58,7 @@ def check_payment(id):
                       body=json.dumps(body))
     return {
         "status" : 200,
-        "data" : "success"
+        "data" : body
     }
 
 
