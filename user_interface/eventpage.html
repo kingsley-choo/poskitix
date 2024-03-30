@@ -40,27 +40,27 @@
 
                 <div class="hidden w-full md:block md:w-auto" id="navbar-default">
                     <ul
-                        class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white">
-                        <li>
-                            <a href="#"
-                                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0">Home</a>
-                        </li>
+                        class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-gray-900">
                         <li>
                             <a href="#"
                                 class="block py-2 px-3 text-white bg-red-700 rounded md:bg-transparent md:text-red-700 md:p-0"
-                                aria-current="page">Events</a>
+                                aria-current="page">Home</a>
                         </li>
                         <li>
                             <a href="#"
-                                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0">Tickets</a>
+                                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-200 md:text-white md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0">Events</a>
                         </li>
                         <li>
                             <a href="#"
-                                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0">Profile</a>
+                                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-200 md:text-white md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0">Tickets</a>
                         </li>
                         <li>
                             <a href="#"
-                                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0">Contact</a>
+                                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-200 md:text-white md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0">Profile</a>
+                        </li>
+                        <li>
+                            <a href="#"
+                                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-200 md:text-white md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0">Contact</a>
                         </li>
                     </ul>
                 </div>
@@ -95,62 +95,6 @@
                                 <div class="col-span-3 bg-gray-100 text-center py-4 font-bold">Location</div>
                                 <div class="col-span-4 bg-gray-100 text-center py-4 font-bold">Status</div>
                             </div>
-
-                            
-                            <!-- <div class="grid grid-cols-12 gap-4">
-                                <div class="col-span-2 text-center py-4">${eventName}</div>
-                                <div class="col-span-3 text-center py-4">${eventDate}</div>
-                                <div class="col-span-3 text-center py-4">${eventLocation}</div>
-                                <div class="col-span-4 text-center py-4">Sorry! Tickets Sold Out!</div>
-                            </div>
-                            <div class="grid grid-cols-12 gap-4 border">
-                                <div class="col-span-2 text-center py-4">${eventName}</div>
-                                <div class="col-span-3 text-center py-4">${eventDate}</div>
-                                <div class="col-span-3 text-center py-4">${eventLocation}</div>
-                                <div class="col-span-4 text-center">
-                                    <button type="button"
-                                        class="text-white bg-black hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">Queue</button>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-12 gap-4 border">
-                                <div class="col-span-2 text-center py-4">${eventName}</div>
-                                <div class="col-span-3 text-center py-4">${eventDate}</div>
-                                <div class="col-span-3 text-center py-4">${eventLocation}</div>
-                                <div class="col-span-4 text-center py-4">
-                                    <p>Sorry you have Missed your chance to buy :( </p>
-                                </div>
-                            </div>            
-                            <div class="grid grid-cols-12 gap-4 border">
-                                <div class="col-span-2 text-center py-4">${eventName}</div>
-                                <div class="col-span-3 text-center py-4">${eventDate}</div>
-                                <div class="col-span-3 text-center py-4">${eventLocation}</div>
-                                <div class="col-span-2 text-center py-4">Ready at ${ready_time}</div>
-                                <div class="col-span-2 text-center">
-                                    <button type="button" class="bg-emerald-500     text-white focus:outline-none focus:ring-4 focus:ring-emerald-500 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">Purchase Ticket!</button>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-12 gap-4 border">
-                                <div class="col-span-2 text-center py-4">${eventName}</div>
-                                <div class="col-span-3 text-center py-4">${eventDate}</div>
-                                <div class="col-span-3 text-center py-4">${eventLocation}</div>
-                                <div class="col-span-4 text-center py-4">
-                                    <p>Sorry! All tickets Sold Out!</p>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-12 gap-4 border">
-                                <div class="col-span-2 text-center py-4">${eventName}</div>
-                                <div class="col-span-3 text-center py-4">${eventDate}</div>
-                                <div class="col-span-3 text-center py-4">${eventLocation}</div>
-                                <div class="col-span-2 text-center py-4">
-                                    Wait Time: ${waiting_time}
-                                </div>
-                                <div class="col-span-2 text-center py-4">
-                                    <p>Waiting...</p>
-                                </div>
-                            </div>
-                        </div> -->
-
-
                     </div>
                 </div>
 
@@ -171,16 +115,12 @@
     </div>
 
 
-    <!-- testing germaine -->
+
     <script>
-        var uid = JSON.parse(localStorage.getItem('uid'));
         var nameresult = localStorage.getItem('nameresult');
         var emailresult = localStorage.getItem("emailinput");
         var uid = localStorage.getItem('uid');
-
-        console.log(emailresult)
-        // console.log(uid)
-        // console.log(nameresult)
+        
 
         document.getElementById('result').innerText = "Welcome " + nameresult + "!";
 
@@ -208,7 +148,8 @@
                         eventDate = event.date
                         eventLocation = event.location
                         num_ticketsleft = event.tickets_left
-                        eid = event.eid
+                        var eid = event.eid
+                        
 
                         if (num_ticketsleft == 0 && event.queue_status == None) {
                             
@@ -232,7 +173,7 @@
                                 <div class="col-span-3 text-center py-4">${eventDate}</div>
                                 <div class="col-span-3 text-center py-4">${eventLocation}</div>
                                 <div class="col-span-4 text-center">
-                                    <button type="button" onclick="addUserToQueue()" class="text-white bg-black hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">
+                                    <button type="button" onclick="addUserToQueue(${eid})" class="text-white bg-black hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">
                                         Queue
                                     </button>
                                 </div>
@@ -251,9 +192,9 @@
                                 <div class="grid grid-cols-12 gap-4 border">
                                     <div class="col-span-2 text-center py-4">${eventName}</div>
                                     <div class="col-span-3 text-center py-4">${eventDate}</div>
-                                    <div class="col-span-3 text-center py-4">${eventLocation}</div>
+                                    <div class="col-span-3 text-center py-4">${eventLocation}</div>  
                                     <div class="col-span-4 text-center py-4">
-                                        <p>Sorry you have Missed your chance to buy :( </p>
+                                        <p>You missed your chance to purchase</p>
                                     </div>
                                 </div>
                                     `
@@ -262,6 +203,8 @@
                             // add event, updating that the queue has reached their turn and can proceed to buy
                             else if (status_name == "Ready") {
                                 ready_time = event_queue_status.readyAt
+                                
+
                                 document.getElementById("event_status_display").innerHTML +=
 
                                     `
@@ -274,7 +217,7 @@
                                         <button type="button" class="text-emerald-500 border border-emerald-500  hover:bg-emerald-500 hover:text-white 
                                         hover:border-black
                                         focus:outline-none focus:ring-4 focus:ring-emerald-500 font-medium rounded-full text-sm px-5 py-2.5 mt-5 text-center"
-                                        onclick="fetchPurchaseLink()">
+                                        onclick="createPurchaseLink(${eid})">
                                         Purchase Ticket!
                                         </button>
                                     </div>
@@ -312,7 +255,7 @@
                                 <div class="col-span-3 text-center py-4">${eventDate}</div>
                                 <div class="col-span-3 text-center py-4">${eventLocation}</div>
                                 <div class="col-span-4 text-center py-4">
-                                    <p>Sorry! All tickets Sold Out!</p>
+                                    <p>Tickets are Sold Out!</p>
                                 </div>
                             </div>
                                 `
@@ -354,8 +297,7 @@
         }
 
 
-        function addUserToQueue(){
-
+        function addUserToQueue(eid){
             axios.post('http://localhost:5100/queue/event/' + eid + '/user/' + uid + '/join')
                 .then(function (response) {
                     added = response.data
@@ -368,29 +310,35 @@
         }
 
 
-        function fetchPurchaseLink(){
-
+        function createPurchaseLink(eid){
             axios.post('http://localhost:5300/purchase_ticket/event/' + eid + '/user/' + uid)
                 .then(function (response) {
-                    purchaseurl = response.data.url;
-                    // console.log(purchaseurl) 
-                    // purchaseurl = purchaseurl.slice(34, purchaseurl.length)
+                    var purchaseurl = response.data.url;
                     location.assign(purchaseurl)
-                    // axios.post('http://localhost:5400/check_payment/' + purchaseurl)
-                    //     .then(function (response){
-                    //         console.log('success')
-                    //     })
-                    //     .catch(function (error){
-                    //         console.log(error)
-                    //     })
-                   
+                    // fetchConfirmationURL(purchaseurl)
+                    
+                    
                 })
                 .catch(function (error){
                     console.log(error);
                 });
-
         }
 
+        // function fetchConfirmationURL(){
+        //     axios.get(purchaseurl)
+        //         .then(function (response){
+        //             console.log(response)
+        //             location.assign(purchaseurl)
+        //             redirectedURL = window.location.href;
+        //             sessionid = redirectedURL.split('=')[1]
+        //             console.log(sessionid)
+
+        //         })
+        //         .catch(function (error){
+        //             console.log(error)
+        //         })
+            
+        // }
 
 
     </script>
