@@ -164,12 +164,12 @@ services:
       - '5100:5100'
 
   ####################################
-  # Process ticket (cron) microservice  
+  # Process queue (cron) microservice  
   ####################################
-  process_ticket:
+  process_queue:
     # restart: on-failure
     build:
-      context: ./complex_microservice/process_ticket
+      context: ./complex_microservice/process_queue
       dockerfile: Dockerfile
     environment:
       RABBIT_URL : 'rabbitmq'
