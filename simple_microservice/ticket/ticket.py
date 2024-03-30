@@ -130,5 +130,24 @@ def get_ticket_left(eid):
                 "data": output.json()
             }
             )
+    
+@app.route("/ticket/event/<int:eid>/user/<int:uid>")
+def get_ticket(eid,uid):
+    output= db.session.scalars(db.select(Ticket).filter_by(eid=eid, uid=uid).limit(1)).first()
+    if output is None:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Ticket not found."
+            }
+            ), 404
+    else:
+        return jsonify(
+            {
+                "code": 200,
+                "data": output.json()
+            }
+            )
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5003, debug=True)

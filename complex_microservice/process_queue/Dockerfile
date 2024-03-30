@@ -2,7 +2,7 @@ FROM python:3-slim
 WORKDIR /usr/src/app
 COPY requirements.txt ./
 RUN python -m pip install --no-cache-dir -r requirements.txt
-COPY ./process_ticket.py .
+COPY ./process_queue.py .
 
 # update apt-get to install cron
 RUN apt-get update && apt-get -y install cron && apt-get -y install curl
@@ -22,4 +22,4 @@ RUN service cron start
 # enable logging from cron
 RUN touch /var/log/cron.log
 
-CMD cron;python ./process_ticket.py 
+CMD cron;python ./process_queue.py 

@@ -270,13 +270,15 @@
                                 document.getElementById("event_status_display").innerHTML +=
 
                                     `
-                                <div class="grid grid-cols-12 gap-4 border">
+                                <div class="grid grid-cols-12 gap-4 border justify-center">
                                     <div class="col-span-2 text-center py-4">${eventName}</div>
                                     <div class="col-span-3 text-center py-4">${eventDate}</div>
                                     <div class="col-span-3 text-center py-4">${eventLocation}</div>
                                     <div class="col-span-2 text-center py-4">Ready at ${ready_time}</div>
                                     <div class="col-span-2 text-center">
-                                        <button type="button" class="text-white border-solid hover:bg-emerald-500 hover:text-white focus:outline-none focus:ring-4 focus:ring-emerald-500 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">Purchase Ticket!</button>
+                                        <button type="button" class="text-emerald-500 border border-emerald-500  hover:bg-emerald-500 hover:text-white 
+                                        hover:border-black
+                                        focus:outline-none focus:ring-4 focus:ring-emerald-500 font-medium rounded-full text-sm px-5 py-2.5 mt-5 text-center">Purchase Ticket!</button>
                                     </div>
                                 </div>
                                     `
@@ -328,10 +330,12 @@
                                 <div class="col-span-3 text-center py-4">${eventDate}</div>
                                 <div class="col-span-3 text-center py-4">${eventLocation}</div>
                                 <div class="col-span-2 text-center py-4">
-                                    Wait Time: ${waiting_time} Minutes
+                                    Wait Time: 
+                                    <span class="bg-red-100 text-black text-md font-medium me-2 px-2.5 py-0.5 rounded border border-red-400">${waiting_time} Minutes</span>
+                                    
                                 </div>
                                 <div class="col-span-2 text-center py-4">
-                                    <span class="bg-yellow-100 text-yellow-800 text-md font-medium me-2 px-3 py-1 rounded-full dark:bg-yellow-900 dark:text-yellow-300">Waiting</span>
+                                    <span class="bg-yellow-200 text-black text-md font-medium me-2 px-5 py-2.5 rounded-full ">Waiting</span>
                                 </div>
                             </div>
                                 `

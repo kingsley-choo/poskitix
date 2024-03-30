@@ -14,7 +14,8 @@ def get_events_to_display(email):
     if response_user.status_code not in range(200,300):
         return {"code":404, "data":"user not found"},404
     
-    uid = response_user.json()["uid"]
+    user = response_user.json()
+    uid = user["uid"]
 
     #2. get a response        #1. make a request....
     response_events = requests.get(f"http://event/event")
@@ -66,7 +67,7 @@ def get_events_to_display(email):
 
         
     
-    return { "code" : 200, "data" : events, "uid" : uid}
+    return { "code" : 200, "data" : events, "user" : user}
 
 
 if __name__ == "__main__":
