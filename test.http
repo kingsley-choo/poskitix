@@ -82,7 +82,7 @@ DELETE {{payment}}/order/{{sesion_id}}/expire
 GET http://localhost:5010/get-details/user/kingsleychoo2001+joshua@gmail.com
 
 ### complex micro 1 part 2
-POST http://localhost:5100/queue/event/2/user/3/join
+POST http://localhost:5100/queue/event/2/user/1/join
 
 ### complex micro 2 (process queue)
 POST http://localhost:5200/queue/process
