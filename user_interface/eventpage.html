@@ -18,7 +18,7 @@
 
 </head>
 
-<body>
+<body onload="fetchEventandStatus()">
     <div>
         <nav class="bg-gray-900 border-gray-200">
             <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -82,17 +82,11 @@
                             </div>
                         </div>
 
-                        <div class="lg:hidden">
-                            <h1 id="result"
-                                class="mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl text-black text-center">
-                                <!-- Welcome user -->
-                            </h1>
-                        </div>
-
                         <p id="page-subheader"
                             class="mb-6 text-3xl font-bold lg:text-4xl sm:px-16 xl:px-48 text-gray-400 text-center">
                             Choose an Event
                         </p>
+                        
                         <div id="event_status_display" class="border">
                             <div class="grid grid-cols-12 bg-gray-100 gap-4 border">
                                 <div class="col-span-2 bg-gray-100 text-center py-4 font-bold">Event Name</div>
@@ -100,7 +94,7 @@
                                 <div class="col-span-3 bg-gray-100 text-center py-4 font-bold">Location</div>
                                 <div class="col-span-4 bg-gray-100 text-center py-4 font-bold">Status</div>
                             </div>
-                            <div class="grid grid-cols-12 gap-4">
+                            <!-- <div class="grid grid-cols-12 gap-4">
                                 <div class="col-span-2 text-center py-4">${eventName}</div>
                                 <div class="col-span-3 text-center py-4">${eventDate}</div>
                                 <div class="col-span-3 text-center py-4">${eventLocation}</div>
@@ -151,15 +145,7 @@
                                     <p>Waiting...</p>
                                 </div>
                             </div>
-                        </div>
-
-
-                        <div>
-                            <button onclick="fetchEventandStatus()">test1</button>
-                        </div>
-                        <div>
-                            <button onclick="">test2</button>
-                        </div>
+                        </div> -->
 
 
                     </div>
@@ -218,20 +204,21 @@
 
             console.log("run fetchEventandStatus()" )
 
-            axios.get('http://localhost:8000/api/v1/get_details/get-details/user/' + emailresult)
+            axios.get('http://localhost:5010/get-details/user/' + emailresult)
                 .then(function (response) {
                     console.log("its working")
                     var event_statusresult = response.data.data;
+                    console.log(document.getElementById("event_status_display").innerHTML)
 
                     for (event of event_statusresult) {
                         eventName = event.eventname
                         eventDate = event.date
                         eventLocation = event.location
-                        output_html = ""
+                        console.log(eventLocation)
 
-                        if (event.sold_out == True && event.queue_status == None) {
+                        if (event.sold_out == "True" && event.queue_status == None) {
 
-                            document.getElementById("event_status_display") +=
+                            document.getElementById("event_status_display".innerHTML) +=
                                 `
                             <div class="grid grid-cols-12 gap-4">
                                 <div class="col-span-2 text-center">${eventName}</div>
@@ -245,14 +232,14 @@
 
                         else if (event.queue_status == null) {
                             output_status = "Queue"
-                            document.getElementById("event_status_display") +=
+                            document.getElementById("event_status_display").innerHTML +=
                                 `
                             <div class="grid grid-cols-12 gap-4 border">
                                 <div class="col-span-2 text-center py-4">${eventName}</div>
                                 <div class="col-span-3 text-center py-4">${eventDate}</div>
                                 <div class="col-span-3 text-center py-4">${eventLocation}</div>
                                 <div class="col-span-4 text-center">
-                                    <button type="button" class="text-black border-solid hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">Queue</button>
+                                    <button type="button" class="text-white bg-black hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">Queue</button>
                                 </div>
                             </div>
                                 `
@@ -264,7 +251,7 @@
 
                             // add event, updating that they have missed their chance to buy
                             if (status_name == "Missed") {
-                                document.getElementById("event_status_display") +=
+                                document.getElementById("event_status_display").innerHTML +=
                                     `
                                 <div class="grid grid-cols-12 gap-4 border">
                                     <div class="col-span-2 text-center py-4">${eventName}</div>
@@ -280,16 +267,18 @@
                             // add event, updating that the queue has reached their turn and can proceed to buy
                             else if (status_name == "Ready") {
                                 ready_time = event_queue_status.readyAt
-                                document.getElementById("event_status_display") +=
+                                document.getElementById("event_status_display").innerHTML +=
 
                                     `
-                                <div class="grid grid-cols-12 gap-4 border">
+                                <div class="grid grid-cols-12 gap-4 border justify-center">
                                     <div class="col-span-2 text-center py-4">${eventName}</div>
                                     <div class="col-span-3 text-center py-4">${eventDate}</div>
                                     <div class="col-span-3 text-center py-4">${eventLocation}</div>
                                     <div class="col-span-2 text-center py-4">Ready at ${ready_time}</div>
                                     <div class="col-span-2 text-center">
-                                        <button type="button" class="text-white border-solid hover:bg-emerald-500 hover:text-white focus:outline-none focus:ring-4 focus:ring-emerald-500 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">Purchase Ticket!</button>
+                                        <button type="button" class="text-emerald-500 border border-emerald-500  hover:bg-emerald-500 hover:text-white 
+                                        hover:border-black
+                                        focus:outline-none focus:ring-4 focus:ring-emerald-500 font-medium rounded-full text-sm px-5 py-2.5 mt-5 text-center">Purchase Ticket!</button>
                                     </div>
                                 </div>
                                     `
@@ -298,7 +287,7 @@
 
                             // add event, updating user that the user has already bought a ticket for the event
                             else if (status_name == "Done") {
-                                document.getElementById("event_status_display") +=
+                                document.getElementById("event_status_display").innerHTML +=
                                 
                                 `
                             <div class="grid grid-cols-12 gap-4 border">
@@ -315,7 +304,7 @@
                             // add event, updating user that their initial queue has failed as all tickets are now sold out
                             // if at the front ticket amount is 0 still need this?
                             else if (status_name == "Fail") {
-                                document.getElementById("event_status_display") +=
+                                document.getElementById("event_status_display").innerHTML +=
                                 
                                 `
                             <div class="grid grid-cols-12 gap-4 border">
@@ -333,7 +322,7 @@
                             // add event, updating user that they are current in the queue, not yet called to purchase
                             else if (status_name == "Waiting") {
                                 waiting_time = event_queue_status.waiting_time_minutes
-                                document.getElementById("event_status_display") +=
+                                document.getElementById("event_status_display").innerHTML +=
                                 
                                 `
                             <div class="grid grid-cols-12 gap-4 border">
@@ -341,10 +330,12 @@
                                 <div class="col-span-3 text-center py-4">${eventDate}</div>
                                 <div class="col-span-3 text-center py-4">${eventLocation}</div>
                                 <div class="col-span-2 text-center py-4">
-                                    Wait Time: ${waiting_time}
+                                    Wait Time: 
+                                    <span class="bg-red-100 text-black text-md font-medium me-2 px-2.5 py-0.5 rounded border border-red-400">${waiting_time} Minutes</span>
+                                    
                                 </div>
                                 <div class="col-span-2 text-center py-4">
-                                    <p>Waiting...</p>
+                                    <span class="bg-yellow-200 text-black text-md font-medium me-2 px-5 py-2.5 rounded-full ">Waiting</span>
                                 </div>
                             </div>
                                 `
@@ -352,9 +343,6 @@
                             }
 
                         }
-
-
-
 
                     }
                 })
