@@ -88,12 +88,15 @@
                         </p>
                         
                         <div id="event_status_display" class="border">
+                            <!-- Table header -->
                             <div class="grid grid-cols-12 bg-gray-100 gap-4 border">
                                 <div class="col-span-2 bg-gray-100 text-center py-4 font-bold">Event Name</div>
                                 <div class="col-span-3 bg-gray-100 text-center py-4 font-bold">Date</div>
                                 <div class="col-span-3 bg-gray-100 text-center py-4 font-bold">Location</div>
                                 <div class="col-span-4 bg-gray-100 text-center py-4 font-bold">Status</div>
                             </div>
+
+                            
                             <!-- <div class="grid grid-cols-12 gap-4">
                                 <div class="col-span-2 text-center py-4">${eventName}</div>
                                 <div class="col-span-3 text-center py-4">${eventDate}</div>
@@ -172,34 +175,15 @@
     <script>
         var uid = JSON.parse(localStorage.getItem('uid'));
         var nameresult = localStorage.getItem('nameresult');
-        var emailresult = localStorage.getItem("emailinput")
+        var emailresult = localStorage.getItem("emailinput");
+        var uid = localStorage.getItem('uid');
 
         console.log(emailresult)
         // console.log(uid)
         // console.log(nameresult)
 
-        document.getElementById('result').innerText = "Welcome " + nameresult + "!"
+        document.getElementById('result').innerText = "Welcome " + nameresult + "!";
 
-        // obtain events and relevant statuses
-        function fetchEventData() {
-
-            axios.get('http://localhost:8000/api/v1/event')
-                .then(function (response) {
-                    var eventresult = response.data.data;
-                    console.log(eventresult);
-
-                    // Loop through each event object and print the eventname
-                    for (event of eventresult) {
-                        eventname = event.eventname
-                        console.log(eventname)
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        }
-
-        // obtain event name and status
         function fetchEventandStatus() {
 
             console.log("run fetchEventandStatus()" )
@@ -207,17 +191,27 @@
             axios.get('http://localhost:5010/get-details/user/' + emailresult)
                 .then(function (response) {
                     console.log("its working")
+
+                    // event details
                     var event_statusresult = response.data.data;
-                    console.log(document.getElementById("event_status_display").innerHTML)
+
+
+
+                    // const interval = 60000
+                    
+                    
+
+                    // console.log(document.getElementById("event_status_display").innerHTML)
 
                     for (event of event_statusresult) {
                         eventName = event.eventname
                         eventDate = event.date
                         eventLocation = event.location
-                        console.log(eventLocation)
+                        num_ticketsleft = event.tickets_left
+                        eid = event.eid
 
-                        if (event.sold_out == "True" && event.queue_status == None) {
-
+                        if (num_ticketsleft == 0 && event.queue_status == None) {
+                            
                             document.getElementById("event_status_display".innerHTML) +=
                                 `
                             <div class="grid grid-cols-12 gap-4">
@@ -231,7 +225,6 @@
                         }
 
                         else if (event.queue_status == null) {
-                            output_status = "Queue"
                             document.getElementById("event_status_display").innerHTML +=
                                 `
                             <div class="grid grid-cols-12 gap-4 border">
@@ -239,7 +232,9 @@
                                 <div class="col-span-3 text-center py-4">${eventDate}</div>
                                 <div class="col-span-3 text-center py-4">${eventLocation}</div>
                                 <div class="col-span-4 text-center">
-                                    <button type="button" class="text-white bg-black hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">Queue</button>
+                                    <button type="button" onclick="addUserToQueue()" class="text-white bg-black hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">
+                                        Queue
+                                    </button>
                                 </div>
                             </div>
                                 `
@@ -278,7 +273,10 @@
                                     <div class="col-span-2 text-center">
                                         <button type="button" class="text-emerald-500 border border-emerald-500  hover:bg-emerald-500 hover:text-white 
                                         hover:border-black
-                                        focus:outline-none focus:ring-4 focus:ring-emerald-500 font-medium rounded-full text-sm px-5 py-2.5 mt-5 text-center">Purchase Ticket!</button>
+                                        focus:outline-none focus:ring-4 focus:ring-emerald-500 font-medium rounded-full text-sm px-5 py-2.5 mt-5 text-center"
+                                        onclick="fetchPurchaseLink()">
+                                        Purchase Ticket!
+                                        </button>
                                     </div>
                                 </div>
                                     `
@@ -295,7 +293,9 @@
                                 <div class="col-span-3 text-center py-4">${eventDate}</div>
                                 <div class="col-span-3 text-center py-4">${eventLocation}</div>
                                 <div class="col-span-4 text-center py-4">
-                                    <p class="text-emerald-500">Ticket Purchased</p>
+                                    <p class="text-emerald-500">
+                                        Ticket Purchased
+                                    </p>
                                 </div>
                             </div>
                                 `
@@ -335,7 +335,9 @@
                                     
                                 </div>
                                 <div class="col-span-2 text-center py-4">
-                                    <span class="bg-yellow-200 text-black text-md font-medium me-2 px-5 py-2.5 rounded-full ">Waiting</span>
+                                    <span class="bg-yellow-200 text-black text-md font-medium me-2 px-5 py-2.5 rounded-full ">
+                                        Waiting
+                                    </span>
                                 </div>
                             </div>
                                 `
@@ -349,6 +351,44 @@
                 .catch(function (error) {
                     console.log(error);
                 });
+        }
+
+
+        function addUserToQueue(){
+
+            axios.post('http://localhost:5100/queue/event/' + eid + '/user/' + uid + '/join')
+                .then(function (response) {
+                    added = response.data
+                    console.log(added)
+                })
+                .catch(function (error){
+                    console.log(error);
+                });
+
+        }
+
+
+        function fetchPurchaseLink(){
+
+            axios.post('http://localhost:5300/purchase_ticket/event/' + eid + '/user/' + uid)
+                .then(function (response) {
+                    purchaseurl = response.data.url;
+                    // console.log(purchaseurl) 
+                    // purchaseurl = purchaseurl.slice(34, purchaseurl.length)
+                    location.assign(purchaseurl)
+                    // axios.post('http://localhost:5400/check_payment/' + purchaseurl)
+                    //     .then(function (response){
+                    //         console.log('success')
+                    //     })
+                    //     .catch(function (error){
+                    //         console.log(error)
+                    //     })
+                   
+                })
+                .catch(function (error){
+                    console.log(error);
+                });
+
         }
 
 
