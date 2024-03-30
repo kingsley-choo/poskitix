@@ -33,7 +33,7 @@ def purchase_ticket(eid,uid):
             else : 
                 return {"code": 200, "data" : "Success but not recorded please contact us after paying","url": session.url}, 200
         else:
-            r_payment_info = requests.get(f"http://order:5005/order/{queue_status["checkout_session_id"]}/url")
+            r_payment_info = requests.get(f"http://payment:5005/order/{queue_status["checkout_session_id"]}/url")
             if r_payment_info.status_code not in range(200,300):
                 return {"code":500, "data":"issue with stripe"},500
             

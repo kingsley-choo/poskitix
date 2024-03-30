@@ -47,20 +47,24 @@ def get_events_to_display(email):
 
         response_tickets_left_body = response_tickets_left.json()
 
-        #oh no more, so we can conclude they probably not in queue
-        if response_tickets_left_body["data"]["tickets_left"] == 0:
-            event["sold_out"] = True
-            event["queue_status"] = None
+        event["tickets_left"]= response_tickets_left_body["data"]["tickets_left"] 
+
         #lets check their status in queue
+        response_queue_status = requests.get(f"http://queue:5004/queue/event/{input_eid}/user/{uid}")
+        if response_queue_status.status_code not in range(200,300):
+            #an error! lets just set the queue_status as None
+            event["queue_status"] = None
         else:
-            event["sold_out"]=False
-            #lets check their status in queue
-            response_queue_status = requests.get(f"http://queue:5004/queue/event/{input_eid}/user/{uid}")
-            if response_queue_status.status_code not in range(200,300):
-                #an error! lets just set the queue_status as None
-                event["queue_status"] = None
-            else:
-                event["queue_status"] = response_queue_status.json()["data"]
+            event["queue_status"] = response_queue_status.json()["data"]
+
+        response_ticket = requests.get(f"http://ticket:5003/ticket/event/{input_eid}/user/{uid}")
+        if response_ticket.status_code not in range(200,300):
+            #an error! lets just set the queue_status as None
+            event["ticket"] = None
+        else:
+            event["ticket"] = response_ticket.json()["data"]       
+
+        
     
     return { "code" : 200, "data" : events, "uid" : uid}
 

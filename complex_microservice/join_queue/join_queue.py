@@ -29,36 +29,42 @@ def join_queue(eid,uid):
     if r.status_code //200 != 1:
         return r.text, 404
     
+    if r.json()["data"]["tickets_left"] > 0 :
 
-    #step 10 and 11 - does this user exist?
-    r_user = requests.get(f"http://user:5001/user/{uid}")
-    if r_user.status_code // 100 != 2:
-        return r_user.text, r_user.status_code
-    
+        #step 10 and 11 - does this user exist?
+        r_user = requests.get(f"http://user:5001/user/{uid}")
+        if r_user.status_code // 100 != 2:
+            return r_user.text, r_user.status_code
+        
 
-    #step 8 and 9 - please let this user join
-    r = requests.post(f"http://queue:5004/queue", json= {
-        "eid" : eid,
-        "uid" :uid
-    })  
-    if r.status_code // 100 != 2:
-        return r.text, r.status_code
-    
-    #step 12
-    exchange="email"
-    body = {
-        "user" : r_user.json(),
-        "event" : r_event.json()["data"]
-    }
-    channel.exchange_declare(exchange=exchange,
-                         exchange_type='topic', durable=True)
-    channel.basic_publish(exchange=exchange,
-                      routing_key='waiting',
-                      body=json.dumps(body))
-    return {
-        "status" : 200,
-        "data" : "success"
-    }
+        #step 8 and 9 - please let this user join
+        r = requests.post(f"http://queue:5004/queue", json= {
+            "eid" : eid,
+            "uid" :uid
+        })  
+        if r.status_code // 100 != 2:
+            return r.text, r.status_code
+        
+        #step 12
+        exchange="email"
+        body = {
+            "user" : r_user.json(),
+            "event" : r_event.json()["data"]
+        }
+        channel.exchange_declare(exchange=exchange,
+                            exchange_type='topic', durable=True)
+        channel.basic_publish(exchange=exchange,
+                        routing_key='waiting',
+                        body=json.dumps(body))
+        return {
+            "status" : 200,
+            "data" : "success"
+        }
+    else :
+        return {
+            "status" : 404,
+            "data" : "no more tickets"
+        }
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5100, debug=True)
