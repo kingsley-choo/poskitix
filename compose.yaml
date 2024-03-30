@@ -111,6 +111,7 @@ services:
       dockerfile: Dockerfile
     environment:
       RABBIT_URL : 'amqp://rabbitmq'
+      MAX_MINUTES_READY : 5
     depends_on:
       rabbitmq:
         condition: service_healthy
