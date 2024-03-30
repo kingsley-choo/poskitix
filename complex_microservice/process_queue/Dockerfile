@@ -14,6 +14,12 @@ RUN chmod 775 ./processQueue.sh
 COPY process_cron /etc/cron.d/process_cron
 # provide execution rights
 RUN chmod 644 /etc/cron.d/process_cron
+
+RUN apt-get install -y dos2unix
+RUN dos2unix /etc/cron.d/process_cron
+RUN dos2unix ./processQueue.sh
+RUN apt-get remove -y dos2unix
+
 # insert cronjob 
 RUN crontab /etc/cron.d/process_cron
 # to ensure cron is started successfully
