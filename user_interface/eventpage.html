@@ -18,7 +18,7 @@
 
 </head>
 
-<body>
+<body onload="fetchEventandStatus()">
     <div>
         <nav class="bg-gray-900 border-gray-200">
             <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -144,16 +144,8 @@
                                 <div class="col-span-2 text-center py-4">
                                     <p>Waiting...</p>
                                 </div>
-                            </div> -->
-                        </div>
-
-
-                        <div>
-                            <button onclick="fetchEventandStatus()">test1</button>
-                        </div>
-                        <div>
-                            <button onclick="">test2</button>
-                        </div>
+                            </div>
+                        </div> -->
 
 
                     </div>
@@ -223,7 +215,6 @@
                         eventDate = event.date
                         eventLocation = event.location
                         console.log(eventLocation)
-                        output_html = ""
 
                         if (event.sold_out == "True" && event.queue_status == None) {
 
@@ -248,7 +239,7 @@
                                 <div class="col-span-3 text-center py-4">${eventDate}</div>
                                 <div class="col-span-3 text-center py-4">${eventLocation}</div>
                                 <div class="col-span-4 text-center">
-                                    <button type="button" class="text-black border-solid hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">Queue</button>
+                                    <button type="button" class="text-white bg-black hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">Queue</button>
                                 </div>
                             </div>
                                 `
@@ -337,10 +328,10 @@
                                 <div class="col-span-3 text-center py-4">${eventDate}</div>
                                 <div class="col-span-3 text-center py-4">${eventLocation}</div>
                                 <div class="col-span-2 text-center py-4">
-                                    Wait Time: ${waiting_time}
+                                    Wait Time: ${waiting_time} Minutes
                                 </div>
                                 <div class="col-span-2 text-center py-4">
-                                    <p>Waiting...</p>
+                                    <span class="bg-yellow-100 text-yellow-800 text-md font-medium me-2 px-3 py-1 rounded-full dark:bg-yellow-900 dark:text-yellow-300">Waiting</span>
                                 </div>
                             </div>
                                 `
