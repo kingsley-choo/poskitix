@@ -14,6 +14,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@next"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/lib/browser.min.js"></script> 
+
 
 
 </head>
@@ -151,9 +153,10 @@
             axios.post('http://localhost:5400/check_payment/' + session_id)
                 .then(function (response) {
                     console.log("its working")
+                    
+                    output_result = response.data.data
 
                     // event details
-                    output_result = response.data.data
                     event_name = output_result.event.eventname
                     event_location = output_result.event.location
                     event_price = output_result.event.price
@@ -163,7 +166,18 @@
                     console.log(event_location)
                     console.log(event_price)
 
+                    // ticket details
+                    var tid = output_result.ticket.tid
 
+                    // the issue is idk where tf to put this T.T
+                    console.log(tid)
+                    QRCode.toCanvas(document.getElementById('canvas'), 'sample text', function (error) { 
+                    if (error) console.error(error) 
+                    console.log('success!'); 
+                    })
+
+
+                    
                     input_html =
 
                         `
@@ -194,8 +208,7 @@
                                     </div>
                                     <div class="col-span-5 lg:col-span-2 flex items-center max-lg:mt-3 ">
                                         <!-- PUT QR HERE -->
-                                        <img src='' class="aspect-square w-full lg:max-w-[140px]">
-                                        QR PIC HERE!
+                                        <canvas id="canvas" class="aspect-square w-full lg:max-w-[140px]"></canvas>
                                     </div>
                                 </div>
                             </div>
