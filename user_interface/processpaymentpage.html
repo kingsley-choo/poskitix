@@ -14,6 +14,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@next"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/lib/browser.min.js"></script> 
+
 
     <script>
         QRcode = null
@@ -166,9 +168,10 @@
             axios.post('http://localhost:5400/check_payment/' + session_id)
                 .then(function (response) {
                     console.log("its working")
+                    
+                    output_result = response.data.data
 
                     // event details
-                    output_result = response.data.data
                     event_name = output_result.event.eventname
                     event_location = output_result.event.location
                     event_price = output_result.event.price
@@ -177,6 +180,17 @@
                     console.log(event_name)
                     console.log(event_location)
                     console.log(event_price)
+
+                    // ticket details
+                    var tid = output_result.ticket.tid
+
+                    // the issue is idk where tf to put this T.T
+                    console.log(tid)
+                    QRCode.toCanvas(document.getElementById('canvas'), 'sample text', function (error) { 
+                    if (error) console.error(error) 
+                    console.log('success!'); 
+                    })
+
 
                     ticket_id  = response.data.data.ticket.tid
 
