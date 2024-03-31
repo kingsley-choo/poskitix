@@ -17,9 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/lib/browser.min.js"></script> 
 
 
-    <script>
-        QRcode = null
-    </script>
+
 
         <script type="module">
 
@@ -180,17 +178,6 @@
                     console.log(event_name)
                     console.log(event_location)
                     console.log(event_price)
-
-                    // ticket details
-                    var tid = output_result.ticket.tid
-
-                    // the issue is idk where tf to put this T.T
-                    console.log(tid)
-                    QRCode.toCanvas(document.getElementById('canvas'), 'sample text', function (error) { 
-                    if (error) console.error(error) 
-                    console.log('success!'); 
-                    })
-
 
                     ticket_id  = response.data.data.ticket.tid
 
