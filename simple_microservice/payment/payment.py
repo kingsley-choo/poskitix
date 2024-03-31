@@ -65,7 +65,7 @@ def create_checkout_session(eid):
                 },
             ],
             mode='payment',
-            success_url = YOUR_DOMAIN + '/successpage.html' + '?session_id={CHECKOUT_SESSION_ID}',
+            success_url = YOUR_DOMAIN + '/process_payment.html' + '?session_id={CHECKOUT_SESSION_ID}',
             cancel_url = YOUR_DOMAIN + '/fail.html',
 
             # Timestamp must be at least 30 minutes
