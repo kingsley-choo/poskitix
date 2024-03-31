@@ -15,12 +15,15 @@ POST {{ticket}}/ticket
 Content-Type: application/json
  
 {
-    "eid": 1,
-    "uid": 2
+    "eid": 2,
+    "uid": 4
 }
 
 ### get number of ticket for an event id
 GET {{ticket}}/ticket/event/2
+
+### get specific ticket for uid, eid
+GET {{ticket}}/ticket/event/2/user/4
 
 @queue = http://localhost:5004
 ### join a queue
@@ -28,17 +31,17 @@ POST {{queue}}/queue
 Content-Type: application/json
  
 {
-    "eid": 1,
-    "uid": 4
+    "eid": 2,
+    "uid": 3
 }
 
 ### 'admit' people into queue i.e. waiting => ready
 ### no admitted = min(max people admitted, tickets left)
-PUT {{queue}}/queue/event/1/waiting-ready
+PUT {{queue}}/queue/event/2/waiting-ready
 Content-Type: application/json
  
 {
-    "tickets_remaining": 2
+    "tickets_remaining": 3
 }
 
 ### remove people who have been too long admitted i.e. ready
@@ -46,19 +49,19 @@ Content-Type: application/json
 PUT {{queue}}/queue/event/1/ready-missed
 
 ### ticket sold out - close queue
-PUT {{queue}}/queue/event/3/waiting-fail
+PUT {{queue}}/queue/event/1/waiting-fail
 
 ### purchase ticket i.e ready => done
-PUT {{queue}}/queue/event/1/user/1/ready-done
+PUT {{queue}}/queue/event/1/user/8/ready-done
 
 ### give user a checkout session id i.e. null => 1234
-PUT {{queue}}/queue/event/1/user/4/session_id/1234
+PUT {{queue}}/queue/event/2/user/3/session_id/ccs_test_a13aj0eeODlPlJhiAR7GDxXRlzDQ6EwFs1Xmu17RkLt4hUZLjDXvt6hdvO
 
 ### get queue based on checkout id
-GET {{queue}}/queue/checkout-session-id/1234
+GET {{queue}}/queue/checkout-session-id/cs_test_a1PPswvgHV7IKqSwvYViPfBl6dU1ITPKIGjIrXv54A8yRRIqA4o2rQS4R5
 
 ### get user queue status
-GET {{queue}}/queue/event/1/user/2
+GET {{queue}}/queue/event/1/user/6
 
 ### get all event and status based on user (to be checked)
 GET {{event}}/user/1
@@ -69,13 +72,13 @@ GET {{event}}/user/1
 POST {{payment}}/create-checkout-session/event/2
 
 ### get session
-GET {{payment}}/order/{{sesion_id}}/payment_status
+GET {{payment}}/order/cs_test_a1NZu4W4V7Fxl25Fkz6nCoLGTOzGuW4Ozxs7VnVR1X4wxexpcjXyQSpOcy/payment_status
 
 ### get session
-GET {{payment}}/order/{{sesion_id}}/url
+GET {{payment}}/cs_test_a1UkzeAsZdzNAUoRN5TCxJlosCjxaS1TQ7gymyFR5264cKUtqQT5GudKEl/url
 
 ### 
-DELETE {{payment}}/order/{{sesion_id}}/expire
+DELETE {{payment}}/order/cs_test_a13aj0eeODlPlJhiAR7GDxXRlzDQ6EwFs1Xmu17RkLt4hUZLjDXvt6hdvO/expire
 
 
 ### complex micro 1 part 1 (get events to display)
@@ -88,7 +91,7 @@ POST http://localhost:5100/queue/event/2/user/1/join
 POST http://localhost:5200/queue/process
 
 ### complex micro 3 part 1 (purchase ticket)
-POST http://localhost:5300/purchase_ticket/event/1/user/1
+POST http://localhost:5300/purchase_ticket/event/1/user/9
 
 ### complex micro 3 part 2 (issue ticket after payment complete)
 POST http://localhost:5400/check_payment/cs_test_a1e49jNnrCL2IvITraxw3LgiNaRbXdOVgqXSyEtw0DtjWPPlmauTdEmEB9
