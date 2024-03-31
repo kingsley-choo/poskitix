@@ -65,8 +65,8 @@ def create_checkout_session(eid):
                 },
             ],
             mode='payment',
-            success_url = YOUR_DOMAIN + '/success.html' + '?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url = YOUR_DOMAIN + '/cancel.html',
+            success_url = YOUR_DOMAIN + '/successpage.html' + '?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url = YOUR_DOMAIN + '/fail.html',
 
             # Timestamp must be at least 30 minutes
             expires_at = int(time.time() + (60 * 30)), # Configured to expire after 30 minutes

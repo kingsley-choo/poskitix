@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poskitix</title>
+    <!-- <script class="headflowbite" src="./node_modules/flowbite/dist/datepicker.js"></script> -->
+    <!-- Load Google client library -->
+    <!-- <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://apis.google.com/js/platform.js?onload=initGoogleSignIn" async defer></script> -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+</head>
+
+<body>
+    <div>
+        <nav class="bg-gray-900 border-gray-200">
+            <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+                <a href="homepage.html" class="flex items-center space-x-3 rtl:space-x-reverse">
+                    <img src="../pics/logo.png" class="h-8" alt="Poskitix Logo" />
+                    <!-- <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Poskitix</span> -->
+                </a>
+            </div>
+        </nav>
+
+        <div id="PageContent">
+            
+            
+            <!-- order and payment success -->
+            <section class="py-24 relative">
+                <div class="w-full max-w-7xl px-4 md:px-5 lg-6 mx-auto">
+                    <h2 class="font-manrope font-bold text-4xl leading-10 text-black text-center">
+                        Hi <span id="nameresult"></span>,
+                        Your Payment Failed
+                    </h2>
+                    <p class="mt-4 font-normal text-lg leading-8 text-gray-500 mb-11 text-center">
+                        failed</p>
+                    <div class="main-box border border-gray-200 rounded-xl pt-6 max-w-xl max-lg:mx-auto lg:max-w-full">
+                        <div
+                            class="flex flex-col lg:flex-row lg:items-center justify-between px-6 pb-6 border-b border-gray-200">
+                            <div class="data">
+                                <p class="font-semibold text-base leading-7 text-black mt-4">
+                                    Order Payment : 
+                                    <span class="font-medium text-m leading-6 whitespace-nowrap py-0.5 px-3 rounded-full lg:mt-3 bg-emerald-50 text-emerald-600">
+                                        Paid
+                                    </span>
+                                </p>
+                            </div>
+                            
+                        </div>
+
+                        <!-- Purchased ticket info -->
+                        <div class="w-full px-3 min-[400px]:px-6">
+                            <div class="flex flex-col lg:flex-row items-center py-6 border-b border-gray-200 gap-6 w-full">
+                                <!-- Image -->
+                                <div class="img-box max-lg:w-full">
+                                    <img src="/pics/erastour.jpeg" class="aspect-square w-full lg:max-w-[140px]">
+                                </div>
+
+                                <div class="flex flex-row items-center w-full ">
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 w-full">
+                                        <div class="flex items-center">
+                                            <div class="">
+                                                <h2 class="font-semibold text-xl leading-8 text-black mb-3">
+                                                    Test Taylor Swift Eras Tour</h2>
+                                                <p class="font-medium text-lg leading-8 text-black mb-3 ">
+                                                    Price:
+                                                    <span class="text-blue-700">Test $100</span>
+                                                </p>
+                                                <div class="flex items-center ">
+                                                    <p class="font-medium text-base leading-7 text-black pr-4 mr-4 border-r border-gray-200">
+                                                        Location: 
+                                                        <span class="text-gray-500">Test Singapore National Stadium</span>
+                                                    
+                                                </div>
+                                            </div>
+        
+                                        </div>
+                                        <div class="grid grid-cols-5 img-box max-lg:w-full">
+                                            <div class="col-span-5 lg:col-span-1 flex items-center max-lg:mt-3">
+                                            </div>
+                                            <div class="col-span-5 lg:col-span-2 flex items-center max-lg:mt-3 ">
+                                            </div>
+                                            <div class="col-span-5 lg:col-span-2 flex items-center max-lg:mt-3 ">
+                                                <!-- PUT QR HERE -->
+                                                <img src='' class="aspect-square w-full lg:max-w-[140px]">
+                                                QR PIC HERE!
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                </div>
+                            </div>
+        
+                        </div>
+
+                        <div class="w-full border-t border-gray-200 px-6 flex flex-col lg:flex-row items-center justify-between ">
+                            <p class="font-semibold text-lg text-black py-6">Total Price: <span class="text-blue-700"> $100.00</span></p>
+                        </div>
+        
+                    </div>
+                </div>
+            </section>
+                                                    
+
+
+
+
+            <footer
+                class="fixed bottom-0 left-0 z-20 w-full h-auto p-1 bg-gray-900 shadow md:flex md:items-center md:justify-between md:p-2">
+                <span class="text-sm text-white sm:text-center">© 2024 <a href="https://flowbite.com/"
+                class="hover:underline">Poskitix</a>. All Rights Reserved.
+                </span>
+            </footer>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        // var uid = JSON.parse(localStorage.getItem('uid'));
+       
+        var nameresult = localStorage.getItem('nameresult');
+        document.getElementById('nameresult').innerText = nameresult 
+        
+
+    </script>
+
+
+    
+
+</body>
+
+</html>
+
+
+<!-- ApexChart CDN -->
+<script class='' src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<!-- Itinerary flowbite -->
+<script id='flowbite' src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.0.0/flowbite.min.js"></script>
+<!-- <script src="./node_modules/flowbite/dist/flowbite.min.js"></script>
+<script src="./node_modules/flowbite/dist/datepicker.js"></script> -->
+
+<!-- Importing icons from ionic.io -->
+<script class='importCDN' type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script class='importCDN' nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

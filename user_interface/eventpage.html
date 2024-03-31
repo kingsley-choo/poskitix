@@ -86,7 +86,7 @@
                             class="mb-6 text-3xl font-bold lg:text-4xl sm:px-16 xl:px-48 text-gray-400 text-center">
                             Choose an Event
                         </p>
-                        
+
                         <div id="event_status_display" class="border">
                             <!-- Table header -->
                             <div class="grid grid-cols-12 bg-gray-100 gap-4 border">
@@ -95,66 +95,66 @@
                                 <div class="col-span-3 bg-gray-100 text-center py-4 font-bold">Location</div>
                                 <div class="col-span-4 bg-gray-100 text-center py-4 font-bold">Status</div>
                             </div>
+                        </div>
                     </div>
+
+
+
+
+
                 </div>
-
-
-
-
+                <footer
+                    class="fixed bottom-0 left-0 z-20 w-full h-auto p-1 bg-gray-900 shadow md:flex md:items-center md:justify-between md:p-2">
+                    <span class="text-sm text-white sm:text-center">© 2024 <a href="https://flowbite.com/"
+                            class="hover:underline">Poskitix</a>. All Rights Reserved.
+                    </span>
+                </footer>
 
             </div>
-            <footer
-                class="fixed bottom-0 left-0 z-20 w-full h-auto p-1 bg-gray-900 shadow md:flex md:items-center md:justify-between md:p-2">
-                <span class="text-sm text-white sm:text-center">© 2024 <a href="https://flowbite.com/"
-                        class="hover:underline">Poskitix</a>. All Rights Reserved.
-                </span>
-            </footer>
 
         </div>
 
-    </div>
+
+
+        <script>
+            var nameresult = localStorage.getItem('nameresult');
+            var emailresult = localStorage.getItem("emailinput");
+            var uid = localStorage.getItem('uid');
+
+
+            document.getElementById('result').innerText = "Welcome " + nameresult + "!";
+
+            function fetchEventandStatus() {
+
+                console.log("run fetchEventandStatus()")
+
+                axios.get('http://localhost:5010/get-details/user/' + emailresult)
+                    .then(function (response) {
+                        console.log("its working")
+
+                        // event details
+                        var event_statusresult = response.data.data;
 
 
 
-    <script>
-        var nameresult = localStorage.getItem('nameresult');
-        var emailresult = localStorage.getItem("emailinput");
-        var uid = localStorage.getItem('uid');
-        
-
-        document.getElementById('result').innerText = "Welcome " + nameresult + "!";
-
-        function fetchEventandStatus() {
-
-            console.log("run fetchEventandStatus()" )
-
-            axios.get('http://localhost:5010/get-details/user/' + emailresult)
-                .then(function (response) {
-                    console.log("its working")
-
-                    // event details
-                    var event_statusresult = response.data.data;
+                        // const interval = 60000
 
 
 
-                    // const interval = 60000
-                    
-                    
+                        // console.log(document.getElementById("event_status_display").innerHTML)
 
-                    // console.log(document.getElementById("event_status_display").innerHTML)
+                        for (event of event_statusresult) {
+                            eventName = event.eventname
+                            eventDate = event.date
+                            eventLocation = event.location
+                            num_ticketsleft = event.tickets_left
+                            var eid = event.eid
 
-                    for (event of event_statusresult) {
-                        eventName = event.eventname
-                        eventDate = event.date
-                        eventLocation = event.location
-                        num_ticketsleft = event.tickets_left
-                        var eid = event.eid
-                        
 
-                        if (num_ticketsleft == 0 && event.queue_status == None) {
-                            
-                            document.getElementById("event_status_display".innerHTML) +=
-                                `
+                            if (num_ticketsleft == 0 && event.queue_status == None) {
+
+                                document.getElementById("event_status_display".innerHTML) +=
+                                    `
                             <div class="grid grid-cols-12 gap-4">
                                 <div class="col-span-2 text-center">${eventName}</div>
                                 <div class="col-span-4 text-center">${eventDate}</div>
@@ -163,32 +163,32 @@
                             </div>
                                 `
 
-                        }
+                            }
 
-                        else if (event.queue_status == null) {
-                            document.getElementById("event_status_display").innerHTML +=
-                                `
+                            else if (event.queue_status == null) {
+                                document.getElementById("event_status_display").innerHTML +=
+                                    `
                             <div class="grid grid-cols-12 gap-4 border">
                                 <div class="col-span-2 text-center py-4">${eventName}</div>
                                 <div class="col-span-3 text-center py-4">${eventDate}</div>
                                 <div class="col-span-3 text-center py-4">${eventLocation}</div>
                                 <div class="col-span-4 text-center">
-                                    <button type="button" onclick="addUserToQueue(${eid})" class="text-white bg-black hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">
+                                    <button type="button" onclick="addUserToQueue(${eid})" onclick="refreshPage()" class="text-white bg-black hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">
                                         Queue
                                     </button>
                                 </div>
                             </div>
                                 `
-                        }
+                            }
 
-                        else {
-                            event_queue_status = event.queue_status
-                            status_name = event_queue_status.status
+                            else {
+                                event_queue_status = event.queue_status
+                                status_name = event_queue_status.status
 
-                            // add event, updating that they have missed their chance to buy
-                            if (status_name == "Missed") {
-                                document.getElementById("event_status_display").innerHTML +=
-                                    `
+                                // add event, updating that they have missed their chance to buy
+                                if (status_name == "Missed") {
+                                    document.getElementById("event_status_display").innerHTML +=
+                                        `
                                 <div class="grid grid-cols-12 gap-4 border">
                                     <div class="col-span-2 text-center py-4">${eventName}</div>
                                     <div class="col-span-3 text-center py-4">${eventDate}</div>
@@ -198,16 +198,16 @@
                                     </div>
                                 </div>
                                     `
-                            }
+                                }
 
-                            // add event, updating that the queue has reached their turn and can proceed to buy
-                            else if (status_name == "Ready") {
-                                ready_time = event_queue_status.readyAt
-                                
+                                // add event, updating that the queue has reached their turn and can proceed to buy
+                                else if (status_name == "Ready") {
+                                    ready_time = event_queue_status.readyAt
 
-                                document.getElementById("event_status_display").innerHTML +=
 
-                                    `
+                                    document.getElementById("event_status_display").innerHTML +=
+
+                                        `
                                 <div class="grid grid-cols-12 gap-4 border justify-center">
                                     <div class="col-span-2 text-center py-4">${eventName}</div>
                                     <div class="col-span-3 text-center py-4">${eventDate}</div>
@@ -217,20 +217,20 @@
                                         <button type="button" class="text-emerald-500 border border-emerald-500  hover:bg-emerald-500 hover:text-white 
                                         hover:border-black
                                         focus:outline-none focus:ring-4 focus:ring-emerald-500 font-medium rounded-full text-sm px-5 py-2.5 mt-5 text-center"
-                                        onclick="createPurchaseLink(${eid})">
+                                        onclick="createPurchaseLink(${eid}, ${uid})" onclick="refreshPage()">
                                         Purchase Ticket!
                                         </button>
                                     </div>
                                 </div>
                                     `
 
-                            }
+                                }
 
-                            // add event, updating user that the user has already bought a ticket for the event
-                            else if (status_name == "Done") {
-                                document.getElementById("event_status_display").innerHTML +=
-                                
-                                `
+                                // add event, updating user that the user has already bought a ticket for the event
+                                else if (status_name == "Done") {
+                                    document.getElementById("event_status_display").innerHTML +=
+
+                                        `
                             <div class="grid grid-cols-12 gap-4 border">
                                 <div class="col-span-2 text-center py-4">${eventName}</div>
                                 <div class="col-span-3 text-center py-4">${eventDate}</div>
@@ -242,14 +242,14 @@
                                 </div>
                             </div>
                                 `
-                            }
+                                }
 
-                            // add event, updating user that their initial queue has failed as all tickets are now sold out
-                            // if at the front ticket amount is 0 still need this?
-                            else if (status_name == "Fail") {
-                                document.getElementById("event_status_display").innerHTML +=
-                                
-                                `
+                                // add event, updating user that their initial queue has failed as all tickets are now sold out
+                                // if at the front ticket amount is 0 still need this?
+                                else if (status_name == "Fail") {
+                                    document.getElementById("event_status_display").innerHTML +=
+
+                                        `
                             <div class="grid grid-cols-12 gap-4 border">
                                 <div class="col-span-2 text-center py-4">${eventName}</div>
                                 <div class="col-span-3 text-center py-4">${eventDate}</div>
@@ -260,14 +260,14 @@
                             </div>
                                 `
 
-                            }
+                                }
 
-                            // add event, updating user that they are current in the queue, not yet called to purchase
-                            else if (status_name == "Waiting") {
-                                waiting_time = event_queue_status.waiting_time_minutes
-                                document.getElementById("event_status_display").innerHTML +=
-                                
-                                `
+                                // add event, updating user that they are current in the queue, not yet called to purchase
+                                else if (status_name == "Waiting") {
+                                    waiting_time = event_queue_status.waiting_time_minutes
+                                    document.getElementById("event_status_display").innerHTML +=
+
+                                        `
                             <div class="grid grid-cols-12 gap-4 border">
                                 <div class="col-span-2 text-center py-4">${eventName}</div>
                                 <div class="col-span-3 text-center py-4">${eventDate}</div>
@@ -285,63 +285,71 @@
                             </div>
                                 `
 
+                                }
+
                             }
 
                         }
-
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
 
 
-        function addUserToQueue(eid){
-            axios.post('http://localhost:5100/queue/event/' + eid + '/user/' + uid + '/join')
-                .then(function (response) {
-                    added = response.data
-                    console.log(added)
-                })
-                .catch(function (error){
-                    console.log(error);
-                });
+            function addUserToQueue(eid) {
+                axios.post('http://localhost:5100/queue/event/' + eid + '/user/' + uid + '/join')
+                    .then(function (response) {
+                        added = response.data
+                        console.log(added)
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
 
-        }
-
-
-        function createPurchaseLink(eid){
-            axios.post('http://localhost:5300/purchase_ticket/event/' + eid + '/user/' + uid)
-                .then(function (response) {
-                    var purchaseurl = response.data.url;
-                    location.assign(purchaseurl)
-                    // fetchConfirmationURL(purchaseurl)
-                    
-                    
-                })
-                .catch(function (error){
-                    console.log(error);
-                });
-        }
-
-        // function fetchConfirmationURL(){
-        //     axios.get(purchaseurl)
-        //         .then(function (response){
-        //             console.log(response)
-        //             location.assign(purchaseurl)
-        //             redirectedURL = window.location.href;
-        //             sessionid = redirectedURL.split('=')[1]
-        //             console.log(sessionid)
-
-        //         })
-        //         .catch(function (error){
-        //             console.log(error)
-        //         })
-            
-        // }
+            }
 
 
-    </script>
+            function createPurchaseLink(eid, uid) {
+                axios.post('http://localhost:5300/purchase_ticket/event/' + eid + '/user/' + uid)
+                    .then(function (response) {
+                        purchaseurl = response.data.url;
+                        console.log(purchaseurl)
+                        window.location.href = purchaseurl
+                        stripe_sessionid = purchaseurl.substring(34)
+                        console.log(stripe_sessionid)
+                        // location.assign(purchaseurl)
+                        // fetchConfirmationURL(purchaseurl)
+
+
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
+
+            function fetchConfirmationURL() {
+                axios.get(purchaseurl)
+                    .then(function (response) {
+                        console.log(response)
+                        location.assign(purchaseurl)
+                        redirectedURL = window.location.href;
+                        sessionid = redirectedURL.split('=')[1]
+                        console.log(sessionid)
+
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+
+            }
+
+            function refreshPage() {
+                window.location.reload();
+            }
+
+
+        </script>
 
 
 
