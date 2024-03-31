@@ -64,7 +64,7 @@ def create_queue():
         return jsonify(
             {
                 "code": 400,
-                "message": "Missing required parameters."
+                "message": "Missing required parameter(s)."
             }
             ), 400
     new_queue = Queue(eid=eid, uid=uid)
@@ -72,7 +72,7 @@ def create_queue():
     try:
         db.session.add(new_queue)
         db.session.commit()
-        return jsonify({"code": 201, "message": f"User {uid} entered queue created successfully."}), 201
+        return jsonify({"code": 201, "message": f"User {uid} has entered queue for event {eid} successfully."}), 201
     except Exception as e:
         db.session.rollback()
         return jsonify(
@@ -164,7 +164,7 @@ def update_queue_status_bought(eid,uid):
         queue_entry.status = 'Done'
         db.session.commit()
 
-        return jsonify({"code": 200, "message": f"User {uid} updated to 'Bought' successfully."}), 200
+        return jsonify({"code": 200, "message": f"User {uid} for event {eid} updated to 'Bought' successfully."}), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({"code": 500, "message": f"An error occurred: {str(e)}"}), 500
@@ -177,7 +177,7 @@ def update_session_id(eid,uid,sid):
             return {"code" : 400, "message" : "session id recorded already"},400
         record.checkout_session_id = sid
         db.session.commit()
-        return jsonify({"code": 200, "message": f"User {uid} updated session ID successfully."}), 200
+        return jsonify({"code": 200, "message": f"User {uid} for event {eid} updated session ID successfully."}), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({"code": 500, "message": f"An error occurred: {str(e)}"}), 500
