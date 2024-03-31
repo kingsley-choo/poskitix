@@ -15,6 +15,19 @@
     <script src="https://unpkg.com/vue@next"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
+    <script>
+        QRcode = null
+    </script>
+
+        <script type="module">
+
+        import QRcode123 from 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/+esm' 
+
+        window.QRCode = QRcode123
+
+
+    </script>
+
 
 </head>
 
@@ -131,6 +144,7 @@
     <script>
 
         // var uid = JSON.parse(localStorage.getItem('uid'));
+        ticket_id = null
 
         var nameresult = localStorage.getItem('nameresult');
         document.getElementById('successmsg').innerText = 
@@ -148,6 +162,7 @@
             console.log(session_id)
 
 
+
             axios.post('http://localhost:5400/check_payment/' + session_id)
                 .then(function (response) {
                     console.log("its working")
@@ -162,6 +177,8 @@
                     console.log(event_name)
                     console.log(event_location)
                     console.log(event_price)
+
+                    ticket_id  = response.data.data.ticket.tid
 
 
                     input_html =
@@ -193,9 +210,7 @@
                                     <div class="col-span-5 lg:col-span-2 flex items-center max-lg:mt-3 ">
                                     </div>
                                     <div class="col-span-5 lg:col-span-2 flex items-center max-lg:mt-3 ">
-                                        <!-- PUT QR HERE -->
-                                        <img src='' class="aspect-square w-full lg:max-w-[140px]">
-                                        QR PIC HERE!
+                                        <canvas id="canvas"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -204,7 +219,14 @@
                     </div>
                     `
 
+             
+
                     document.getElementById("ticket_info").innerHTML += input_html
+
+                    window.QRCode.toCanvas(canvas, ticket_id, function (error) {
+                    if (error) console.error(error)
+                    console.log('success!');
+                    })
 
                 })
                 .catch(function (error) {
@@ -233,6 +255,8 @@
 
 
     </script>
+
+
 
 
 
