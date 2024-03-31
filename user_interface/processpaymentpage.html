@@ -34,9 +34,7 @@
             <!-- order and payment success -->
             <section class="py-24 relative">
                 <div class="w-full max-w-7xl px-4 md:px-5 lg-6 mx-auto">
-                    <h2 class="font-manrope font-bold text-4xl leading-10 text-black text-center">
-                        Hi <span id="nameresult"></span>,
-                        Your Payment is Successful !
+                    <h2 id="successmsg" class="font-manrope font-bold text-4xl leading-10 text-black text-center">
                     </h2>
                     <p class="mt-4 font-normal text-lg leading-8 text-gray-500 mb-11 text-center">
                         You have have successfully bought your ticket. The ticket information will be emailed to you.
@@ -134,10 +132,11 @@
 
         // var uid = JSON.parse(localStorage.getItem('uid'));
 
-        f
-
         var nameresult = localStorage.getItem('nameresult');
-        document.getElementById('nameresult').innerText = nameresult
+        document.getElementById('successmsg').innerText = 
+        `
+        Hi ${nameresult},  Your Payment is Successful!
+        `
 
         function get_payment_info() {
 
@@ -173,7 +172,7 @@
                                 <div class="flex items-center">
                                     <div class="">
                                         <h2 class="font-semibold text-xl leading-8 text-black mb-3">
-                                            Test Taylor Swift Eras Tour</h2>
+                                            ${event_name}</h2>
                                         <p class="font-medium text-lg leading-8 text-black mb-3 ">
                                             Price:
                                             <span class="text-blue-700">${event_price}</span>
