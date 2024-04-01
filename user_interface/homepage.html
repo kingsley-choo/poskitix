@@ -223,7 +223,7 @@
                 .catch(function (error) {
                     console.error(error);
                     var noemailmsg = "This email does not exist. Please Try Again.";
-                    document.getElementById('emailerror').innerHTML = noemailmsg;
+                    document.getElementById('emailerror').innerText = noemailmsg;
         
                 });
         }
