@@ -45,10 +45,10 @@ def get_events_to_display(email):
 
         if response_events.status_code not in range(200,300): # if there is an error with tickets of one event - leave it be 
             event["status"] = "error"
-
-        response_tickets_left_body = response_tickets_left.json()
-
-        event["tickets_left"]= response_tickets_left_body["data"]["tickets_left"] 
+        else:
+            response_tickets_left_body = response_tickets_left.json()
+    
+            event["tickets_left"]= response_tickets_left_body["data"]["tickets_left"] 
 
         #lets check their status in queue
         response_queue_status = requests.get(f"http://queue:5004/queue/event/{input_eid}/user/{uid}")

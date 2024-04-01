@@ -131,7 +131,7 @@
                 axios.get('http://localhost:5010/get-details/user/' + emailresult)
                     .then(function (response) {
                         console.log("its working")
-
+                        let today = new Date();
                         // event details
                         var event_statusresult = response.data.data;
 
@@ -148,6 +148,7 @@
                             eventDate = event.date
                             eventLocation = event.location
                             num_ticketsleft = event.tickets_left
+                            eventSalesDate = new Date(event.salesdate)
                             var eid = event.eid
 
 
@@ -164,8 +165,9 @@
                                 `
 
                             }
+                            // else if (event.queue_status =)
 
-                            else if (event.queue_status == null) {
+                            else if (event.queue_status == null && eventSalesDate < today) {
                                 document.getElementById("event_status_display").innerHTML +=
                                     `
                             <div class="grid grid-cols-12 gap-4 border">
@@ -175,6 +177,21 @@
                                 <div class="col-span-4 text-center">
                                     <button type="button" onclick="addUserToQueue(${eid})" onclick="refreshPage()" class="text-white bg-black hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">
                                         Queue
+                                    </button>
+                                </div>
+                            </div>
+                                `
+                            }
+                            else if (event.queue_status == null && eventSalesDate >= today) {
+                                document.getElementById("event_status_display").innerHTML +=
+                                    `
+                            <div class="grid grid-cols-12 gap-4 border">
+                                <div class="col-span-2 text-center py-4">${eventName}</div>
+                                <div class="col-span-3 text-center py-4">${eventDate}</div>
+                                <div class="col-span-3 text-center py-4">${eventLocation}</div>
+                                <div class="col-span-4 text-center">
+                                     <button type="button" disabled onclick="refreshPage()" class="text-white bg-black hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">
+                                        Sales Begins at ${eventSalesDate}
                                     </button>
                                 </div>
                             </div>
@@ -347,6 +364,8 @@
             function refreshPage() {
                 window.location.reload();
             }
+
+            // function 
 
 
         </script>
