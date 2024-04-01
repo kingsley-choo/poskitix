@@ -41,7 +41,7 @@ insert into event (eventname, date, salesdate, location, description, capacity, 
 
 insert into event (eventname, date, salesdate, location, description, capacity, price) values (
 	"Kingsley Tour Night (Free Seating)",
-    "2024-08-16 13:00:00",
+    "2024-05-16 13:00:00",
     "2024-04-03 17:00:00",
     "Germaine's Stadium, Myanmmar", 
     "I love Nathan",
