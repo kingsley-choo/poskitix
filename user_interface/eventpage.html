@@ -352,10 +352,11 @@
                                     purchaseButton.setAttribute('type', 'button');
                                     purchaseButton.classList.add('text-emerald-500', 'border', 'border-emerald-500', 'hover:bg-emerald-500', 'hover:text-white', 'hover:border-black', 'focus:outline-none', 'focus:ring-4', 'focus:ring-emerald-500', 'font-medium', 'rounded-full', 'text-sm', 'px-5', 'py-2.5', 'mt-5', 'text-center');
                                     purchaseButton.textContent = 'Purchase Ticket!';
-                                    purchaseButton.addEventListener('click', function() {
-                                        createPurchaseLink(eid, uid);
-                                        // refreshPage();
-                                    });
+                                    purchaseButton.setAttribute('onClick', `createPurchaseLink(${eid}, ${uid})`)
+                                    // purchaseButton.addEventListener('click', function() {
+                                    //     // createPurchaseLink(eid, uid);
+                                    //     // refreshPage();
+                                    // });
 
                                     // Append child elements to container
                                     container.appendChild(eventNameDiv);
