@@ -128,12 +128,21 @@
 
                 console.log("run fetchEventandStatus()")
 
+                console.log(emailresult)
+
+                if (!emailresult){
+                    window.location.href = "homepage.html"
+                    alert("Please enter your email first! :(")
+                }
+
                 axios.get('http://localhost:5010/get-details/user/' + emailresult)
                     .then(function (response) {
                         console.log("its working")
                         let today = new Date();
                         // event details
                         var event_statusresult = response.data.data;
+
+                        console.log(event_statusresult)
 
 
 
