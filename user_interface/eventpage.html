@@ -247,7 +247,7 @@
                                 queueButton.textContent = 'Queue';
                                 queueButton.addEventListener('click', function() {
                                     // addUserToQueue(eid);
-                                    refreshPage();
+                                    // refreshPage();
                                 });
 
                                 // Append child elements to container
@@ -285,7 +285,7 @@
                                 const salesBeginButton = document.createElement('button');
                                 salesBeginButton.setAttribute('type', 'button');
                                 salesBeginButton.setAttribute('disabled', 'true');
-                                salesBeginButton.addEventListener('click', refreshPage);
+                                // salesBeginButton.addEventListener('click', refreshPage);
                                 salesBeginButton.classList.add('text-white', 'bg-black', 'hover:bg-red-800', 'hover:text-white', 'focus:outline-none', 'focus:ring-4', 'focus:ring-red-300', 'font-medium', 'rounded-full', 'text-sm', 'px-5', 'py-2.5', 'mt-2', 'text-center');
                                 salesBeginButton.textContent = `Sales Begins at ${eventSalesDate}`;
 
@@ -453,10 +453,10 @@
                                     purchaseButton.classList.add('text-emerald-500', 'border', 'border-emerald-500', 'hover:bg-emerald-500', 'hover:text-white', 'hover:border-black', 'focus:outline-none', 'focus:ring-4', 'focus:ring-emerald-500', 'font-medium', 'rounded-full', 'text-sm', 'px-5', 'py-2.5', 'mt-5', 'text-center');
                                     purchaseButton.textContent = 'Purchase Ticket!';
                                     purchaseButton.setAttribute('onClick', `createPurchaseLink(${eid}, ${uid})`)
-                                    // purchaseButton.addEventListener('click', function() {
-                                    //     // createPurchaseLink(eid, uid);
-                                    //     // refreshPage();
-                                    // });
+                                    purchaseButton.addEventListener('click', function() {
+                                        // createPurchaseLink(eid, uid);
+                                        // refreshPage();
+                                    });
 
                                     // Append child elements to container
                                     container.appendChild(eventNameDiv);
@@ -643,6 +643,7 @@
                     .then(function (response) {
                         added = response.data
                         console.log(added)
+                        refreshPage()
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -686,7 +687,21 @@
             }
 
             function refreshPage() {
-                window.location.reload();
+                let hehe = document.getElementById("event_status_display")
+
+                while (hehe.lastElementChild){
+                    hehe.removeChild(hehe.lastElementChild)
+                }
+
+                hehe.innerHTML =                             `<div class="grid grid-cols-12 bg-gray-100 gap-4 border">
+                                <div class="col-span-2 bg-gray-100 text-center py-4 font-bold">Event Name</div>
+                                <div class="col-span-3 bg-gray-100 text-center py-4 font-bold">Date</div>
+                                <div class="col-span-3 bg-gray-100 text-center py-4 font-bold">Location</div>
+                                <div class="col-span-4 bg-gray-100 text-center py-4 font-bold">Status</div>
+                            </div>`;
+                
+                fetchEventandStatus();
+   
             }
 
 
