@@ -25,7 +25,7 @@ def join_queue(eid,uid):
         return r_event.text, 404
     # step n - is the event on sale currently?
     salesDate = datetime.fromisoformat(r_event.json()["data"]["salesdate"])
-    if salesDate < datetime.now.date():
+    if salesDate > datetime.now():
         return "Event not on sale", 404
 
     #step 6 and 7 - is there still tickets in the event?
