@@ -16,7 +16,7 @@ CREATE TABLE ticket (
 	 TID varchar(36) DEFAULT (UUID())
 );
 
-insert into ticket_event (tickets_left) values (10), (14);
+insert into ticket_event (tickets_left) values (10), (14), (20), (30);
 
 DELIMITER $$
 

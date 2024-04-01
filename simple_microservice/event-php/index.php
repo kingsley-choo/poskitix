@@ -29,7 +29,7 @@ switch ($method | $uri) {
         $pdo = $connMgr->getConnection(); #what is the method?
 
         #step 2 : prepare SQL statement
-        $sql = "SELECT * FROM event where date > now()";  #need to remember the statements
+        $sql = "SELECT * FROM event where date > now() and salesdate >= now() and salesdate < DATE_ADD(now(), INTERVAL 2 MONTH)";  #need to remember the statements
         $stmt = $pdo->prepare($sql);
 
         #step 4: set the settings
@@ -63,8 +63,8 @@ switch ($method | $uri) {
         break;
 
    /*
-   * Path: GET /api/users/{id}
-   * Task: get one user
+   * Path: GET /event/{id}
+   * Task: get one event
    */
    case ($method == 'GET' && preg_match('/\/event\/[1-9]*/', $uri)):
         header('Content-Type: application/json');

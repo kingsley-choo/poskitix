@@ -1,3 +1,4 @@
+from datetime import datetime
 from os import environ
 from flask_cors import CORS
 from flask import Flask, request, jsonify
@@ -18,11 +19,14 @@ CORS(app)
 def join_queue(eid,uid):
 
 
-    #step 4 and 5 - does the event exist? 
+    #step 4 and 5 - does the event exist
     r_event = requests.get(f"http://event/event/{eid}")
     if r_event.status_code // 200 != 1:
         return r_event.text, 404
-    
+    # step n - is the event on sale currently?
+    salesDate = datetime.fromisoformat(r_event.json()["data"]["salesdate"])
+    if salesDate < datetime.now.date():
+        return "Event not on sale", 404
 
     #step 6 and 7 - is there still tickets in the event?
     r = requests.get(f"http://ticket:5003/ticket/event/{eid}")
