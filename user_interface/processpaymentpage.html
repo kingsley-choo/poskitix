@@ -16,10 +16,7 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script type="module"> 
         import QRcode from 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/+esm' 
-        // QRcode.toCanvas(document.getElementById('canvas'), 'sample text', function (error) {  
-        //     if (error) console.error(error)  
-        //     console.log('success!');  
-        // }) 
+        window.QRcode = QRcode
     </script>
 
 
@@ -268,7 +265,7 @@
                     // Create QR code image
                     const qrCodeImage = document.createElement('img');
                     qrCodeImage.setAttribute('src', '');
-                    qrCodeImage.classList.add('aspect-square', 'w-full', 'lg:max-w-[140px]');
+                    // qrCodeImage.classList.add('aspect-square', 'w-full', 'lg:max-w-[140px]');
 
                     // Create canvas for QR code
                     const qrCodeCanvas = document.createElement('canvas');
@@ -287,11 +284,12 @@
                     // Append container to ticket_info element
                     document.getElementById("ticket_info").appendChild(container);
 
+                    console.log(QRcode)
 
-                    // window.QRCode.toCanvas(canvas, ticket_id, function (error) {
-                    // if (error) console.error(error)
-                    // console.log('success!');
-                    // })
+                    window.QRcode.toCanvas(canvas, ticket_id, function (error) {
+                    if (error) console.error(error)
+                    console.log('success!');
+                    })
 
                 })
                 .catch(function (error) {
