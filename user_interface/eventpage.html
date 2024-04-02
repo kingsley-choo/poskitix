@@ -277,7 +277,56 @@
                                 document.getElementById("event_status_display").appendChild(container);
                             }
 
-                           
+
+                            // else {
+                            //     event_queue_status = event.queue_status
+                            //     status_name = event_queue_status.status
+
+                            //     // add event, updating that they have missed their chance to buy
+                            //         // <div class="col-span-3 text-center py-4">${eventLocation}</div>  
+                            //     //     document.getElementById("event_status_display").innerHTML +=
+                            //     //         `
+                            //     // <div class="grid grid-cols-12 gap-4 border">
+                            //     //     <div class="col-span-2 text-center py-4">${eventName}</div>
+                            //     //     <div class="col-span-3 text-center py-4">${eventDate}</div>
+                            //     //     <div class="col-span-3 text-center py-4">${eventLocation}</div>  
+                            //     //     <div class="col-span-4 text-center py-4">
+                            //     //         <p>You missed your chance to purchase</p>
+                            //     //     </div>
+                            //     // </div>
+                            //     //     `
+                            //         // Create container div
+                            //         let container = document.createElement('div');
+                            //         container.classList.add('grid', 'grid-cols-12', 'gap-4', 'border');
+
+                            //         // Create child elements
+                            //         let eventNameDiv = document.createElement('div');
+                            //         eventNameDiv.classList.add('col-span-2', 'text-center', 'py-4');
+                            //         eventNameDiv.textContent = eventName;
+
+                            //         let eventDateDiv = document.createElement('div');
+                            //         eventDateDiv.classList.add('col-span-3', 'text-center', 'py-4');
+                            //         eventDateDiv.textContent = eventDate;
+
+                            //         let eventLocationDiv = document.createElement('div');
+                            //         eventLocationDiv.classList.add('col-span-3', 'text-center', 'py-4');
+                            //         eventLocationDiv.textContent = eventLocation;
+
+                            //         let missedMessageDiv = document.createElement('div');
+                            //         missedMessageDiv.classList.add('col-span-4', 'text-center', 'py-4');
+                            //         let missedMessage = document.createElement('p');
+                            //         missedMessage.textContent = 'You missed your chance to purchase';
+                            //         missedMessageDiv.appendChild(missedMessage);
+
+                            //         // Append child elements to container
+                            //         container.appendChild(eventNameDiv);
+                            //         container.appendChild(eventDateDiv);
+                            //         container.appendChild(eventLocationDiv);
+                            //         container.appendChild(missedMessageDiv);
+
+                            //         // Append container to event_status_display
+                            //         document.getElementById("event_status_display").appendChild(container);
+                            //     }
 
                             else {
                                 event_queue_status = event.queue_status
