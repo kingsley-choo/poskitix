@@ -156,7 +156,7 @@ def check_and_update_missed_to_waiting_status(eid, uid):
 
     queue_entry = Queue.query.filter_by(status='Missed', eid=eid,uid=uid).one()
 
-    if len(queue_entry) == 0 :
+    if not queue_entry:
         return jsonify({"code": 200, "message": f"No user status was updated in queue for event {eid}"}), 200
 
     queue_entry.status = 'Waiting'
