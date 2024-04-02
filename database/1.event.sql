@@ -13,11 +13,11 @@ CREATE TABLE event (
 );
 
 insert into event (eventname, date, salesdate, location, description, capacity, price) values (
-	"Eras Tour",
+	"Joshua Tour",
     "2024-04-15 13:00:00",
     "2024-03-20 13:00:00",
     "National Stadium", 
-    "I love taylor",
+    "I love taylor (not really)",
     10,
     15.00);
     
