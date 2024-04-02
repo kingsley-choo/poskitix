@@ -151,6 +151,23 @@ def update_queue_status_ready(eid):
             db.session.rollback()
             return jsonify({"code": 500, "message": "An error occurred during bulk update.", "error": str(e)}), 500
 
+@app.route("/queue/event/<int:eid>/user/<int:uid>/missed-waiting", methods=["PUT"])
+def check_and_update_missed_to_waiting_status(eid, uid):
+
+    queue_entry = Queue.query.filter_by(status='Missed', eid=eid,uid=uid).one()
+
+    if not queue_entry:
+        return jsonify({"code": 200, "message": f"No user status was updated in queue for event {eid}"}), 200
+
+    queue_entry.status = 'Waiting'
+
+    try:
+        db.session.commit()
+        return jsonify({"code": 200, "message": f"User {uid} for event {eid} updated to 'Waiting' completed successfully."}) , 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"code": 500, "message": "An error occurred during update. " + str(e)}), 500
+
 @app.route("/queue/event/<int:eid>/user/<int:uid>/ready-done", methods=["PUT"])
 def update_queue_status_bought(eid,uid):
     try:
