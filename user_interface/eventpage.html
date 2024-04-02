@@ -130,16 +130,16 @@
                 console.log("run fetchEventandStatus()")
 
 
-                if (!emailresult){
+                if (!emailresult) {
                     window.location.href = "homepage.html"
                     alert("Please enter your email first! :(")
                 }
 
                 axios.get('http://localhost:5010/get-details/user/' + emailresult)
                     .then(function (response) {
-                        
+
                         let today = new Date();
-                        
+
                         // event details
                         var event_statusresult = response.data.data;
                         console.log(event_statusresult)
@@ -159,18 +159,18 @@
                             let eventStatusDiv = null;
 
                             console.log("its working")
-                            
+
 
                             // SOLD OUT 
-                            if (num_ticketsleft == 0 && event.queue_status.status == null) {
+                            if (num_ticketsleft == 0) {
 
                                 eventStatusDiv = document.createElement('div');
                                 eventStatusDiv.classList.add('col-span-4', 'text-center');
                                 eventStatusDiv.innerText = 'Sorry! Tickets Sold Out!';
-                                
+
                                 console.log(eventStatusDiv)
                             }
-                            
+
 
                             // QUEUE
                             else if (event.queue_status == null && eventSalesDate <= today) {
@@ -183,36 +183,43 @@
                                 queueButton.setAttribute('onClick', `addUserToQueue(${eid})`)
                                 queueButton.classList.add('col-span-4', 'text-white', 'bg-black', 'hover:bg-red-800', 'hover:text-white', 'focus:outline-none', 'focus:ring-4', 'focus:ring-red-300', 'font-medium', 'rounded-full', 'text-sm', 'px-40', 'py-2.5', 'my-4', 'text-center');
                                 queueButton.textContent = 'Queue';
-                                queueButton.addEventListener('click', addUserToQueue);
+                                // queueButton.addEventListener('click', addUserToQueue);
 
                                 eventStatusDiv.appendChild(queueButton);
 
                                 console.log(eventStatusDiv)
                             }
-                            
+
                             // SALES HAVENT START
-                            else if (event.queue_status == null && eventSalesDate > today){ 
+                            else if (event.queue_status == null && eventSalesDate > today) {
                                 eventStatusDiv = document.createElement('div');
                                 eventStatusDiv.classList.add('col-span-4', 'text-center');
 
                                 let salesBeginButton = document.createElement('button');
                                 salesBeginButton.setAttribute('type', 'button');
                                 salesBeginButton.setAttribute('disabled', 'true');
-                                salesBeginButton.classList.add('col-span-4','text-gray-600', 'bg-gray-300', 'text-sm', 'rounded-full', 'text-sm', 'px-5', 'py-2.5', 'my-4', 'text-center');
+                                salesBeginButton.classList.add('col-span-4', 'text-gray-600', 'bg-gray-300', 'text-sm', 'rounded-full', 'text-sm', 'px-5', 'py-2.5', 'my-4', 'text-center');
                                 salesBeginButton.innerText = `Sales Begins on ${eventSalesDate}`;
-                                
+
                                 eventStatusDiv.appendChild(salesBeginButton);
 
-                                
+
                             }
 
                             // MISSED
                             else if (event.queue_status.status == "Missed") {
 
-                                    eventStatusDiv = document.createElement('div');
-                                    eventStatusDiv.classList.add('col-span-4', 'text-center', 'py-4');
-                                    eventStatusDiv.innerText = 'You missed your chance to purchase';
-                                    
+                                eventStatusDiv = document.createElement('div');
+                                eventStatusDiv.classList.add('col-span-4', 'text-center', 'py-4');
+                                eventStatusDiv.innerText = 'You missed your chance to purchase';
+                                let queueButton = document.createElement('button');
+                                queueButton.setAttribute('type', 'button');
+                                queueButton.setAttribute('onClick', `addUserToQueue(${eid})`)
+                                queueButton.classList.add('text-white', 'bg-black', 'hover:bg-red-800', 'hover:text-white', 'focus:outline-none', 'focus:ring-4', 'focus:ring-red-300', 'font-medium', 'rounded-full', 'text-sm', 'px-40', 'py-2.5', 'my-4', 'text-center');
+                                queueButton.textContent = 'Queue Again';
+                                // queueButton.addEventListener('click', addUserToQueue);
+                                eventStatusDiv.appendChild(queueButton)
+
 
                             }
 
@@ -227,51 +234,51 @@
                                 purchaseButton.classList.add('text-emerald-500', 'border', 'border-emerald-500', 'hover:bg-emerald-500', 'hover:text-white', 'hover:border-emerald-600', 'focus:outline-none', 'focus:ring-4', 'focus:ring-emerald-500', 'font-medium', 'rounded-full', 'text-sm', 'px-40', 'py-2.5', 'my-4', 'text-center');
                                 purchaseButton.textContent = 'Purchase Ticket!';
                                 purchaseButton.setAttribute('onClick', `createPurchaseLink(${eid}, ${uid})`)
-                                purchaseButton.addEventListener('click', createPurchaseLink);
+                                // purchaseButton.addEventListener('click', createPurchaseLink);
 
                                 eventStatusDiv.appendChild(purchaseButton);
-                                
-                                
-                                }
 
-                                
+
+                            }
+
+
                             // DONE
                             else if (event.queue_status.status == "Done") {
-                            
+
                                 eventStatusDiv = document.createElement('div');
                                 eventStatusDiv.classList.add('text-emerald-500', 'col-span-4');
                                 eventStatusDiv.innerText = 'Ticket Purchased';
-                                
+
                             }
 
-                                
+
                             // FAIL
                             else if (event.queue_status.status == "Fail") {
-                            
+
                                 eventStatusDiv = document.createElement('div');
                                 eventStatusDiv.classList.add('col-span-4', 'text-center', 'py-4');
                                 eventStatusDiv.innerText = 'Tickets are Sold Out!';
 
                             }
 
-                               
+
                             // WAITING
                             else if (event.queue_status.status == "Waiting") {
 
                                 eventStatusDiv = document.createElement('div');
                                 eventStatusDiv.classList.add('col-span-4', 'text-center');
-                                
-                                eventStatusDiv.classList.add('col-span-4','text-yellow-800', 'bg-yellow-100', 'text-sm', 'rounded-full', 'px-40', 'py-2.5', 'my-4', 'text-center');
+
+                                eventStatusDiv.classList.add('col-span-4', 'text-yellow-800', 'bg-yellow-100', 'text-sm', 'rounded-full', 'px-40', 'py-2.5', 'my-4', 'text-center');
                                 eventStatusDiv.innerText = 'Waiting';
-                                
+
                             }
 
                             // append for reach event
                             // Create container div
-                            
 
 
-                                // Create child elements
+
+                            // Create child elements
                             let eventNameDiv = document.createElement('div');
                             eventNameDiv.classList.add('col-span-2', 'text-center', 'm-2');
                             eventNameDiv.textContent = eventName;
@@ -287,13 +294,13 @@
                             let eventPriceDiv = document.createElement('div');
                             eventPriceDiv.classList.add('col-span-2', 'text-center', 'm-2');
                             eventPriceDiv.textContent = '$' + eventPrice;
-                            
+
                             container.appendChild(eventNameDiv);
                             container.appendChild(eventDateDiv);
                             container.appendChild(eventLocationDiv);
                             container.appendChild(eventPriceDiv);
                             container.appendChild(eventStatusDiv);
-  
+
                         }
                         document.getElementById("event_status_display").appendChild(container);
                     })
@@ -311,10 +318,24 @@
                         refreshPage()
                     })
                     .catch(function (error) {
-                        console.log(error);
+                        // console.log(error);
+                        refreshPage()
                     });
 
             }
+
+            // function addUserToQueueAgain(eid) {
+            //     axios.post('http://localhost:5100/queue/event/' + eid + '/user/' + uid + '/join')
+            //         .then(function (response) {
+            //             added = response.data
+            //             console.log(added)
+            //             refreshPage()
+            //         })
+            //         .catch(function (error) {
+            //             console.log(error);
+            //         });
+
+            // }
 
 
             function createPurchaseLink(eid, uid) {
@@ -354,19 +375,19 @@
             function refreshPage() {
                 let hehe = document.getElementById("event_status_display")
 
-                while (hehe.lastElementChild){
+                while (hehe.lastElementChild) {
                     hehe.removeChild(hehe.lastElementChild)
                 }
 
-                hehe.innerHTML =                             `<div class="grid grid-cols-12 bg-gray-100 gap-4 border">
+                hehe.innerHTML = `<div class="grid grid-cols-12 bg-gray-100 gap-4 border">
                                 <div class="col-span-2 bg-gray-100 text-center py-4 font-bold">Event Name</div>
                                 <div class="col-span-3 bg-gray-100 text-center py-4 font-bold">Date</div>
                                 <div class="col-span-3 bg-gray-100 text-center py-4 font-bold">Location</div>
                                 <div class="col-span-4 bg-gray-100 text-center py-4 font-bold">Status</div>
                             </div>`;
-                
+
                 fetchEventandStatus();
-   
+
             }
 
 

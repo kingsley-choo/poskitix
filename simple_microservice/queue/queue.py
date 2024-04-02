@@ -160,6 +160,7 @@ def check_and_update_missed_to_waiting_status(eid, uid):
         return jsonify({"code": 200, "message": f"No user status was updated in queue for event {eid}"}), 200
 
     queue_entry.status = 'Waiting'
+    queue_entry.checkout_session_id = None
 
     try:
         db.session.commit()
