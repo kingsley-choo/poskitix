@@ -22,6 +22,7 @@ def join_queue(eid,uid):
     #step 4 and 5 - does the event exist
     r_person_status = requests.get(f"http://queue:5004/queue/event/{eid}/user/{uid}")
     current_status = r_person_status["data"]["status"]
+    #person queued for this event before?
     if current_status == "Missed":
         r_missed_to_waiting = requests.put(f"http://queue:5004/queue/event/{eid}/user/{uid}/missed-waiting")
         if r_missed_to_waiting.status_code // 200 != 1:
