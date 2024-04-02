@@ -139,6 +139,7 @@
     <script>
 
         // var uid = JSON.parse(localStorage.getItem('uid'));
+        ticket_id = null
 
         var nameresult = localStorage.getItem('nameresult');
         document.getElementById('successmsg').innerText = 
@@ -156,6 +157,7 @@
             console.log(session_id)
 
 
+
             axios.post('http://localhost:5400/check_payment/' + session_id)
                 .then(function (response) {
                     console.log("its working")
@@ -170,6 +172,8 @@
                     console.log(event_name)
                     console.log(event_location)
                     console.log(event_price)
+
+                    ticket_id  = response.data.data.ticket.tid
 
 
                     input_html =
@@ -212,7 +216,14 @@
                     </div>
                     `
 
+             
+
                     document.getElementById("ticket_info").innerHTML += input_html
+
+                    window.QRCode.toCanvas(canvas, ticket_id, function (error) {
+                    if (error) console.error(error)
+                    console.log('success!');
+                    })
 
                 })
                 .catch(function (error) {
@@ -241,6 +252,8 @@
 
 
     </script>
+
+
 
 
 
