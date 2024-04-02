@@ -22,12 +22,12 @@ stripe.api_key = 'sk_test_51OuAKs2M2WNHYrTASwFcISy1TyhM9f8Vt4X1IaLzZQRQvzTkbGCUX
 
 app = Flask(__name__)
 
-#make 2 products one for each event - create separate script
+#make each product for each event - create separate script
 
 # stripe.Price.create( 
 # currency="sgd",
 # # unit_amount in cents 
-# unit_amount= 1500, 
+# unit_amount= 15 * 100, 
 # lookup_key= "1", 
 # product_data={"name" : "Eras Tour"} 
 # )
@@ -35,9 +35,25 @@ app = Flask(__name__)
 # stripe.Price.create( 
 # currency="sgd", 
 # # unit_amount in cents
-# unit_amount= 3000 , 
+# unit_amount= 30 * 100 , 
 # lookup_key= "2", 
-# product_data={"name" : "Nathan Tour"} 
+# product_data={"name" : "Nathan Tour Night 1(Cat 1)"} 
+# )
+
+# stripe.Price.create( 
+# currency="sgd", 
+# # unit_amount in cents
+# unit_amount= 15 * 100 , 
+# lookup_key= "3", 
+# product_data={"name" : "Nathan Tour Night 1(Cat 2)"} 
+# )
+
+# stripe.Price.create( 
+# currency="sgd", 
+# # unit_amount in cents
+# unit_amount= 3000 , 
+# lookup_key= "4", 
+# product_data={"name" : "Kingsley Tour Night (Free Seating)"} 
 # )
 
 YOUR_DOMAIN = environ.get("YOUR_DOMAIN")
