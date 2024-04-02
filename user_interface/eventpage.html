@@ -161,17 +161,7 @@
                             var eid = event.eid
 
 
-                            if (num_ticketsleft == 0 && event.queue_status == None) {
-
-                            //     document.getElementById("event_status_display".innerHTML) +=
-                            //         `
-                            // <div class="grid grid-cols-12 gap-4">
-                            //     <div class="col-span-2 text-center">${eventName}</div>
-                            //     <div class="col-span-4 text-center">${eventDate}</div>
-                            //     <div class="col-span-4 text-center">${eventLocation}</div>
-                            //     <div class="col-span-2 text-center">Sorry! Tickets Sold Out!</div>
-                            // </div>
-                            //     `
+                            if (num_ticketsleft == 0 && event.queue_status == null) {
 
                                  // Create container div
                                 let container = document.createElement('div');
@@ -183,15 +173,15 @@
                                 eventNameDiv.textContent = eventName;
 
                                 let eventDateDiv = document.createElement('div');
-                                eventDateDiv.classList.add('col-span-4', 'text-center');
+                                eventDateDiv.classList.add('col-span-3', 'text-center');
                                 eventDateDiv.textContent = eventDate;
 
                                 let eventLocationDiv = document.createElement('div');
-                                eventLocationDiv.classList.add('col-span-4', 'text-center');
+                                eventLocationDiv.classList.add('col-span-3', 'text-center');
                                 eventLocationDiv.textContent = eventLocation;
 
                                 let soldOutMessageDiv = document.createElement('div');
-                                soldOutMessageDiv.classList.add('col-span-2', 'text-center');
+                                soldOutMessageDiv.classList.add('col-span-4', 'text-center');
                                 soldOutMessageDiv.textContent = 'Sorry! Tickets Sold Out!';
 
                                 // Append child elements to container
