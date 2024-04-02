@@ -51,6 +51,9 @@ PUT {{queue}}/queue/event/1/ready-missed
 ### ticket sold out - close queue
 PUT {{queue}}/queue/event/1/waiting-fail
 
+### user wants to requeue
+PUT {{queue}}/queue/event/1/user/8/missed-waiting
+
 ### purchase ticket i.e ready => done
 PUT {{queue}}/queue/event/1/user/8/ready-done
 
