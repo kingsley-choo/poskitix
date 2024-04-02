@@ -28,7 +28,7 @@ insert into event (eventname, date, salesdate, location, description, capacity, 
     "International Stadium, Malaysia", 
     "Get up close with Nathan",
     14,
-    300.00);
+    30.00);
 
 insert into event (eventname, date, salesdate, location, description, capacity, price) values (
 	"Nathan Tour Night 1(Cat 2)",
@@ -37,7 +37,7 @@ insert into event (eventname, date, salesdate, location, description, capacity, 
     "International Stadium, Malaysia", 
     "I love Nathan but not enough for Cat 1!",
     20,
-    126.00);
+    15.00);
 
 insert into event (eventname, date, salesdate, location, description, capacity, price) values (
 	"Kingsley Tour Night (Free Seating)",
