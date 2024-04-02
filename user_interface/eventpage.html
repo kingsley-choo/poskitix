@@ -135,7 +135,7 @@
                     alert("Please enter your email first! :(")
                 }
 
-                axios.get('http://localhost:5010/get-details/user/' + emailresult)
+                axios.get('http://localhost:8000/api/v1/get_details/user/' + emailresult)
                     .then(function (response) {
 
                         let today = new Date();
@@ -246,7 +246,7 @@
                             else if (event.queue_status.status == "Done") {
 
                                 eventStatusDiv = document.createElement('div');
-                                eventStatusDiv.classList.add('text-emerald-500', 'col-span-4');
+                                eventStatusDiv.classList.add('text-emerald-500', 'col-span-4', 'text-center', "pt-2");
                                 eventStatusDiv.innerText = 'Ticket Purchased';
 
                             }
@@ -311,7 +311,7 @@
 
 
             function addUserToQueue(eid) {
-                axios.post('http://localhost:5100/queue/event/' + eid + '/user/' + uid + '/join')
+                axios.post('http://localhost:8000/api/v1/join_queue/event/' + eid + '/user/' + uid + '/join')
                     .then(function (response) {
                         added = response.data
                         console.log(added)
@@ -339,7 +339,7 @@
 
 
             function createPurchaseLink(eid, uid) {
-                axios.post('http://localhost:5300/purchase_ticket/event/' + eid + '/user/' + uid)
+                axios.post('http://localhost:8000/api/v1/purchase_ticket/event/' + eid + '/user/' + uid)
                     .then(function (response) {
                         purchaseurl = response.data.url;
                         console.log(purchaseurl)
