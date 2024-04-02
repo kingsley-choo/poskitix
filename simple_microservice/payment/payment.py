@@ -48,13 +48,13 @@ app = Flask(__name__)
 # product_data={"name" : "Nathan Tour Night 1(Cat 2)"} 
 # )
 
-stripe.Price.create( 
-currency="sgd", 
-# unit_amount in cents
-unit_amount= 69 * 100 , 
-lookup_key= "4", 
-product_data={"name" : "Kingsley Tour Night (Free Seating)"} 
-)
+# stripe.Price.create( 
+# currency="sgd", 
+# # unit_amount in cents
+# unit_amount= 69 * 100 , 
+# lookup_key= "4", 
+# product_data={"name" : "Kingsley Tour Night (Free Seating)"} 
+# )
 
 YOUR_DOMAIN = environ.get("YOUR_DOMAIN")
 
