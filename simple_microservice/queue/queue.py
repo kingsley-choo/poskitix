@@ -152,7 +152,7 @@ def update_queue_status_ready(eid):
             return jsonify({"code": 500, "message": "An error occurred during bulk update.", "error": str(e)}), 500
 
 @app.route("/queue/event/<int:eid>/user/<int:uid>/missed-waiting", methods=["PUT"])
-def check_and_update_missed_to_ready_status(eid, uid):
+def check_and_update_missed_to_waiting_status(eid, uid):
 
     queue_entry = Queue.query.filter_by(status='Missed', eid=eid,uid=uid).one()
 
