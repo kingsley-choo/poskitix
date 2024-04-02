@@ -208,7 +208,7 @@
                     // Create price paragraph
                     const priceParagraph = document.createElement('p');
                     priceParagraph.classList.add('font-medium', 'text-lg', 'leading-8', 'text-black', 'mb-3');
-                    priceParagraph.innerHTML = `Price: <span class="text-blue-700">${event_price}</span>`;
+                    priceParagraph.innerHTML = `Price: <span class="text-blue-700"> $ ${(Math.round(event_price * 100) / 100).toFixed(2)}</span>`;
 
                     // Create location paragraph
                     const locationParagraph = document.createElement('p');

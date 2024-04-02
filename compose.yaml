@@ -112,7 +112,7 @@ services:
     environment:
       RABBIT_URL : 'amqp://rabbitmq'
       MAX_MINUTES_READY : 5
-      FRONTEND_URL: "http://localhost/userpage.html"
+      FRONTEND_URL: "http://localhost/gopay.html"
     depends_on:
       rabbitmq:
         condition: service_healthy
