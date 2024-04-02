@@ -163,7 +163,7 @@ def check_and_update_missed_to_waiting_status(eid, uid):
 
     try:
         db.session.commit()
-        return jsonify({"code": 200, "message": "Update to 'Waiting' completed successfully."}) , 200
+        return jsonify({"code": 200, "message": f"User {uid} for event {eid} updated to 'Waiting' completed successfully."}) , 200
     except Exception as e:
         db.session.rollback()
         return jsonify({"code": 500, "message": "An error occurred during update. " + str(e)}), 500
