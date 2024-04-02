@@ -23,15 +23,7 @@ def join_queue(eid,uid):
     r_event = requests.get(f"http://event/event/{eid}")
     if r_event.status_code // 200 != 1:
         return r_event.text, 404
-    
-    r_person_status = requests.get(f"http://queue:5004/queue/event/{eid}/user/{uid}")
-    if r_person_status.status_code != 404:
-        current_status = r_person_status.json()["data"]["status"]
-        #person queued for this event before?
-        if current_status == "Missed":
-            r_missed_to_waiting = requests.put(f"http://queue:5004/queue/event/{eid}/user/{uid}/missed-waiting")
-            if r_missed_to_waiting.status_code // 200 != 1:
-                return r_missed_to_waiting.text, 404
+
         
     # step n - is the event on sale currently?
     salesDate = datetime.fromisoformat(r_event.json()["data"]["salesdate"])
@@ -49,18 +41,27 @@ def join_queue(eid,uid):
     r_user = requests.get(f"http://user:5001/user/{uid}")
     if r_user.status_code // 100 != 2:
         return r_user.text, r_user.status_code
-        
+    
+    r_person_status = requests.get(f"http://queue:5004/queue/event/{eid}/user/{uid}")
+    if r_person_status.status_code != 404:
+        current_status = r_person_status.json()["data"]["status"]
+        #person queued for this event before?
+        if current_status == "Missed":
+            r_missed_to_waiting = requests.put(f"http://queue:5004/queue/event/{eid}/user/{uid}/missed-waiting")
+            if r_missed_to_waiting.status_code // 200 != 1:
+                return r_missed_to_waiting.text, 404
 
         #step 8 and 9 - please let this user join
-    r = requests.post(f"http://queue:5004/queue", json= {
+    else:
+        r = requests.post(f"http://queue:5004/queue", json= {
             "eid" : eid,
             "uid" :uid
     })
     
-    if r.status_code // 100 != 2:
+        if r.status_code // 100 != 2:
             return r.text, r.status_code
         
-        #step 12
+    #step 12
     exchange="email"
     body = {
         "user" : r_user.json(),
