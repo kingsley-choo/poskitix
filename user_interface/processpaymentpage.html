@@ -14,11 +14,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@next"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script type="module"> 
-        import QRcode from 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/+esm' 
-        QRcode.toCanvas(document.getElementById('canvas'), 'sample text', function (error) {  
-            if (error) console.error(error)  
-            console.log('success!');  
+    <script type="module">
+        import QRcode from 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/+esm'
+        QRcode.toCanvas(document.getElementById('canvas'), 'sample text', function (error) {
+            if (error) console.error(error)
+            console.log('success!');
         }) 
     </script>
 
@@ -142,8 +142,8 @@
         ticket_id = null
 
         var nameresult = localStorage.getItem('nameresult');
-        document.getElementById('successmsg').innerText = 
-        `
+        document.getElementById('successmsg').innerText =
+            `
         Hi ${nameresult},  Your Payment is Successful!
         `
 
@@ -173,7 +173,7 @@
                     console.log(event_location)
                     console.log(event_price)
 
-                    ticket_id  = response.data.data.ticket.tid
+                    ticket_id = response.data.data.ticket.tid
 
 
                     input_html =
@@ -216,37 +216,38 @@
                     </div>
                     `
 
-             
+
 
                     document.getElementById("ticket_info").innerHTML += input_html
 
                     window.QRCode.toCanvas(canvas, ticket_id, function (error) {
-                    if (error) console.error(error)
-                    console.log('success!');
+                        if (error) console.error(error)
+                        console.log('success!');
                     })
 
                 })
                 .catch(function (error) {
                     console.log(error);
+                // }
 
-                    document.getElementById("PageContent").innerHTML =
-`
-                        <div class="w-full max-w-7xl px-4 pt-48 md:px-5 lg-6 mx-auto text-center">
-                            <h2 class="font-manrope font-bold text-4xl leading-10 text-black text-center">
-                                Sorry <span id="nameresult"></span>,
-                                Your Payment Failed! D:
-                            </h2>
-                            <p class="mt-4 font-normal text-lg leading-8 text-gray-500 mb-11 text-center">
-                                Please Try Again
-                            </p>
+//                     document.getElementById("PageContent").innerHTML =
+// `
+//                         <div class="w-full max-w-7xl px-4 pt-48 md:px-5 lg-6 mx-auto text-center">
+//                             <h2 class="font-manrope font-bold text-4xl leading-10 text-black text-center">
+//                                 Sorry <span id="nameresult"></span>,
+//                                 Your Payment Failed! D:
+//                             </h2>
+//                             <p class="mt-4 font-normal text-lg leading-8 text-gray-500 mb-11 text-center">
+//                                 Please Try Again
+//                             </p>
 
-                            <a href="eventpage.html"><button class="bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded">
-                                Back to Event Page
-                            </button></a>
+//                             <a href="eventpage.html"><button class="bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded">
+//                                 Back to Event Page
+//                             </button></a>
 
-                        </div>
+//                         </div>
 
-`
+// `
                 });
         }
 

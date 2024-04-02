@@ -161,17 +161,7 @@
                             var eid = event.eid
 
 
-                            if (num_ticketsleft == 0 && event.queue_status == None) {
-
-                            //     document.getElementById("event_status_display".innerHTML) +=
-                            //         `
-                            // <div class="grid grid-cols-12 gap-4">
-                            //     <div class="col-span-2 text-center">${eventName}</div>
-                            //     <div class="col-span-4 text-center">${eventDate}</div>
-                            //     <div class="col-span-4 text-center">${eventLocation}</div>
-                            //     <div class="col-span-2 text-center">Sorry! Tickets Sold Out!</div>
-                            // </div>
-                            //     `
+                            if (num_ticketsleft == 0 && event.queue_status == null) {
 
                                  // Create container div
                                 let container = document.createElement('div');
@@ -183,15 +173,15 @@
                                 eventNameDiv.textContent = eventName;
 
                                 let eventDateDiv = document.createElement('div');
-                                eventDateDiv.classList.add('col-span-4', 'text-center');
+                                eventDateDiv.classList.add('col-span-3', 'text-center');
                                 eventDateDiv.textContent = eventDate;
 
                                 let eventLocationDiv = document.createElement('div');
-                                eventLocationDiv.classList.add('col-span-4', 'text-center');
+                                eventLocationDiv.classList.add('col-span-3', 'text-center');
                                 eventLocationDiv.textContent = eventLocation;
 
                                 let soldOutMessageDiv = document.createElement('div');
-                                soldOutMessageDiv.classList.add('col-span-2', 'text-center');
+                                soldOutMessageDiv.classList.add('col-span-4', 'text-center');
                                 soldOutMessageDiv.textContent = 'Sorry! Tickets Sold Out!';
 
                                 // Append child elements to container
@@ -206,19 +196,6 @@
                             
 
                             else if (event.queue_status == null && eventSalesDate <= today) {
-                            //     document.getElementById("event_status_display").innerHTML +=
-                            //         `
-                            // <div class="grid grid-cols-12 gap-4 border">
-                            //     <div class="col-span-2 text-center py-4">${eventName}</div>
-                            //     <div class="col-span-3 text-center py-4">${eventDate}</div>
-                            //     <div class="col-span-3 text-center py-4">${eventLocation}</div>
-                            //     <div class="col-span-4 text-center">
-                            //         <button type="button" onclick="addUserToQueue(${eid})" onclick="refreshPage()" class="text-white bg-black hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 mt-2 text-center">
-                            //             Queue
-                            //         </button>
-                            //     </div>
-                            // </div>
-                            //     `
 
                                 // Create container div
                                 let container = document.createElement('div');
@@ -260,7 +237,7 @@
                                 // Append container to event_status_display
                                 document.getElementById("event_status_display").appendChild(container);
                             }
-                            // pls help me change this
+                            
                             else if (event.queue_status == null && eventSalesDate > today) {
                                 // Create container div
                                 const container = document.createElement('div');
@@ -300,55 +277,7 @@
                                 document.getElementById("event_status_display").appendChild(container);
                             }
 
-                            // else {
-                            //     event_queue_status = event.queue_status
-                            //     status_name = event_queue_status.status
-
-                            //     // add event, updating that they have missed their chance to buy
-                            //         // <div class="col-span-3 text-center py-4">${eventLocation}</div>  
-                            //     //     document.getElementById("event_status_display").innerHTML +=
-                            //     //         `
-                            //     // <div class="grid grid-cols-12 gap-4 border">
-                            //     //     <div class="col-span-2 text-center py-4">${eventName}</div>
-                            //     //     <div class="col-span-3 text-center py-4">${eventDate}</div>
-                            //     //     <div class="col-span-3 text-center py-4">${eventLocation}</div>  
-                            //     //     <div class="col-span-4 text-center py-4">
-                            //     //         <p>You missed your chance to purchase</p>
-                            //     //     </div>
-                            //     // </div>
-                            //     //     `
-                            //         // Create container div
-                            //         let container = document.createElement('div');
-                            //         container.classList.add('grid', 'grid-cols-12', 'gap-4', 'border');
-
-                            //         // Create child elements
-                            //         let eventNameDiv = document.createElement('div');
-                            //         eventNameDiv.classList.add('col-span-2', 'text-center', 'py-4');
-                            //         eventNameDiv.textContent = eventName;
-
-                            //         let eventDateDiv = document.createElement('div');
-                            //         eventDateDiv.classList.add('col-span-3', 'text-center', 'py-4');
-                            //         eventDateDiv.textContent = eventDate;
-
-                            //         let eventLocationDiv = document.createElement('div');
-                            //         eventLocationDiv.classList.add('col-span-3', 'text-center', 'py-4');
-                            //         eventLocationDiv.textContent = eventLocation;
-
-                            //         let missedMessageDiv = document.createElement('div');
-                            //         missedMessageDiv.classList.add('col-span-4', 'text-center', 'py-4');
-                            //         let missedMessage = document.createElement('p');
-                            //         missedMessage.textContent = 'You missed your chance to purchase';
-                            //         missedMessageDiv.appendChild(missedMessage);
-
-                            //         // Append child elements to container
-                            //         container.appendChild(eventNameDiv);
-                            //         container.appendChild(eventDateDiv);
-                            //         container.appendChild(eventLocationDiv);
-                            //         container.appendChild(missedMessageDiv);
-
-                            //         // Append container to event_status_display
-                            //         document.getElementById("event_status_display").appendChild(container);
-                            //     }
+                           
 
                             else {
                                 event_queue_status = event.queue_status
@@ -356,17 +285,7 @@
 
                                 // add event, updating that they have missed their chance to buy
                                 if (status_name == "Missed") {
-                                //     document.getElementById("event_status_display").innerHTML +=
-                                //         `
-                                // <div class="grid grid-cols-12 gap-4 border">
-                                //     <div class="col-span-2 text-center py-4">${eventName}</div>
-                                //     <div class="col-span-3 text-center py-4">${eventDate}</div>
-                                //     <div class="col-span-3 text-center py-4">${eventLocation}</div>  
-                                //     <div class="col-span-4 text-center py-4">
-                                //         <p>You missed your chance to purchase</p>
-                                //     </div>
-                                // </div>
-                                //     `
+                                
                                     // Create container div
                                     let container = document.createElement('div');
                                     container.classList.add('grid', 'grid-cols-12', 'gap-4', 'border');
@@ -405,24 +324,7 @@
                                     ready_time = event_queue_status.readyAt
 
 
-                                //     document.getElementById("event_status_display").innerHTML +=
-
-                                //         `
-                                // <div class="grid grid-cols-12 gap-4 border justify-center">
-                                //     <div class="col-span-2 text-center py-4">${eventName}</div>
-                                //     <div class="col-span-3 text-center py-4">${eventDate}</div>
-                                //     <div class="col-span-3 text-center py-4">${eventLocation}</div>
-                                //     <div class="col-span-2 text-center py-4">Ready at ${ready_time}</div>
-                                //     <div class="col-span-2 text-center">
-                                //         <button type="button" class="text-emerald-500 border border-emerald-500  hover:bg-emerald-500 hover:text-white 
-                                //         hover:border-black
-                                //         focus:outline-none focus:ring-4 focus:ring-emerald-500 font-medium rounded-full text-sm px-5 py-2.5 mt-5 text-center"
-                                //         onclick="createPurchaseLink(${eid}, ${uid})" onclick="refreshPage()">
-                                //         Purchase Ticket!
-                                //         </button>
-                                //     </div>
-                                // </div>
-                                //     `
+                               
                                     
                                     // Create container div
                                     let container = document.createElement('div');
@@ -473,20 +375,7 @@
 
                                 // add event, updating user that the user has already bought a ticket for the event
                                 else if (status_name == "Done") {
-                            //         document.getElementById("event_status_display").innerHTML +=
-
-                            //             `
-                            // <div class="grid grid-cols-12 gap-4 border">
-                            //     <div class="col-span-2 text-center py-4">${eventName}</div>
-                            //     <div class="col-span-3 text-center py-4">${eventDate}</div>
-                            //     <div class="col-span-3 text-center py-4">${eventLocation}</div>
-                            //     <div class="col-span-4 text-center py-4">
-                            //         <p class="text-emerald-500">
-                            //             Ticket Purchased
-                            //         </p>
-                            //     </div>
-                            // </div>
-                            //     `
+                            
                                     // Create elements
                                     let container = document.createElement('div');
                                     container.classList.add('grid', 'grid-cols-12', 'gap-4', 'border');
@@ -525,18 +414,7 @@
                                 // add event, updating user that their initial queue has failed as all tickets are now sold out
                                 // if at the front ticket amount is 0 still need this?
                                 else if (status_name == "Fail") {
-                            //         document.getElementById("event_status_display").innerHTML +=
-
-                            //             `
-                            // <div class="grid grid-cols-12 gap-4 border">
-                            //     <div class="col-span-2 text-center py-4">${eventName}</div>
-                            //     <div class="col-span-3 text-center py-4">${eventDate}</div>
-                            //     <div class="col-span-3 text-center py-4">${eventLocation}</div>
-                            //     <div class="col-span-4 text-center py-4">
-                            //         <p>Tickets are Sold Out!</p>
-                            //     </div>
-                            // </div>
-                            //     `
+                           
 
                                     // Create elements
                                     let container = document.createElement('div');
@@ -572,25 +450,6 @@
                                 // add event, updating user that they are current in the queue, not yet called to purchase
                                 else if (status_name == "Waiting") {
                                     waiting_time = event_queue_status.waiting_time_minutes
-                            //         document.getElementById("event_status_display").innerHTML +=
-
-                            //             `
-                            // <div class="grid grid-cols-12 gap-4 border">
-                            //     <div class="col-span-2 text-center py-4">${eventName}</div>
-                            //     <div class="col-span-3 text-center py-4">${eventDate}</div>
-                            //     <div class="col-span-3 text-center py-4">${eventLocation}</div>
-                            //     <div class="col-span-2 text-center py-4">
-                            //         Wait Time: 
-                            //         <span class="bg-red-100 text-black text-md font-medium me-2 px-2.5 py-0.5 rounded border border-red-400">${waiting_time} Minutes</span>
-                                    
-                            //     </div>
-                            //     <div class="col-span-2 text-center py-4">
-                            //         <span class="bg-yellow-200 text-black text-md font-medium me-2 px-5 py-2.5 rounded-full ">
-                            //             Waiting
-                            //         </span>
-                            //     </div>
-                            // </div>
-                            //     `
 
                                     // Create elements
                                     let container = document.createElement('div');
