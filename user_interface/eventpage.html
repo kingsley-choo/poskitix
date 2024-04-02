@@ -42,14 +42,15 @@
                     <ul
                         class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-gray-900">
                         <li>
-                            <a href="#"
-                                class="block py-2 px-3 text-white bg-red-700 rounded md:bg-transparent md:text-red-700 md:p-0"
-                                aria-current="page">Home</a>
+                            <a href="homepage.html"
+                            class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-200 md:text-white md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0"
+                                >Home</a>
                         </li>
                         <li>
-                            <a href="#"
-                                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-200 md:text-white md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0">Events</a>
+                            <a href="#" aria-current="page"
+                                class="block py-2 px-3 text-white bg-red-700 rounded md:bg-transparent md:text-red-700 md:p-0">Events</a>
                         </li>
+                    
                         <li>
                             <a href="#"
                                 class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-200 md:text-white md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0">Tickets</a>
@@ -61,6 +62,11 @@
                         <li>
                             <a href="#"
                                 class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-200 md:text-white md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0">Contact</a>
+                        </li>
+                        <li>
+                            <a href="#"
+                                onclick="logout()"
+                                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-200 md:text-white md:hover:bg-transparent md:border-0 md:hover:text-red-700 md:p-0">Logout</a>
                         </li>
                     </ul>
                 </div>
@@ -118,6 +124,10 @@
 
 
         <script>
+            function logout(){
+                localStorage.clear();
+                window.location.href="homepage.html"
+            }
             var nameresult = localStorage.getItem('nameresult');
             var emailresult = localStorage.getItem("emailinput");
             var uid = localStorage.getItem('uid');
