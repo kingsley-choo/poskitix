@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</head>
+<body>
+    <script>
+        let params = new URL(document.location.toString()).searchParams;
+        var eid = params.get("eid");
+        var uid = params.get("uid");
+
+    axios.post('http://localhost:5300/purchase_ticket/event/' + eid + '/user/' + uid)
+    .then(function (response) {
+        purchaseurl = response.data.url;
+        console.log(purchaseurl)
+        window.location.href = purchaseurl
+        stripe_sessionid = purchaseurl.substring(34)
+        console.log(stripe_sessionid)
+        // location.assign(purchaseurl)
+        // fetchConfirmationURL(purchaseurl)
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+
+    </script>
+</body>
+</html>

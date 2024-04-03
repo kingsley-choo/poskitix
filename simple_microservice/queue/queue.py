@@ -204,7 +204,11 @@ def update_session_id(eid,uid,sid):
 @app.route("/queue/checkout-session-id/<string:sid>")
 def get_session_id(sid):
     try:
-        record = Queue.query.filter_by(checkout_session_id=sid, status="Ready").one()
+        record = Queue.query.filter_by(checkout_session_id=sid, status="Ready").first()
+        if record is None:
+            record = Queue.query.filter_by(checkout_session_id=sid, status="Done").first()
+            if record is None:
+                return jsonify({"code":404, "message": "no record found"}),404
         return jsonify({"code": 200, "data": record.json()}), 200
     except Exception as e:
         db.session.rollback()
@@ -257,4 +261,4 @@ def find_specific_queue_status(eid, uid):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5004)
+    app.run(host="0.0.0.0", port=5004, debug=True)

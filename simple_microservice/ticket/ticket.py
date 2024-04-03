@@ -145,7 +145,7 @@ def get_ticket(eid,uid):
         return jsonify(
             {
                 "code": 200,
-                "data": output.json()
+                "message": output.json()
             }
             )
 

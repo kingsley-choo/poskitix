@@ -63,7 +63,7 @@ def get_events_to_display(email):
             #an error! lets just set the queue_status as None
             event["ticket"] = None
         else:
-            event["ticket"] = response_ticket.json()["data"]       
+            event["ticket"] = response_ticket.json()["message"]       
 
         
     
