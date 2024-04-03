@@ -1,0 +1,23 @@
+homepage
+
+(line 209) - fetchUserDetails()
+http://localhost:5010/get-details/user/
+
+
+
+eventpage 
+
+(line 138) - fetchEventandStatus()
+http://localhost:5010/get-details/user/ 
+
+(line 314) - addUserToQueue(eid)
+http://localhost:5100/queue/event/
+
+(line 342) - createPurchaseLink(eid, uid)
+http://localhost:5300/purchase_ticket/event/
+
+
+
+processpaymentpage
+(line 168) - get_payment_info()
+http://localhost:5400/check_payment/
