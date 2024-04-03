@@ -10,7 +10,7 @@ export default  {
                         
                     <p>It is now your turn to purchase ticket for ${event_info.eventname} on ${event_info.date}</p>
                     
-                    <p>Click <a href="${process.env.FRONTEND_URL}">here</a> to purchase. Hurry! You only have ${process.env.MAX_MINUTES_READY} minutes</p>`, // html body
+                    <p>Click <a href="${process.env.FRONTEND_URL}?eid=${event_info.eid}&uid=${user_info.uid}">here</a> to purchase. Hurry! You only have ${process.env.MAX_MINUTES_READY} minutes</p>`, // html body
           }
     },
     ready_missed : function(user_info,event_info) {
