@@ -22,7 +22,7 @@ insert into event (eventname, date, salesdate, location, description, capacity, 
     15.00);
     
 insert into event (eventname, date, salesdate, location, description, capacity, price) values (
-	"Nathan Tour Night 1(Cat 1)",
+	"Nathan Tour Night 1 (Cat 1)",
     "2024-04-16 13:00:00",
     "2024-03-20 13:00:00",
     "International Stadium, Malaysia", 
@@ -31,12 +31,12 @@ insert into event (eventname, date, salesdate, location, description, capacity, 
     30.00);
 
 insert into event (eventname, date, salesdate, location, description, capacity, price) values (
-	"Nathan Tour Night 1(Cat 2)",
+	"Nathan Tour Night 1 (Cat 2)",
     "2024-04-16 13:00:00",
     "2024-03-20 13:00:00",
     "International Stadium, Malaysia", 
     "I love Nathan but not enough for Cat 1!",
-    20,
+    1,
     15.00);
 
 insert into event (eventname, date, salesdate, location, description, capacity, price) values (

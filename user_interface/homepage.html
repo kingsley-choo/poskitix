@@ -103,28 +103,28 @@
 
                 <div class="animate-up flex flex-shrink-0 h-80 md:h-96">
 
-                        <div id="homepage-carousel" class="z-0 w-full content-center" data-carousel="slide">
-                            <div class="relative z-0 h-80 overflow-hidden w-full rounded-2xl md:h-96">
+                    <div id="homepage-carousel" class="z-0 w-full content-center" data-carousel="slide">
+                        <div class="relative z-0 h-80 overflow-hidden w-full rounded-2xl md:h-96">
 
-                                <div class="hidden duration-1000 ease-in-out" data-carousel-item>
-                                    <img src="pics/erastour.jpeg"
-                                        class="w-full h-64 lg:h-full object-cover relative block w-full shadow-xl"
-                                        alt="Taylor Swift Eras Tour">
-                                </div>
+                            <div class="hidden duration-1000 ease-in-out" data-carousel-item>
+                                <img src="pics/erastour.jpeg"
+                                    class="w-full h-64 lg:h-full object-cover relative block w-full shadow-xl"
+                                    alt="Taylor Swift Eras Tour">
+                            </div>
 
-                                <div class="hidden duration-1000 ease-in-out" data-carousel-item>
-                                    <img src="pics/brunomars.png"
-                                        class="w-full h-64 lg:h-full object-cover relative block w-full shadow-xl"
-                                        alt="Bruno Mars Tour">
-                                </div>
+                            <div class="hidden duration-1000 ease-in-out" data-carousel-item>
+                                <img src="pics/brunomars.png"
+                                    class="w-full h-64 lg:h-full object-cover relative block w-full shadow-xl"
+                                    alt="Bruno Mars Tour">
+                            </div>
 
-                                <div class="hidden duration-1000 ease-in-out" data-carousel-item>
-                                    <img src="pics/coldplay.png"
-                                        class="h-64 lg:h-full object-cover relative block w-full shadow-xl"
-                                        alt="Coldplay Music of Spheres Tour">
-                                </div>
+                            <div class="hidden duration-1000 ease-in-out" data-carousel-item>
+                                <img src="pics/coldplay.png"
+                                    class="h-64 lg:h-full object-cover relative block w-full shadow-xl"
+                                    alt="Coldplay Music of Spheres Tour">
                             </div>
                         </div>
+                    </div>
 
 
                 </div>
@@ -151,44 +151,50 @@
 
                 </div> -->
 
-                    <div class="p-4 pb-12">
-                        <label for="input-group-1"
-                            class="block mb-2 text-sm font-medium text-white-900"><div id="emailerror">Enter Your Email</div></label>
 
-                        <div class="relative mb-6">
-                            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                                <svg class="w-4 h-4 text-white-900" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
-                                    <path
-                                        d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z" />
-                                    <path
-                                        d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z" />
-                                </svg>
-                            </div>
+                <div class="p-4 pb-12 animate-up text-center">
+                    <label for="input-group-1" class="block mb-2 text-sm font-medium text-white-900">
+                        <div id="emailerror">
+                            <p class="text-xl">Enter Your Email</p>
+                        </div>
+                    </label>
+
+                    <div class="relative mb-6 content-center">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                            <svg class="w-4 h-4 text-white-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor" viewBox="0 0 20 16">
+                                <path
+                                    d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z" />
+                                <path
+                                    d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z" />
+                            </svg>
+                        </div>
+                        <div class="text-center">
                             <input type="text" id="emailinput"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 "
                                 placeholder="Enter your email">
                         </div>
-
-                        <button onclick="fetchUserDetails()"
-                            class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">    
-                                Log In
-                        </button>
-
                     </div>
+
+                    <button onclick="fetchUserDetails()"
+                        class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                        Log In
+                    </button>
 
                 </div>
 
             </div>
 
-            <footer
-                class="fixed bottom-0 left-0 z-20 w-full h-auto p-1 bg-gray-900 shadow md:flex md:items-center md:justify-between md:p-2">
-                <span class="text-sm text-white sm:text-center">© 2024 <a href="https://flowbite.com/"
-                class="hover:underline">Poskitix</a>. All Rights Reserved.
-                </span>
-            </footer>
-
         </div>
+
+        <footer
+            class="fixed bottom-0 left-0 z-20 w-full h-auto p-1 bg-gray-900 shadow md:flex md:items-center md:justify-between md:p-2">
+            <span class="text-sm text-white sm:text-center">© 2024 <a href="https://flowbite.com/"
+                    class="hover:underline">Poskitix</a>. All Rights Reserved.
+            </span>
+        </footer>
+
+    </div>
 
 
 
@@ -196,11 +202,11 @@
 
     <script>
 
-        function fetchUserDetails(){
+        function fetchUserDetails() {
             var emailinput = document.getElementById('emailinput').value;
 
             console.log(emailinput)
-            axios.get('http://localhost:5010/get-details/user/' + emailinput)
+            axios.get('http://localhost:8000/api/v1/get_details/user/' + emailinput)
                 .then(function (response) {
 
                     // store name
@@ -214,17 +220,17 @@
 
                     // store email
                     localStorage.setItem('emailinput', emailinput)
-                    
+
                     // direct to event page
                     window.location.href = 'eventpage.html'
-                   
+
 
                 })
                 .catch(function (error) {
                     console.error(error);
                     var noemailmsg = "This email does not exist. Please Try Again.";
                     document.getElementById('emailerror').innerText = noemailmsg;
-        
+
                 });
         }
     </script>
